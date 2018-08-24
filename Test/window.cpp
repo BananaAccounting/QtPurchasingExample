@@ -2,40 +2,11 @@
 
 Window::Window(QWidget *parent) : QWidget(parent)
 {
-//    setFixedSize(900, 500);
 
-//    but_purchase_multiple = new QPushButton("Purchase multiple times", this);
-//    but_purchase_multiple->setGeometry(50, 50, 200, 200);
-
-//    label_multiple = new QLabel("0", this);
-//    label_multiple->setTextInteractionFlags(Qt::NoTextInteraction);
-//    label_multiple->setAlignment(Qt::AlignCenter);
-//    label_multiple->setGeometry(100, 350, 100, 100);
-
-//    connect(but_purchase_multiple, SIGNAL(clicked()), this, SLOT(incrementLabelMultiple()));
-
-//    but_purchase_limited = new QPushButton("Purchase for limited time", this);
-//    but_purchase_limited->setGeometry(350, 50, 200, 200);
-
-//    label_limited = new QLabel("Not purchased", this);
-//    label_limited->setGeometry(400, 350, 100, 100);
-
-//    connect(but_purchase_limited, SIGNAL(clicked()), this, SLOT(purchaseLimited()));
-
-
-
-//    but_purchase_once = new QPushButton("Purchase once forever", this);
-//    but_purchase_once->setGeometry(650, 50, 200, 200);
-
-//    label_once = new QLabel("Not purchased",this);
-//    label_once->setGeometry(700, 350, 100, 100);
-
-//    connect(but_purchase_once, SIGNAL(clicked()), this, SLOT(purchaseOnce()));
-
-
-    //setFixedSize(900, 500);
-
-
+    #ifdef Q_OS_WIN 
+    setFixedSize(1920, 1080);
+    #endif
+    
     m_myStore = new QInAppStore(this);
     setupConnections();
 
