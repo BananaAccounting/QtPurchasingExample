@@ -1,6 +1,6 @@
 #include "storemanager.h"
 #include "pch.h"
-#include "MicrosoftStoreLib.h"
+#include "store.h"
 
 
 StoreManager::StoreManager()
