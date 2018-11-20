@@ -1,0 +1,15 @@
+D:\github\QtPurchasingExample\Windows_App_Package\Images\LockScreenLogo.scale-200.png
+D:\github\QtPurchasingExample\Windows_App_Package\Images\Square150x150Logo.scale-200.png
+D:\github\QtPurchasingExample\Windows_App_Package\Images\Square44x44Logo.scale-200.png
+D:\github\QtPurchasingExample\Windows_App_Package\Images\Square44x44Logo.targetsize-24_altform-unplated.png
+D:\github\QtPurchasingExample\Windows_App_Package\Images\StoreLogo.png
+D:\github\QtPurchasingExample\Windows_App_Package\Images\Wide310x150Logo.scale-200.png
+D:\github\QtPurchasingExample\Windows_App_Package\Qt5Core.dll
+D:\github\QtPurchasingExample\Windows_App_Package\Qt5Cored.dll
+D:\github\QtPurchasingExample\Windows_App_Package\Qt5Gui.dll
+D:\github\QtPurchasingExample\Windows_App_Package\Qt5Guid.dll
+D:\github\QtPurchasingExample\Windows_App_Package\Qt5Widgets.dll
+D:\github\QtPurchasingExample\Windows_App_Package\Qt5Widgetsd.dll
+C:\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.17134.0\Windows.winmd
+D:\github\QtPurchasingExample\Windows_App_Package\bin\x86\Release\resources.pri
+D:\github\QtPurchasingExample\Test\Win32\Release\TestQtPurchasing.exe

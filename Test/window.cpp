@@ -1,5 +1,38 @@
 #include "window.h"
+#include "storemanager.h"
 
+
+class QInAppProduct {
+public:
+	QInAppProduct(QObject*) {}
+	QInAppProduct() {}
+	QString identifier() { return ""; }
+	void purchase() {}
+	enum MyEnum
+	{
+		Consumable, Unlockable
+	};
+
+};
+class QInAppTransaction {
+public:
+	QInAppTransaction(QObject*) {}
+	enum States
+	{
+		PurchaseRestored, PurchaseApproved, PurchaseFailed
+	};
+	States status() { return States::PurchaseFailed; }
+	void finalize() {}
+	QInAppProduct* product() { return nullptr; }
+};
+class QInAppStore {
+public:
+	QInAppStore(QObject*) {}
+	void registerProduct(QInAppProduct::MyEnum x, const QString& qs) {}
+	void restorePurchases() {}
+	QInAppProduct* registeredProduct(QString x) { return nullptr; }
+	
+};
 Window::Window(QWidget *parent) : QWidget(parent)
 {
 
@@ -16,6 +49,7 @@ Window::Window(QWidget *parent) : QWidget(parent)
     m_myStore->registerProduct(QInAppProduct::Unlockable,
                                QStringLiteral("banana_once_product"));
 
+	setupOpenButton();
     setupMultipleButton();
 
     setupLimitedButton();
@@ -26,18 +60,32 @@ Window::Window(QWidget *parent) : QWidget(parent)
 
 }
 
+
+void Window::setupOpenButton()
+{
+
+	but_open_UWP = new QPushButton("Open UWP Window", this);
+	but_open_UWP->setGeometry(100, 50, 800, 50);
+	but_open_UWP->setEnabled(true);
+	label_open = new QLabel("0", this);
+	label_open->setTextInteractionFlags(Qt::NoTextInteraction);
+	label_open->setAlignment(Qt::AlignCenter);
+	label_open->setGeometry(100, 100, 800, 60);
+	connect(but_open_UWP, SIGNAL(clicked()), this, SLOT(openUWPWindow()));
+}
+
 void Window::setupMultipleButton()
 {
 
     but_purchase_multiple = new QPushButton("Purchase multiple times", this);
-    but_purchase_multiple->setGeometry(100, 100, 800, 150);
+    but_purchase_multiple->setGeometry(100, 150, 800, 50);
 
     but_purchase_multiple->setEnabled(false);
 
     label_multiple = new QLabel("0", this);
     label_multiple->setTextInteractionFlags(Qt::NoTextInteraction);
     label_multiple->setAlignment(Qt::AlignCenter);
-    label_multiple->setGeometry(100, 300, 800, 150);
+    label_multiple->setGeometry(100, 200, 800, 50);
 
     connect(but_purchase_multiple, SIGNAL(clicked()), this, SLOT(purchaseMultiple()));
 }
@@ -45,14 +93,14 @@ void Window::setupMultipleButton()
 void Window::setupLimitedButton()
 {
     but_purchase_limited = new QPushButton("Purchase for limited time", this);
-    but_purchase_limited->setGeometry(100, 500, 800, 150);
+    but_purchase_limited->setGeometry(100, 250, 800, 50);
 
     but_purchase_limited->setEnabled(false);
 
     label_limited = new QLabel("Not purchased", this);
     label_limited->setTextInteractionFlags(Qt::NoTextInteraction);
     label_limited->setAlignment(Qt::AlignCenter);
-    label_limited->setGeometry(100, 700, 800, 150);
+    label_limited->setGeometry(100, 300, 800, 50);
 
     connect(but_purchase_limited, SIGNAL(clicked()), this, SLOT(purchaseLimited()));
 }
@@ -60,14 +108,14 @@ void Window::setupLimitedButton()
 void Window::setupOnceButton()
 {
     but_purchase_once = new QPushButton("Purchase once forever", this);
-    but_purchase_once->setGeometry(100, 900, 800, 150);
+    but_purchase_once->setGeometry(100, 450, 800, 50);
 
     but_purchase_once->setEnabled(false);
 
     label_once = new QLabel("Not purchased",this);
     label_once->setTextInteractionFlags(Qt::NoTextInteraction);
     label_once->setAlignment(Qt::AlignCenter);
-    label_once->setGeometry(100, 1100, 800, 150);
+    label_once->setGeometry(100, 500, 800, 50);
 
     connect(but_purchase_once, SIGNAL(clicked()), this, SLOT(purchaseOnce()));
 }
@@ -75,7 +123,7 @@ void Window::setupOnceButton()
 void Window::setupRestoreButton()
 {
     but_restore_once = new QPushButton("Restore unique product if already bought", this);
-    but_restore_once->setGeometry(100, 1300, 800, 150);
+    but_restore_once->setGeometry(100, 550, 800, 50);
 
     but_restore_once->setEnabled(true);
 
@@ -90,13 +138,13 @@ void Window::restoreOnce()
 
 void Window::setupConnections()
 {
-    connect(m_myStore, SIGNAL(productRegistered(QInAppProduct*)),
+    /*connect(m_myStore, SIGNAL(productRegistered(QInAppProduct*)),
             this, SLOT(markProductAvailable(QInAppProduct*)));
     connect(m_myStore, SIGNAL(productUnknown(QInAppProduct*)),
             this, SLOT(handleErrorGracefully(QInAppProduct*)));
 
     connect(m_myStore, SIGNAL(transactionReady(QInAppTransaction*)),
-            this, SLOT(handleTransaction(QInAppTransaction*)));
+            this, SLOT(handleTransaction(QInAppTransaction*)));*/
 }
 
 void Window::markProductAvailable(QInAppProduct* p)
@@ -214,4 +262,10 @@ void Window::markAsPurchasedOnce()
     this->hide();
     this->show();
 
+}
+
+void Window::openUWPWindow()
+{
+	StoreManager sm;
+	sm.openApp();
 }

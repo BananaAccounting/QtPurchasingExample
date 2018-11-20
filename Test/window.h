@@ -9,7 +9,10 @@
 #include <QString>
 #include <QStringLiteral>
 #include <QTimer>
-#include <QtPurchasing>
+//#include <QtPurchasing>
+class QInAppStore;
+class QInAppProduct;
+class QInAppTransaction;
 
 class Window : public QWidget
 {
@@ -18,6 +21,8 @@ public:
     explicit Window(QWidget *parent = nullptr);
 
 private:
+	QPushButton *but_open_UWP;
+	QLabel *label_open;
     QPushButton *but_purchase_multiple;
     QLabel *label_multiple;
     QPushButton *but_purchase_once;
@@ -26,6 +31,7 @@ private:
     QLabel *label_limited;
     QPushButton *but_restore_once;
     QInAppStore *m_myStore;
+	void setupOpenButton();
     void setupMultipleButton();
     void setupLimitedButton();
     void setupOnceButton();
@@ -45,6 +51,7 @@ public slots:
     void restoreLimited();
     void restoreOnce();
     void purchaseOnce();
+	void openUWPWindow();
 };
 
 #endif // WINDOW_H

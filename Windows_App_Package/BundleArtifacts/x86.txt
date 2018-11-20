@@ -1,0 +1,1 @@
+MainPackage=D:\github\QtPurchasingExample\Windows_App_Package\bin\x86\Release\Windows_App_Package_1.0.8.0_x86.appx

@@ -1,0 +1,20 @@
+﻿[ResourceMetadata]
+"ResourceDimensions"		"scale-200"
+"ResourceDimensions"		"language-en-us"
+
+[Files]
+"D:\github\QtPurchasingExample\Windows_App_Package\obj\x86\Debug\filemap.pri"			"resources.pri"
+"D:\github\QtPurchasingExample\Windows_App_Package\obj\x86\Debug\PackageLayout\Qt5Widgetsd.dll"			"Qt5Widgetsd.dll"
+"D:\github\QtPurchasingExample\Windows_App_Package\obj\x86\Debug\PackageLayout\Qt5Widgets.dll"			"Qt5Widgets.dll"
+"D:\github\QtPurchasingExample\Windows_App_Package\obj\x86\Debug\PackageLayout\Qt5Guid.dll"			"Qt5Guid.dll"
+"D:\github\QtPurchasingExample\Windows_App_Package\obj\x86\Debug\PackageLayout\Qt5Gui.dll"			"Qt5Gui.dll"
+"D:\github\QtPurchasingExample\Windows_App_Package\obj\x86\Debug\PackageLayout\Qt5Cored.dll"			"Qt5Cored.dll"
+"D:\github\QtPurchasingExample\Windows_App_Package\obj\x86\Debug\PackageLayout\Qt5Core.dll"			"Qt5Core.dll"
+"D:\github\QtPurchasingExample\Windows_App_Package\obj\x86\Debug\PackageLayout\WinMetadata\Windows.winmd"			"WinMetadata\Windows.winmd"
+"D:\github\QtPurchasingExample\Windows_App_Package\obj\x86\Debug\PackageLayout\TestQtPurchasing\TestQtPurchasing.exe"			"TestQtPurchasing\TestQtPurchasing.exe"
+"D:\github\QtPurchasingExample\Windows_App_Package\obj\x86\Debug\PackageLayout\Images\Wide310x150Logo.scale-200.png"			"Images\Wide310x150Logo.scale-200.png"
+"D:\github\QtPurchasingExample\Windows_App_Package\obj\x86\Debug\PackageLayout\Images\StoreLogo.png"			"Images\StoreLogo.png"
+"D:\github\QtPurchasingExample\Windows_App_Package\obj\x86\Debug\PackageLayout\Images\Square44x44Logo.targetsize-24_altform-unplated.png"			"Images\Square44x44Logo.targetsize-24_altform-unplated.png"
+"D:\github\QtPurchasingExample\Windows_App_Package\obj\x86\Debug\PackageLayout\Images\Square44x44Logo.scale-200.png"			"Images\Square44x44Logo.scale-200.png"
+"D:\github\QtPurchasingExample\Windows_App_Package\obj\x86\Debug\PackageLayout\Images\Square150x150Logo.scale-200.png"			"Images\Square150x150Logo.scale-200.png"
+"D:\github\QtPurchasingExample\Windows_App_Package\obj\x86\Debug\PackageLayout\Images\LockScreenLogo.scale-200.png"			"Images\LockScreenLogo.scale-200.png"
