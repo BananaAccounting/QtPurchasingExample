@@ -12,8 +12,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestQtPurchasing", "TestQtP
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MicrosoftStoreWRC", "MicrosoftStoreWRC\MicrosoftStoreWRC.vcxproj", "{C994F87E-2DFF-427C-ACBA-6AEC0B5EE284}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MicrosoftStoreLib", "MicrosoftStoreLib\MicrosoftStoreLib.vcxproj", "{DAE92951-B1E4-428D-B4D6-BE308A593F20}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,24 +88,6 @@ Global
 		{C994F87E-2DFF-427C-ACBA-6AEC0B5EE284}.Release|x64.Build.0 = Release|x64
 		{C994F87E-2DFF-427C-ACBA-6AEC0B5EE284}.Release|x86.ActiveCfg = Release|Win32
 		{C994F87E-2DFF-427C-ACBA-6AEC0B5EE284}.Release|x86.Build.0 = Release|Win32
-		{DAE92951-B1E4-428D-B4D6-BE308A593F20}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{DAE92951-B1E4-428D-B4D6-BE308A593F20}.Debug|ARM.ActiveCfg = Debug|ARM
-		{DAE92951-B1E4-428D-B4D6-BE308A593F20}.Debug|ARM.Build.0 = Debug|ARM
-		{DAE92951-B1E4-428D-B4D6-BE308A593F20}.Debug|Win32.ActiveCfg = Debug|Win32
-		{DAE92951-B1E4-428D-B4D6-BE308A593F20}.Debug|Win32.Build.0 = Debug|Win32
-		{DAE92951-B1E4-428D-B4D6-BE308A593F20}.Debug|x64.ActiveCfg = Debug|x64
-		{DAE92951-B1E4-428D-B4D6-BE308A593F20}.Debug|x64.Build.0 = Debug|x64
-		{DAE92951-B1E4-428D-B4D6-BE308A593F20}.Debug|x86.ActiveCfg = Debug|Win32
-		{DAE92951-B1E4-428D-B4D6-BE308A593F20}.Debug|x86.Build.0 = Debug|Win32
-		{DAE92951-B1E4-428D-B4D6-BE308A593F20}.Release|Any CPU.ActiveCfg = Release|Win32
-		{DAE92951-B1E4-428D-B4D6-BE308A593F20}.Release|ARM.ActiveCfg = Release|ARM
-		{DAE92951-B1E4-428D-B4D6-BE308A593F20}.Release|ARM.Build.0 = Release|ARM
-		{DAE92951-B1E4-428D-B4D6-BE308A593F20}.Release|Win32.ActiveCfg = Release|Win32
-		{DAE92951-B1E4-428D-B4D6-BE308A593F20}.Release|Win32.Build.0 = Release|Win32
-		{DAE92951-B1E4-428D-B4D6-BE308A593F20}.Release|x64.ActiveCfg = Release|x64
-		{DAE92951-B1E4-428D-B4D6-BE308A593F20}.Release|x64.Build.0 = Release|x64
-		{DAE92951-B1E4-428D-B4D6-BE308A593F20}.Release|x86.ActiveCfg = Release|Win32
-		{DAE92951-B1E4-428D-B4D6-BE308A593F20}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

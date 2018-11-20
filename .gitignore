@@ -17,3 +17,4 @@ Test/MicrosoftStoreWRC/Release/*
 Test/MicrosoftStoreWRC/Debug/*
 Windows_App_Package/AppPackages/*
 Windows_App_Package/bin/*
+Test/GeneratedFiles/Debug/moc_window.cpp
