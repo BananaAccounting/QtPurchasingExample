@@ -1,6 +1,6 @@
 #include "window.h"
 
-Window::Window(QWidget *parent) : QWidget(parent), m_shopManager(this->windowHandle(), this)
+Window::Window(QWidget *parent) : QWidget(parent)
 {
 
     #ifdef Q_OS_WIN 
@@ -8,13 +8,29 @@ Window::Window(QWidget *parent) : QWidget(parent), m_shopManager(this->windowHan
     #endif
     setupUi(this);
 
-    connect(btnMultple, &QPushButton::clicked, this, &Window::purchaseMultiple);
-    connect(btnPurchaseForever, &QPushButton::clicked, this, &Window::purchaseLimited);
-    connect(btnPurchaseOnce, &QPushButton::clicked, this, &Window::purchaseOnce);
-    connect(btnRestorePurchases, &QPushButton::clicked, &m_shopManager, &ShopManager::restorePurchases);
-    connect(btnCheckTrial, &QPushButton::clicked, &m_shopManager, &ShopManager::checkIsTrial);
+    
+}
 
-    connect(&m_shopManager, &ShopManager::productPurchased, this, &Window::handlePurchase);
+Window::~Window()
+{
+   delete m_shopManager;
+}
+
+void Window::showEvent(QShowEvent *ev)
+{
+   QWidget::showEvent(ev);
+   if (m_shopManager == nullptr)
+   {
+      m_shopManager = new ShopManager(this->windowHandle(), this);
+
+      connect(btnMultple, &QPushButton::clicked, this, &Window::purchaseMultiple);
+      connect(btnPurchaseForever, &QPushButton::clicked, this, &Window::purchaseLimited);
+      connect(btnPurchaseOnce, &QPushButton::clicked, this, &Window::purchaseOnce);
+      connect(btnRestorePurchases, &QPushButton::clicked, m_shopManager, &ShopManager::restorePurchases);
+      connect(btnCheckTrial, &QPushButton::clicked, m_shopManager, &ShopManager::checkIsTrial);
+
+      connect(m_shopManager, &ShopManager::productPurchased, this, &Window::handlePurchase);
+   }
 }
 
 void Window::handleError(const QString& errorMessage)
@@ -39,12 +55,12 @@ void Window::handlePurchase(ShopManager::Products productId)
 
 void Window::purchaseOnce()
 {
-    m_shopManager.doPurchase(ShopManager::banana_once_product);
+    m_shopManager->doPurchase(ShopManager::banana_once_product);
 }
 
 void Window::purchaseMultiple()
 {
-    m_shopManager.doPurchase(ShopManager::banana_multiple_product);
+    m_shopManager->doPurchase(ShopManager::banana_multiple_product);
 }
 
 void Window::incrementLabelMultiple()
