@@ -7,24 +7,21 @@
 const wchar_t kItemFriendlyName[] = L"10 coins";
 const wchar_t kItemStoreId[] = L"ten_coins";
 
+ComPtr<IStoreContext> storeContext;
+
 QInAppStore::QInAppStore(QWindow* mainWindow, QObject *parent)
    : QObject(parent)
 {
-   /*if ((m_storeContext = StoreContext::GetDefault()))
-   
-   //Windows::Services.Store.StoreContext context = StoreContext.GetDefault();
+	ComPtr<IStoreContextStatics> storeContextStatics;
+	auto hr = RoGetActivationFactory(HStringReference(L"Windows.Services.Store.StoreContext").Get(), __uuidof(storeContextStatics), &storeContextStatics);
+	CheckHr(hr);
 
-   {
-      IInitializeWithWindow* pIInitWithWindow;
-      IInspectable* iInspect = reinterpret_cast<IInspectable*>(m_storeContext);
+	hr = storeContextStatics->GetDefault(&storeContext);
+	CheckHr(hr);
 
-      if (SUCCEEDED(iInspect->QueryInterface(IID_PPV_ARGS(&pIInitWithWindow))))
-      {
-         pIInitWithWindow->Initialize((HWND)(void *)hWnd);
-         pIInitWithWindow->Release();
-      }
-   }
-   */
+	ComPtr<IInitializeWithWindow> initWindow;
+	hr = storeContext->QueryInterface(IID_PPV_ARGS(&initWindow));
+	hr = initWindow->Initialize((HWND)(void*)mainWindow);
 }
 
 void QInAppStore::emitIsTrial(bool bActiveLicense)
@@ -46,10 +43,6 @@ void QInAppStore::checkIsTrial()
 //{
    ComPtr<IStoreContextStatics> storeContextStatics;
    auto hr = RoGetActivationFactory(HStringReference(L"Windows.Services.Store.StoreContext").Get(), __uuidof(storeContextStatics), &storeContextStatics);
-   CheckHr(hr);
-
-   ComPtr<IStoreContext> storeContext;
-   hr = storeContextStatics->GetDefault(&storeContext);
    CheckHr(hr);
 
    ComPtr<IAsyncOperation<StoreAppLicense*>> getLicenseOperation;
