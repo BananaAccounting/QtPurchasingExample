@@ -1,0 +1,5 @@
+
+PackageTest/obj/*
+PackageTest/bin/*
+output/*
+.vs/*

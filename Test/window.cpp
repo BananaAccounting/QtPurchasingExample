@@ -1,175 +1,64 @@
 #include "window.h"
 
-Window::Window(QWidget *parent) : QWidget(parent)
+Window::Window(QWidget *parent) : QWidget(parent), m_shopManager(this->windowHandle(), this)
 {
 
     #ifdef Q_OS_WIN 
     setFixedSize(1920, 1080);
     #endif
-    
-    m_myStore = new QInAppStore(this);
-    setupConnections();
+    setupUi(this);
 
-    m_myStore->registerProduct(QInAppProduct::Consumable,
-                               QStringLiteral("banana_multiple_product"));
+    connect(btnMultple, &QPushButton::clicked, this, &Window::purchaseMultiple);
+    connect(btnPurchaseForever, &QPushButton::clicked, this, &Window::purchaseLimited);
+    connect(btnPurchaseOnce, &QPushButton::clicked, this, &Window::purchaseOnce);
+    connect(btnRestorePurchases, &QPushButton::clicked, &m_shopManager, &ShopManager::restorePurchases);
+    connect(btnCheckTrial, &QPushButton::clicked, &m_shopManager, &ShopManager::checkIsTrial);
 
-    m_myStore->registerProduct(QInAppProduct::Unlockable,
-                               QStringLiteral("banana_once_product"));
-
-    setupMultipleButton();
-
-    setupLimitedButton();
-
-    setupOnceButton();
-
-    setupRestoreButton();
-
+    connect(&m_shopManager, &ShopManager::productPurchased, this, &Window::handlePurchase);
 }
 
-void Window::setupMultipleButton()
+void Window::handleError(const QString& errorMessage)
 {
-
-    but_purchase_multiple = new QPushButton("Purchase multiple times", this);
-    but_purchase_multiple->setGeometry(100, 100, 800, 150);
-
-    but_purchase_multiple->setEnabled(false);
-
-    label_multiple = new QLabel("0", this);
-    label_multiple->setTextInteractionFlags(Qt::NoTextInteraction);
-    label_multiple->setAlignment(Qt::AlignCenter);
-    label_multiple->setGeometry(100, 300, 800, 150);
-
-    connect(but_purchase_multiple, SIGNAL(clicked()), this, SLOT(purchaseMultiple()));
+   QMessageBox msgBox;
+   msgBox.setText(errorMessage);
+   msgBox.exec();
 }
 
-void Window::setupLimitedButton()
+void Window::handlePurchase(ShopManager::Products productId)
 {
-    but_purchase_limited = new QPushButton("Purchase for limited time", this);
-    but_purchase_limited->setGeometry(100, 500, 800, 150);
-
-    but_purchase_limited->setEnabled(false);
-
-    label_limited = new QLabel("Not purchased", this);
-    label_limited->setTextInteractionFlags(Qt::NoTextInteraction);
-    label_limited->setAlignment(Qt::AlignCenter);
-    label_limited->setGeometry(100, 700, 800, 150);
-
-    connect(but_purchase_limited, SIGNAL(clicked()), this, SLOT(purchaseLimited()));
-}
-
-void Window::setupOnceButton()
-{
-    but_purchase_once = new QPushButton("Purchase once forever", this);
-    but_purchase_once->setGeometry(100, 900, 800, 150);
-
-    but_purchase_once->setEnabled(false);
-
-    label_once = new QLabel("Not purchased",this);
-    label_once->setTextInteractionFlags(Qt::NoTextInteraction);
-    label_once->setAlignment(Qt::AlignCenter);
-    label_once->setGeometry(100, 1100, 800, 150);
-
-    connect(but_purchase_once, SIGNAL(clicked()), this, SLOT(purchaseOnce()));
-}
-
-void Window::setupRestoreButton()
-{
-    but_restore_once = new QPushButton("Restore unique product if already bought", this);
-    but_restore_once->setGeometry(100, 1300, 800, 150);
-
-    but_restore_once->setEnabled(true);
-
-    connect(but_restore_once, SIGNAL(clicked()), this, SLOT(restoreOnce()));
-}
-
-
-void Window::restoreOnce()
-{
-    m_myStore->restorePurchases();
-}
-
-void Window::setupConnections()
-{
-    connect(m_myStore, SIGNAL(productRegistered(QInAppProduct*)),
-            this, SLOT(markProductAvailable(QInAppProduct*)));
-    connect(m_myStore, SIGNAL(productUnknown(QInAppProduct*)),
-            this, SLOT(handleErrorGracefully(QInAppProduct*)));
-
-    connect(m_myStore, SIGNAL(transactionReady(QInAppTransaction*)),
-            this, SLOT(handleTransaction(QInAppTransaction*)));
-}
-
-void Window::markProductAvailable(QInAppProduct* p)
-{
-    if (p->identifier() == QStringLiteral("banana_multiple_product"))
+    switch (productId)
     {
-        but_purchase_multiple->setEnabled(true);
-    }
-    else if (p->identifier() == QStringLiteral("banana_once_product"))
-    {
-        but_purchase_once->setEnabled(true);
+    case ShopManager::banana_multiple_product:
+       incrementLabelMultiple();
+       break;
+    case ShopManager::banana_once_product:
+       markAsPurchasedOnce();
+       break;
     }
 }
 
-void Window::handleErrorGracefully(QInAppProduct* p)
+void Window::purchaseOnce()
 {
-    QMessageBox msgBox;
-    msgBox.setText("Error regarding " + p->identifier());
-    msgBox.exec();
+    m_shopManager.doPurchase(ShopManager::banana_once_product);
 }
-
-void Window::handleTransaction(QInAppTransaction* transaction)
-{
-
-    if (transaction->status() == QInAppTransaction::PurchaseRestored && transaction->product()->identifier() == QStringLiteral("banana_once_product"))
-    {
-        markAsPurchasedOnce();
-        transaction->finalize();
-    }
-    else if (transaction->status() == QInAppTransaction::PurchaseApproved)
-    {
-        if (transaction->product()->identifier() == QStringLiteral("banana_multiple_product"))
-        {
-            incrementLabelMultiple();
-        }
-        else if (transaction->product()->identifier() == QStringLiteral("banana_once_product"))
-        {
-            markAsPurchasedOnce();
-        }
-        transaction->finalize();
-    }
-    else if (transaction->status() == QInAppTransaction::PurchaseFailed)
-    {
-        QMessageBox msgBox;
-        msgBox.setText("The purchase has not been completed or an error was found");
-        msgBox.exec();
-        transaction->finalize();
-    }
-
-}
-
 
 void Window::purchaseMultiple()
 {
-    QInAppProduct *product = m_myStore->registeredProduct(QStringLiteral("banana_multiple_product"));
-
-    Q_ASSERT(product != 0);
-
-    product->purchase();
+    m_shopManager.doPurchase(ShopManager::banana_multiple_product);
 }
 
 void Window::incrementLabelMultiple()
 {
-    int lab = label_multiple->text().toInt();
+    int lab = lblAmount->text().toInt();
     lab++;
-    label_multiple->setNum(lab);
+    lblAmount->setNum(lab);
     this->hide();
     this->show();
 }
 
 void Window::purchaseLimited()
 {
-//    QInAppProduct *product = m_myStore->registeredProduct(QStringLiteral("banana_multiple_product"));
+//    QInAppProduct *product = m_shopManager->registeredProduct(QStringLiteral("banana_multiple_product"));
 
 //    Q_ASSERT(product != 0);
 
@@ -179,8 +68,8 @@ void Window::purchaseLimited()
 
 void Window::markAsPurchasedLimited()
 {
-    label_limited->setText("Purchased");
-    but_purchase_limited->setEnabled(false);
+    lblOnceForever->setText("Purchased");
+    btnPurchaseForever->setEnabled(false);
     this->hide();
     this->show();
 
@@ -192,26 +81,17 @@ void Window::markAsPurchasedLimited()
 
 void Window::restoreLimited()
 {
-    label_limited->setText("Purchase limited time");
-    but_purchase_limited->setEnabled(true);
+    lblOnceForever->setText("Purchase limited time");
+    btnPurchaseForever->setEnabled(true);
     this->hide();
     this->show();
 }
 
-void Window::purchaseOnce()
-{
-    QInAppProduct *product = m_myStore->registeredProduct(QStringLiteral("banana_once_product"));
-
-    Q_ASSERT(product != 0);
-
-    product->purchase();
-}
 
 void Window::markAsPurchasedOnce()
 {
-    label_once->setText("Purchased");
-    but_purchase_once->setEnabled(false);
+    lblOnce->setText("Purchased");
+    btnPurchaseOnce->setEnabled(false);
     this->hide();
     this->show();
-
 }
