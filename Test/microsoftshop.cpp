@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include "shobjidl.h"
+#include "MicrosoftStore.h"
 
 #define CheckHr(hr) do { if (FAILED(hr)) __debugbreak(); } while (false)
 const wchar_t kItemFriendlyName[] = L"10 coins";
@@ -12,7 +13,7 @@ ComPtr<IStoreContext> storeContext;
 QInAppStore::QInAppStore(QWindow* mainWindow, QObject *parent)
    : QObject(parent)
 {
-	ComPtr<IStoreContextStatics> storeContextStatics;
+	/*ComPtr<IStoreContextStatics> storeContextStatics;
 	auto hr = RoGetActivationFactory(HStringReference(L"Windows.Services.Store.StoreContext").Get(), __uuidof(storeContextStatics), &storeContextStatics);
 	CheckHr(hr);
 
@@ -21,7 +22,7 @@ QInAppStore::QInAppStore(QWindow* mainWindow, QObject *parent)
 
 	ComPtr<IInitializeWithWindow> initWindow;
 	hr = storeContext->QueryInterface(IID_PPV_ARGS(&initWindow));
-	hr = initWindow->Initialize((HWND)(void*)mainWindow);
+	hr = initWindow->Initialize((HWND)(void*)mainWindow);*/
 }
 
 void QInAppStore::emitIsTrial(bool bActiveLicense)
@@ -31,6 +32,9 @@ void QInAppStore::emitIsTrial(bool bActiveLicense)
 
 void QInAppStore::checkIsTrial()
 {
+	qDebug() << helloWorld().c_str();
+	
+	/*
    //std::function<void(bool)> onCompleted(emitIsTrial);
    //CheckIsTrial(f2);
 
@@ -88,7 +92,7 @@ void QInAppStore::checkIsTrial()
       onCompleted(static_cast<bool>(isActive));
       return S_OK;
    }).Get());
-   CheckHr(hr);
+   CheckHr(hr);*/
 }
 
 
