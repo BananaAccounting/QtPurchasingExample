@@ -19,7 +19,7 @@ class ShopManager : public QObject
     void setupConnections();
 
 public:
-    enum Products { banana_once_product, banana_multiple_product, once_forever };
+    enum Products { banana_product, banana_once_product, banana_subscription };
     explicit ShopManager(QWindow* mainWindow, QObject *parent = nullptr);
 
     void restorePurchases();
@@ -33,7 +33,6 @@ signals:
 
     
 public slots:
-    void markProductAvailable(QInAppProduct*);
     void handleErrorGracefully(QInAppProduct*);
     void handleTransaction(QInAppTransaction*);
 };

@@ -2,13 +2,11 @@
 
 Window::Window(QWidget *parent) : QWidget(parent)
 {
-
     #ifdef Q_OS_WIN 
-    setFixedSize(1920, 1080);
+    setFixedSize(800, 600);
     #endif
     setupUi(this);
-
-    
+	lblIsTrial->setStyleSheet("QLabel { color : red; }");
 }
 
 Window::~Window()
@@ -23,13 +21,9 @@ void Window::showEvent(QShowEvent *ev)
    {
       m_shopManager = new ShopManager(this->windowHandle(), this);
 
-      connect(btnMultple, &QPushButton::clicked, this, &Window::purchaseMultiple);
-      connect(btnPurchaseForever, &QPushButton::clicked, this, &Window::purchaseLimited);
-      connect(btnPurchaseOnce, &QPushButton::clicked, this, &Window::purchaseOnce);
-      connect(btnRestorePurchases, &QPushButton::clicked, m_shopManager, &ShopManager::restorePurchases);
-      connect(btnCheckTrial, &QPushButton::clicked, m_shopManager, &ShopManager::checkIsTrial);
-
-      connect(m_shopManager, &ShopManager::productPurchased, this, &Window::handlePurchase);
+      connect(btnSubscribe, &QPushButton::clicked, this, &Window::purchaseSubscription);
+      connect(btnBuyProduct, &QPushButton::clicked, this, &Window::purchaseProduct);
+      connect(btnBuyDurable, &QPushButton::clicked, this, &Window::purchaseDurable);
    }
 }
 
@@ -40,74 +34,44 @@ void Window::handleError(const QString& errorMessage)
    msgBox.exec();
 }
 
-void Window::handlePurchase(ShopManager::Products productId)
-{
-    switch (productId)
-    {
-    case ShopManager::banana_multiple_product:
-       incrementLabelMultiple();
-       break;
-    case ShopManager::banana_once_product:
-       markAsPurchasedOnce();
-       break;
-    }
-}
-
-void Window::purchaseOnce()
+void Window::purchaseDurable()
 {
     m_shopManager->doPurchase(ShopManager::banana_once_product);
 }
 
-void Window::purchaseMultiple()
+void Window::purchaseSubscription()
 {
-    m_shopManager->doPurchase(ShopManager::banana_multiple_product);
+    m_shopManager->doPurchase(ShopManager::banana_subscription);
 }
 
-void Window::incrementLabelMultiple()
+void Window::purchaseProduct()
 {
-    int lab = lblAmount->text().toInt();
-    lab++;
-    lblAmount->setNum(lab);
-    this->hide();
-    this->show();
+	m_shopManager->doPurchase(ShopManager::banana_product);
 }
 
-void Window::purchaseLimited()
+
+void Window::markAsSubscribed()
 {
-//    QInAppProduct *product = m_shopManager->registeredProduct(QStringLiteral("banana_multiple_product"));
-
-//    Q_ASSERT(product != 0);
-
-//    product->purchase();
-    markAsPurchasedLimited();
-}
-
-void Window::markAsPurchasedLimited()
-{
-    lblOnceForever->setText("Purchased");
-    btnPurchaseForever->setEnabled(false);
-    this->hide();
-    this->show();
-
-    QTimer *timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(restoreLimited()));
-    timer->start(5000);
-
-}
-
-void Window::restoreLimited()
-{
-    lblOnceForever->setText("Purchase limited time");
-    btnPurchaseForever->setEnabled(true);
+    lblSubscription->setText("Subscribed");
+	btnSubscribe->setEnabled(false);
     this->hide();
     this->show();
 }
 
 
-void Window::markAsPurchasedOnce()
+void Window::markAsDurablePurchased()
 {
-    lblOnce->setText("Purchased");
-    btnPurchaseOnce->setEnabled(false);
+    lblDurable->setText("Durable purchased");
+	btnBuyDurable->setEnabled(false);
     this->hide();
     this->show();
+}
+
+void Window::markAsProductPurchased()
+{
+	lblTrial->setText("is purchased");
+	btnBuyProduct->setEnabled(false);
+	this->hide();
+	this->show();
+	lblIsTrial->setStyleSheet("QLabel { color : green; }");
 }

@@ -1,7 +1,7 @@
 
-PackageTest/obj/*
-PackageTest/bin/*
-PackageTest/AppPackages/*
-PackageTest/BundleArtifacts/*
+QtPurchasingWAP/obj/*
+QtPurchasingWAP/bin/*
+QtPurchasingWAP/AppPackages/*
+QtPurchasingWAP/BundleArtifacts/*
 output/*
 .vs/*

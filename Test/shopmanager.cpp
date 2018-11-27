@@ -7,11 +7,12 @@ ShopManager::ShopManager(QWindow* mainWindow, QObject *parent) : QObject(parent)
 {
    m_myStore = new QInAppStore(mainWindow, this);
 
-   m_myStore->registerProduct(QInAppProduct::Consumable,
-      QStringLiteral("banana_multiple_product"));
 
    m_myStore->registerProduct(QInAppProduct::Unlockable,
       QStringLiteral("banana_once_product"));
+
+   m_myStore->registerProduct(QInAppProduct::Subscription,
+      QStringLiteral("banana_subscription"));
 }
 
 
@@ -21,7 +22,6 @@ void ShopManager::setupConnections()
       this, SLOT(markProductAvailable(QInAppProduct*)));
    connect(m_myStore, SIGNAL(productUnknown(QInAppProduct*)),
       this, SLOT(handleErrorGracefully(QInAppProduct*)));
-
    connect(m_myStore, SIGNAL(transactionReady(QInAppTransaction*)),
       this, SLOT(handleTransaction(QInAppTransaction*)));
 }
@@ -31,12 +31,13 @@ void ShopManager::doPurchase(Products product)
    QInAppProduct *inAppProduct;
    switch (product)
    {
-   case banana_multiple_product:
-      inAppProduct = m_myStore->registeredProduct(QStringLiteral("banana_once_product"));
    case banana_once_product:
       inAppProduct = m_myStore->registeredProduct(QStringLiteral("banana_once_product"));
+   case banana_subscription:
+	   inAppProduct = m_myStore->registeredProduct(QStringLiteral("banana_subscription"));
+   case banana_product:
+	   inAppProduct = m_myStore->registeredProduct(QStringLiteral("banana_product"));
    }
-   Q_ASSERT(product != 0);
    inAppProduct->purchase();
 }
 
@@ -50,15 +51,6 @@ void ShopManager::restorePurchases()
 
 }
 
-
-void ShopManager::markProductAvailable(QInAppProduct* p)
-{
-   if (p->identifier() == QStringLiteral("banana_multiple_product"))
-      emit productPurchased(banana_multiple_product);
-   else if (p->identifier() == QStringLiteral("banana_once_product"))
-      emit productPurchased(banana_once_product);
-}
-
 void ShopManager::handleErrorGracefully(QInAppProduct* p)
 {
    emit error("Error regarding " + p->identifier());
@@ -67,7 +59,7 @@ void ShopManager::handleErrorGracefully(QInAppProduct* p)
 void ShopManager::handleTransaction(QInAppTransaction* transaction)
 {
 
-   if (transaction->status() == QInAppTransaction::PurchaseRestored && transaction->product()->identifier() == QStringLiteral("banana_once_product"))
+   /*if (transaction->status() == QInAppTransaction::PurchaseRestored && transaction->product()->identifier() == QStringLiteral("banana_once_product"))
    {
       emit productPurchased(banana_once_product);
    }
@@ -82,5 +74,5 @@ void ShopManager::handleTransaction(QInAppTransaction* transaction)
    {
       emit error("The purchase has not been completed or an error was found");
    }
-   transaction->finalize();
+   transaction->finalize();*/
 }

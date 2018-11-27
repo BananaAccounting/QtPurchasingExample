@@ -22,19 +22,17 @@ public:
 private:
     ShopManager* m_shopManager = nullptr;
     
-    void incrementLabelMultiple();
-    void markAsPurchasedLimited();
-    void markAsPurchasedOnce();
+    void markAsSubscribed();
+    void markAsDurablePurchased();
+    void markAsProductPurchased();
 signals:
 protected:
    virtual void showEvent(QShowEvent *ev) override;
 public slots:
     void handleError(const QString& errorMessage);
-    void handlePurchase(ShopManager::Products id);
-    void purchaseMultiple();
-    void purchaseLimited();
-    void restoreLimited();
-    void purchaseOnce();
+    void purchaseDurable();
+    void purchaseSubscription();
+    void purchaseProduct();
 };
 
 #endif // WINDOW_H
