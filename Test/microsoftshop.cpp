@@ -1,7 +1,7 @@
 #include "microsoftshop.h"
-
+#include "vector.h"
+#include "winrt/base.h"
 #include <QDebug>
-#include "shobjidl.h"
 
 
 #define CheckHr(hr) do { if (FAILED(hr)) __debugbreak(); } while (false)
@@ -10,7 +10,10 @@ const wchar_t kItemStoreId[] = L"ten_coins";
 
 ComPtr<IStoreContext> storeContext;
 
-
+void writeLog(QString log) {
+	qDebug() << log;
+	MyLogger::instance().writeLog(log);
+}
 void OnPurchaseOperationDone(IAsyncOperation<StorePurchaseResult*>* operation, AsyncStatus status)
 {
 	if (status != AsyncStatus::Completed)
@@ -25,7 +28,7 @@ void OnPurchaseOperationDone(IAsyncOperation<StorePurchaseResult*>* operation, A
 		CheckHr(hr);
 
 		// Do something with the errorCode
-
+		emit writeLog(QString(errorCode));
 
 		// Return once error is handled
 		return;
@@ -44,25 +47,27 @@ void OnPurchaseOperationDone(IAsyncOperation<StorePurchaseResult*>* operation, A
 	case StorePurchaseStatus_Succeeded:
 	case StorePurchaseStatus_AlreadyPurchased:
 		// Success. Product was purchased
-		qDebug() << "Success. Product was purchased";
+
+		writeLog(QString("Success. Product was purchased"));
 		break;
 
 	case StorePurchaseStatus_NotPurchased:
 		// User canceled the purchase
-		qDebug() << "User canceled the purchase";
+		writeLog(QString("User canceled the purchase"));
 		break;
 
 	case StorePurchaseStatus_NetworkError:
 		// The device could not reach windows store
-		qDebug() << " The device could not reach windows store";
+		writeLog(QString(" The device could not reach windows store"));
 		break;
 
 	case StorePurchaseStatus_ServerError:
 		// Something broke on the server
-		qDebug() << " Something broke on the server";
+		writeLog(QString(" Something broke on the server"));
 		break;
 	}
 }
+
 /* QInAppProduct */
 class QInAppProductPrivate
 {
@@ -130,7 +135,7 @@ void QInAppProduct::purchase()
 	CheckHr(hr);
 
 	auto onCompletedCallback = Callback<Implements<RuntimeClassFlags<ClassicCom>, IAsyncOperationCompletedHandler<StorePurchaseResult*>, FtmBase>>(
-		[](IAsyncOperation<StorePurchaseResult*>* operation, AsyncStatus status)
+		[this](IAsyncOperation<StorePurchaseResult*>* operation, AsyncStatus status)
 	{
 		OnPurchaseOperationDone(operation, status);
 		return S_OK;
@@ -141,6 +146,7 @@ void QInAppProduct::purchase()
 	hr = purchaseOperation->put_Completed(onCompletedCallback.Get());
 	CheckHr(hr);
 }
+
 
 
 
@@ -160,7 +166,7 @@ public:
 	QInAppProduct *product;
 };
 
-QInAppTransaction::QInAppTransaction(TransactionStatus status,	QInAppProduct *product,	QObject *parent): QObject(parent)
+QInAppTransaction::QInAppTransaction(TransactionStatus status, QInAppProduct *product, QObject *parent) : QObject(parent)
 {
 	d = QSharedPointer<QInAppTransactionPrivate>(new QInAppTransactionPrivate(status, product));
 }
@@ -209,18 +215,19 @@ QString QInAppTransaction::platformProperty(const QString &propertyName) const
 QInAppProduct * QInAppStore::registeredProduct(const QString & id)
 {
 	QInAppProduct* product;
-	
-	if(id == "banana_product")
+
+	if (id == "banana_product")
 		product = new QInAppProduct("0", id, id, QInAppProduct::ProductType::Unlockable, "9NDW9G6P5G6X");
-	else if(id == "banana_subscription")
+	else if (id == "banana_subscription")
 		product = new QInAppProduct("0", id, id, QInAppProduct::ProductType::Subscription, "9P2QZFC6NH0M");
 	else
 		product = new QInAppProduct("0", id, id, QInAppProduct::ProductType::Unlockable, "9P27DZCTDFDR");
+
 	return product;
 }
 
 QInAppStore::QInAppStore(QWindow* mainWindow, QObject *parent)
-   : QObject(parent)
+	: QObject(parent)
 {
 	ComPtr<IStoreContextStatics> storeContextStatics;
 	auto hr = RoGetActivationFactory(HStringReference(L"Windows.Services.Store.StoreContext").Get(), __uuidof(storeContextStatics), &storeContextStatics);
@@ -234,105 +241,158 @@ QInAppStore::QInAppStore(QWindow* mainWindow, QObject *parent)
 	hr = initWindow->Initialize((HWND)(void*)mainWindow);
 }
 
-void QInAppStore::emitIsTrial(bool bActiveLicense)
-{
-   emit isTrial(bActiveLicense);
-}
-
 void QInAppStore::checkIsTrial()
 {
+	ComPtr<IAsyncOperation<StoreAppLicense*>> getLicenseOperation;
+	auto hr = storeContext->GetAppLicenseAsync(&getLicenseOperation);
+	CheckHr(hr);
+
+	hr = getLicenseOperation->put_Completed
+	(Callback<Implements<RuntimeClassFlags<ClassicCom>, IAsyncOperationCompletedHandler<StoreAppLicense*>, FtmBase>>(
+		[this](IAsyncOperation<StoreAppLicense*>* operation, AsyncStatus status)
+	{
+		if (status != AsyncStatus::Completed)
+		{
+			// It failed for some reason. Find out why.
+			ComPtr<IAsyncInfo> asyncInfo;
+			auto hr = operation->QueryInterface(__uuidof(asyncInfo), &asyncInfo);
+			CheckHr(hr);
+
+			HRESULT errorCode;
+			hr = asyncInfo->get_ErrorCode(&errorCode);
+			CheckHr(hr);
+
+			// Do something with the errorCode
+			writeLog(QString("Error getLicenseOperation: ").append(errorCode));
+			// Return once error is handled
+			return S_OK;
+		}
+
+		ComPtr<IStoreAppLicense> appLicense;
+		auto hr = operation->GetResults(&appLicense);
+		CheckHr(hr);
+
+		boolean isActiveb, isTrialb = false;
+
+		hr = appLicense->get_IsActive(&isActiveb);
+		CheckHr(hr);
+
+		emit isActive(isActiveb);
+		if (isActiveb)
+		{
+			hr = appLicense->get_IsTrial(&isTrialb);
+			if (isTrialb)
+			{
+				writeLog(QString("Is trial!"));
+			}
+			CheckHr(hr);
+			emit isTrial(isTrialb);
+			writeLog(QString("isActive: true"));
+		}
+		else
+			writeLog(QString("isActive: false"));
+		return S_OK;
+	}).Get());
+	CheckHr(hr);
+}
+
+void QInAppStore::checkDurable()
+{
+	//Vector<HSTRING>^ filterList = ref new Vector<HSTRING>();
+	//filterList->Append(HSTRING("Durable"));
+	//IVectorView<HSTRING> view{ filterList->GetView() };
+	ComPtr<Vector<HSTRING>> filters = Make<Vector<HSTRING>>();
+	filters->Append(HString::MakeReference(L"Durable").Get());
+	ComPtr<IIterable<HSTRING>> iterable;
+	iterable = reinterpret_cast<IIterable<HSTRING>*>(filters.Get());
 	
-   //std::function<void(bool)> onCompleted(emitIsTrial);
-   //CheckIsTrial(f2);
+	ComPtr<IAsyncOperation<StoreProductQueryResult*>> products;
+	IIterable<HSTRING>* v = iterable.Get();
+	auto hr = storeContext->GetUserCollectionAsync(v, &products);
+	CheckHr(hr);
 
-   std::function<void(bool)> onCompleted = std::bind(&QInAppStore::emitIsTrial, this, std::placeholders::_1);
+	hr = products->put_Completed
+	(Callback<Implements<RuntimeClassFlags<ClassicCom>, IAsyncOperationCompletedHandler<StoreProductQueryResult *>, FtmBase>>(
+		[this](IAsyncOperation<StoreProductQueryResult *>* operation, AsyncStatus status)
+	{
+		if (status != AsyncStatus::Completed)
+		{
+			// It failed for some reason. Find out why.
+			ComPtr<IAsyncInfo> asyncInfo;
+			auto hr = operation->QueryInterface(__uuidof(asyncInfo), &asyncInfo);
+			CheckHr(hr);
 
-//}
-//}
+			HRESULT errorCode;
+			hr = asyncInfo->get_ErrorCode(&errorCode);
+			CheckHr(hr);
 
-//void CheckIsTrial(std::function<void(bool)> onCompleted)
-//{
-   ComPtr<IStoreContextStatics> storeContextStatics;
-   auto hr = RoGetActivationFactory(HStringReference(L"Windows.Services.Store.StoreContext").Get(), __uuidof(storeContextStatics), &storeContextStatics);
-   CheckHr(hr);
+			// Do something with the errorCode
+			writeLog(QString("Error getLicenseOperation: ").append(errorCode));
+			// Return once error is handled
+			return S_OK;
+		}
 
-   ComPtr<IAsyncOperation<StoreAppLicense*>> getLicenseOperation;
-   hr = storeContext->GetAppLicenseAsync(&getLicenseOperation);
-   CheckHr(hr);
+		//ComPtr<IStoreAppLicense> appLicense;
+		//auto hr = operation->GetResults(&appLicense);
+		//CheckHr(hr);
 
-   hr = getLicenseOperation->put_Completed
-      (Callback<Implements<RuntimeClassFlags<ClassicCom>, IAsyncOperationCompletedHandler<StoreAppLicense*>, FtmBase>>(
-         [onCompleted{ std::move(onCompleted) }](IAsyncOperation<StoreAppLicense*>* operation, AsyncStatus status)
-   {
-      if (status != AsyncStatus::Completed)
-      {
-         // It failed for some reason. Find out why.
-         ComPtr<IAsyncInfo> asyncInfo;
-         auto hr = operation->QueryInterface(__uuidof(asyncInfo), &asyncInfo);
-         CheckHr(hr);
+		//ComPtr<IIterable> addonlicense;
+		//hr = appLicense->get_AddOnLicenses(&addonlicense);
 
-         HRESULT errorCode;
-         hr = asyncInfo->get_ErrorCode(&errorCode);
-         CheckHr(hr);
 
-         // Do something with the errorCode
-		 qDebug() << errorCode << endl;
-         // Return once error is handled
-         return S_OK;
-      }
+		//CheckHr(hr);
+		/*
+		if (addonlicense.SkuStoreId.StartsWith(subscriptionStoreId))
+		{
+			if (license.IsActive)
+			{
+				// The expiration date is available in the license.ExpirationDate property.
+				return true;
+			}
+		}*/
 
-      ComPtr<IStoreAppLicense> appLicense;
-      auto hr = operation->GetResults(&appLicense);
-      CheckHr(hr);
+		return S_OK;
+	}).Get());
+	CheckHr(hr);
+}
 
-      boolean isActive, isTrial = false;
+void QInAppStore::checkSubscription()
+{
 
-      hr = appLicense->get_IsActive(&isActive);
-      CheckHr(hr);
-	  qDebug() << "isActive: "<< isActive << endl;
-      if (isActive)
-      {
-         hr = appLicense->get_IsTrial(&isTrial);
-         CheckHr(hr);
-      }
-
-      onCompleted(static_cast<bool>(isActive));
-      return S_OK;
-   }).Get());
-   CheckHr(hr);
 }
 
 void QInAppStore::Purchase10Coins()
 {
-   ComPtr<IStoreContextStatics> storeContextStatics;
-   auto hr = RoGetActivationFactory(HStringReference(L"Windows.Services.Store.StoreContext").Get(), __uuidof(storeContextStatics), &storeContextStatics);
-   CheckHr(hr);
+	ComPtr<IStoreContextStatics> storeContextStatics;
+	auto hr = RoGetActivationFactory(HStringReference(L"Windows.Services.Store.StoreContext").Get(), __uuidof(storeContextStatics), &storeContextStatics);
+	CheckHr(hr);
 
-   ComPtr<IStoreContext> storeContext;
-   hr = storeContextStatics->GetDefault(&storeContext);
-   CheckHr(hr);
+	ComPtr<IStoreContext> storeContext;
+	hr = storeContextStatics->GetDefault(&storeContext);
+	CheckHr(hr);
 
-   ComPtr<IStorePurchasePropertiesFactory> purchasePropertiesFactory;
-   hr = RoGetActivationFactory(HStringReference(L"Windows.Services.Store.StorePurchaseProperties").Get(), __uuidof(purchasePropertiesFactory), &purchasePropertiesFactory);
-   CheckHr(hr);
+	ComPtr<IStorePurchasePropertiesFactory> purchasePropertiesFactory;
+	hr = RoGetActivationFactory(HStringReference(L"Windows.Services.Store.StorePurchaseProperties").Get(), __uuidof(purchasePropertiesFactory), &purchasePropertiesFactory);
+	CheckHr(hr);
 
-   ComPtr<IStorePurchaseProperties> purchaseProperties;
-   hr = purchasePropertiesFactory->Create(HStringReference(kItemFriendlyName).Get(), &purchaseProperties);
-   CheckHr(hr);
+	ComPtr<IStorePurchaseProperties> purchaseProperties;
+	hr = purchasePropertiesFactory->Create(HStringReference(kItemFriendlyName).Get(), &purchaseProperties);
+	CheckHr(hr);
 
-   ComPtr<IAsyncOperation<StorePurchaseResult*>> purchaseOperation;
-   hr = storeContext->RequestPurchaseWithPurchasePropertiesAsync(HStringReference(kItemStoreId).Get(), purchaseProperties.Get(), &purchaseOperation);
-   CheckHr(hr);
+	ComPtr<IAsyncOperation<StorePurchaseResult*>> purchaseOperation;
+	hr = storeContext->RequestPurchaseWithPurchasePropertiesAsync(HStringReference(kItemStoreId).Get(), purchaseProperties.Get(), &purchaseOperation);
+	CheckHr(hr);
 
-   // Change the following line to call Callback<IAsyncOperationCompletedHandler<StorePurchaseResult*>> if you want the callback to happen back on the UI thread
-   // Implementing FtmBase allows it to fire on the thread the operation finished
-   auto onCompletedCallback = Callback<Implements<RuntimeClassFlags<ClassicCom>, IAsyncOperationCompletedHandler<StorePurchaseResult*>, FtmBase>>(
-      [](IAsyncOperation<StorePurchaseResult*>* operation, AsyncStatus status)
-   {
-      OnPurchaseOperationDone(operation, status);
-      return S_OK;
-   });
+	// Change the following line to call Callback<IAsyncOperationCompletedHandler<StorePurchaseResult*>> if you want the callback to happen back on the UI thread
+	// Implementing FtmBase allows it to fire on the thread the operation finished
+	auto onCompletedCallback = Callback<Implements<RuntimeClassFlags<ClassicCom>, IAsyncOperationCompletedHandler<StorePurchaseResult*>, FtmBase>>(
+		[this](IAsyncOperation<StorePurchaseResult*>* operation, AsyncStatus status)
+	{
+		OnPurchaseOperationDone(operation, status);
+		return S_OK;
+	});
 
-   hr = purchaseOperation->put_Completed(onCompletedCallback.Get());
-   CheckHr(hr);
+	hr = purchaseOperation->put_Completed(onCompletedCallback.Get());
+	CheckHr(hr);
 }
+

@@ -3,13 +3,17 @@
 
 #include <QObject>
 #include <QSharedPointer>
+#include <QDateTime>
+#include "mylogger.h"
 
+#include "shobjidl.h"
 #include <windows.h>
 #include <Windows.Services.Store.h>
 #include <wrl.h>
 #include <functional>
 
 using namespace ABI::Windows::Foundation;
+using namespace ABI::Windows::Foundation::Collections;
 using namespace ABI::Windows::Services::Store;
 using namespace Microsoft::WRL;
 using namespace Microsoft::WRL::Wrappers;
@@ -25,7 +29,10 @@ class QInAppProduct : public QObject
 	Q_PROPERTY(QString price READ price CONSTANT)
 	Q_PROPERTY(QString title READ title CONSTANT)
 	Q_PROPERTY(QString description READ description CONSTANT)
+signals:
+
 public:
+
 	enum ProductType
 	{
 		Consumable,
@@ -39,6 +46,7 @@ public:
 	QString title() const;
 	QString description() const;
 	void purchase();
+
 protected:
 	explicit QInAppProduct(const QString &price, const QString &title, const QString &description, ProductType productType, const QString &identifier, QObject *parent = nullptr);
 
@@ -82,6 +90,7 @@ public:
 	FailureReason failureReason() const;
 	QString errorString() const;
 	QDateTime timestamp() const;
+
 protected:
 	explicit QInAppTransaction(TransactionStatus status, QInAppProduct *product, QObject *parent = nullptr);
 private:
@@ -100,11 +109,17 @@ public:
    QInAppProduct* registeredProduct(const QString& id);
 
    void checkIsTrial();
+   void checkDurable();
+   void checkSubscription();
    void Purchase10Coins();
+private:
+
 signals:
    void isTrial(bool);
-};
+   void isActive(bool);
+public slots:
 
+};
 
 
 #endif // MICROSOFTSHOP_H

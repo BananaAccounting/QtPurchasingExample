@@ -5,11 +5,13 @@
 #include <QString>
 #include <QStringLiteral>
 
+
 #if !defined Q_OS_WIN
 #include <QtPurchasing>
 #else
 #include "microsoftshop.h"
 #endif
+#include "mylogger.h"
 
 class ShopManager : public QObject
 {
@@ -25,12 +27,14 @@ public:
     void restorePurchases();
     void doPurchase(Products product);
     void checkIsTrial();
+	void checkAddon();
+	void checkSubscription();
 
 signals:
     void productPurchased(Products product);
     void error(QString errorMessage);
-    void isTrial(bool);
-
+	void isTrial(bool);
+	void isActive(bool);
     
 public slots:
     void handleErrorGracefully(QInAppProduct*);

@@ -6,24 +6,20 @@
 ShopManager::ShopManager(QWindow* mainWindow, QObject *parent) : QObject(parent)
 {
    m_myStore = new QInAppStore(mainWindow, this);
-
-
-   m_myStore->registerProduct(QInAppProduct::Unlockable,
-      QStringLiteral("banana_once_product"));
-
-   m_myStore->registerProduct(QInAppProduct::Subscription,
-      QStringLiteral("banana_subscription"));
+   //m_myStore->registerProduct(QInAppProduct::Unlockable, QStringLiteral("banana_product"));
+   //m_myStore->registerProduct(QInAppProduct::Unlockable, QStringLiteral("banana_once_product"));
+   //m_myStore->registerProduct(QInAppProduct::Subscription, QStringLiteral("banana_subscription"));
+   setupConnections();
 }
 
 
 void ShopManager::setupConnections()
 {
-   connect(m_myStore, SIGNAL(productRegistered(QInAppProduct*)),
-      this, SLOT(markProductAvailable(QInAppProduct*)));
-   connect(m_myStore, SIGNAL(productUnknown(QInAppProduct*)),
-      this, SLOT(handleErrorGracefully(QInAppProduct*)));
-   connect(m_myStore, SIGNAL(transactionReady(QInAppTransaction*)),
-      this, SLOT(handleTransaction(QInAppTransaction*)));
+   //connect(m_myStore, SIGNAL(productRegistered(QInAppProduct*)), this, SLOT(markProductAvailable(QInAppProduct*)));
+   //connect(m_myStore, SIGNAL(productUnknown(QInAppProduct*)), this, SLOT(handleErrorGracefully(QInAppProduct*)));
+   //connect(m_myStore, SIGNAL(transactionReady(QInAppTransaction*)), this, SLOT(handleTransaction(QInAppTransaction*)));
+
+   connect(m_myStore, &QInAppStore::isTrial, this, &ShopManager::isTrial);
 }
 
 void ShopManager::doPurchase(Products product)
@@ -38,17 +34,32 @@ void ShopManager::doPurchase(Products product)
    case banana_product:
 	   inAppProduct = m_myStore->registeredProduct(QStringLiteral("banana_product"));
    }
+   emit MyLogger::instance().writeLog("Purchasing: "+inAppProduct->title());
    inAppProduct->purchase();
 }
 
 void ShopManager::checkIsTrial()
 {
+   emit  MyLogger::instance().writeLog("Check is trial");
    m_myStore->checkIsTrial();
 }
 
+void ShopManager::checkAddon()
+{
+	emit  MyLogger::instance().writeLog("Check durable Addon");
+	m_myStore->checkDurable();
+}
+
+void ShopManager::checkSubscription()
+{
+	emit  MyLogger::instance().writeLog("Check Subscription");
+	m_myStore->checkSubscription();
+}
+
+
 void ShopManager::restorePurchases()
 {
-
+	emit  MyLogger::instance().writeLog("Restoring purchases");
 }
 
 void ShopManager::handleErrorGracefully(QInAppProduct* p)

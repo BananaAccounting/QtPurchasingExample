@@ -10,6 +10,7 @@
 #include <QStringLiteral>
 #include <QTimer>
 #include "shopmanager.h"
+#include "mylogger.h"
 #include "ui_window.h"
 
 class Window : public QWidget, Ui_Window
@@ -18,13 +19,15 @@ class Window : public QWidget, Ui_Window
 public:
     explicit Window(QWidget *parent = nullptr);
     ~Window();
-
 private:
     ShopManager* m_shopManager = nullptr;
-    
     void markAsSubscribed();
     void markAsDurablePurchased();
     void markAsProductPurchased();
+	void markAsProductTrial();
+	void writeLog(QString log);
+
+	void startingCheck();
 signals:
 protected:
    virtual void showEvent(QShowEvent *ev) override;
@@ -33,6 +36,9 @@ public slots:
     void purchaseDurable();
     void purchaseSubscription();
     void purchaseProduct();
+	void handleTrial(bool);
+
+	
 };
 
 #endif // WINDOW_H
