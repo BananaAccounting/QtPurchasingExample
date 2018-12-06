@@ -3,20 +3,11 @@
 
 #include <QObject>
 #include <QSharedPointer>
+#include <QDebug>
 #include <QDateTime>
+
 #include "mylogger.h"
-
-#include "shobjidl.h"
-#include <windows.h>
-#include <Windows.Services.Store.h>
-#include <wrl.h>
-#include <functional>
-
-using namespace ABI::Windows::Foundation;
-using namespace ABI::Windows::Foundation::Collections;
-using namespace ABI::Windows::Services::Store;
-using namespace Microsoft::WRL;
-using namespace Microsoft::WRL::Wrappers;
+#include "asyncstore.h"
 
 class QWindow;
 class QInAppProductPrivate;
@@ -30,7 +21,8 @@ class QInAppProduct : public QObject
 	Q_PROPERTY(QString title READ title CONSTANT)
 	Q_PROPERTY(QString description READ description CONSTANT)
 signals:
-
+	void isSubscriptionActive(bool);
+	void handleStringResponse(const QString&);
 public:
 
 	enum ProductType
@@ -102,24 +94,35 @@ class QInAppStore : public QObject
 {
    Q_OBJECT
 
-   void emitIsTrial(bool bActiveLicense);
 public:
    QInAppStore(QWindow* mainWindow, QObject *parent = nullptr);
    void registerProduct(QInAppProduct::ProductType, const QString& id) {}
    QInAppProduct* registeredProduct(const QString& id);
 
    void checkIsTrial();
-   void checkDurable();
-   void checkSubscription();
-   void Purchase10Coins();
+   void getAppInfo();
+   void getAddonsInfo();
+   void getCollectionInfo();
 private:
-
+	
 signals:
    void isTrial(bool);
    void isActive(bool);
+   void isDurablePurchased(bool);
+   void isSubscriptionActive(bool);
+   void handleStringResponse(const QString&);
 public slots:
+	
 
 };
 
+/*
+interface IInitializeWithWindow : public IUnknown
+{
+public:
+	void Initialize(void* hwnd);
+};
+struct __declspec(uuid("3E68D4BD-7135-4D10-8018-9FB6D9F33FA1")) IInitializeWithWindow;
+*/
 
 #endif // MICROSOFTSHOP_H

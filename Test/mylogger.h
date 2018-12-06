@@ -22,7 +22,7 @@ private:
 	MyLogger& operator=(const MyLogger&) = delete;
 	MyLogger(const MyLogger&) = delete;
 signals:
-	void writeLog(QString log);
+	void writeLog(const QString& log);
 };
 
 

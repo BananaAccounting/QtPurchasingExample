@@ -26,8 +26,6 @@ private:
     void markAsProductPurchased();
 	void markAsProductTrial();
 	void writeLog(QString log);
-
-	void startingCheck();
 signals:
 protected:
    virtual void showEvent(QShowEvent *ev) override;
@@ -37,6 +35,10 @@ public slots:
     void purchaseSubscription();
     void purchaseProduct();
 	void handleTrial(bool);
+	void handleActive(bool);
+	void handleDurablePurchased(bool);
+	void handleSubscriptionActive(bool);
+
 
 	
 };

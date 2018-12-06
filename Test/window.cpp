@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "window.h"
 
 Window::Window(QWidget *parent) : QWidget(parent)
@@ -25,8 +26,11 @@ void Window::showEvent(QShowEvent *ev)
       connect(btnBuyDurable, &QPushButton::clicked, this, &Window::purchaseDurable);
       connect(&MyLogger::instance(), &MyLogger::writeLog, this, &Window::writeLog);
 	  connect(m_shopManager, &ShopManager::isTrial, this, &Window::handleTrial);
+	  connect(m_shopManager, &ShopManager::isActive, this, &Window::handleActive);
+	  connect(m_shopManager, &ShopManager::isDurablePurchased, this, &Window::handleDurablePurchased);
+	  connect(m_shopManager, &ShopManager::isSubscriptionActive, this, &Window::handleSubscriptionActive);
 
-	  startingCheck();
+	  m_shopManager->initShop();
    }
 }
 
@@ -40,9 +44,22 @@ void Window::handleTrial(bool isTrial)
 {
 	if (isTrial)
 		markAsProductTrial();
-	else
+}
+void Window::handleActive(bool isActive)
+{
+	if (isActive)
 		markAsProductPurchased();
 
+}
+void Window::handleDurablePurchased(bool isPurchased)
+{
+	if(isPurchased)
+		markAsDurablePurchased();
+}
+void Window::handleSubscriptionActive(bool isActive)
+{
+	if (isActive)
+		markAsSubscribed();
 }
 void Window::purchaseDurable()
 {
@@ -97,11 +114,4 @@ void Window::markAsProductTrial()
 
 void Window::writeLog(QString log) {
 	txtLog->append(log);
-}
-
-void Window::startingCheck()
-{
-	m_shopManager->checkIsTrial();
-	m_shopManager->checkAddon();
-	m_shopManager->checkSubscription();
 }

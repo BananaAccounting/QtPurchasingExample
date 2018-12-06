@@ -1,7 +1,7 @@
+#include "pch.h"
 #include "shopmanager.h"
-
 #include <QWindow>
-
+#include <QThread>
 
 ShopManager::ShopManager(QWindow* mainWindow, QObject *parent) : QObject(parent)
 {
@@ -20,6 +20,11 @@ void ShopManager::setupConnections()
    //connect(m_myStore, SIGNAL(transactionReady(QInAppTransaction*)), this, SLOT(handleTransaction(QInAppTransaction*)));
 
    connect(m_myStore, &QInAppStore::isTrial, this, &ShopManager::isTrial);
+   connect(m_myStore, &QInAppStore::isActive, this, &ShopManager::isActive);
+   connect(m_myStore, &QInAppStore::handleStringResponse, this, &ShopManager::handleStringResponse);
+   connect(m_myStore, &QInAppStore::isDurablePurchased, this, &ShopManager::isDurablePurchased);
+   connect(m_myStore, &QInAppStore::isSubscriptionActive, this, &ShopManager::isSubscriptionActive);
+
 }
 
 void ShopManager::doPurchase(Products product)
@@ -34,38 +39,37 @@ void ShopManager::doPurchase(Products product)
    case banana_product:
 	   inAppProduct = m_myStore->registeredProduct(QStringLiteral("banana_product"));
    }
-   emit MyLogger::instance().writeLog("Purchasing: "+inAppProduct->title());
+   MyLogger::instance().writeLog("Purchasing: "+inAppProduct->title());
    inAppProduct->purchase();
 }
 
-void ShopManager::checkIsTrial()
+void ShopManager::initShop()
 {
-   emit  MyLogger::instance().writeLog("Check is trial");
-   m_myStore->checkIsTrial();
+	m_myStore->checkIsTrial();
+	m_myStore->getAppInfo();
+	m_myStore->getAddonsInfo();
+	m_myStore->getCollectionInfo();
 }
 
-void ShopManager::checkAddon()
+bool ShopManager::event(QEvent* e)
 {
-	emit  MyLogger::instance().writeLog("Check durable Addon");
-	m_myStore->checkDurable();
+	return QObject::event(e);
 }
-
-void ShopManager::checkSubscription()
-{
-	emit  MyLogger::instance().writeLog("Check Subscription");
-	m_myStore->checkSubscription();
-}
-
 
 void ShopManager::restorePurchases()
 {
-	emit  MyLogger::instance().writeLog("Restoring purchases");
+	MyLogger::instance().writeLog("Restoring purchases");
 }
 
 void ShopManager::handleErrorGracefully(QInAppProduct* p)
 {
    emit error("Error regarding " + p->identifier());
 }
+
+void ShopManager::handleStringResponse(const QString& result) {
+	MyLogger::instance().writeLog(result);
+}
+
 
 void ShopManager::handleTransaction(QInAppTransaction* transaction)
 {

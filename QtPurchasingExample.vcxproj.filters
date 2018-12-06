@@ -32,6 +32,12 @@
     <ClCompile Include="Test\mylogger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Test\asyncstore.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Test\window.h">
@@ -46,6 +52,9 @@
     <QtMoc Include="Test\mylogger.h">
       <Filter>Source Files</Filter>
     </QtMoc>
+    <QtMoc Include="Test\asyncstore.h">
+      <Filter>Source Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="Test\window.ui">
@@ -53,7 +62,7 @@
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="vector.h">
+    <ClInclude Include="Test\pch.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

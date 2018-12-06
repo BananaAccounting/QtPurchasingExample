@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QPushButton>
 #include "window.h"
+#include "pch.h"
 
 int main(int argc, char **argv)
 {

@@ -25,20 +25,22 @@ public:
     explicit ShopManager(QWindow* mainWindow, QObject *parent = nullptr);
 
     void restorePurchases();
-    void doPurchase(Products product);
-    void checkIsTrial();
-	void checkAddon();
-	void checkSubscription();
+	void doPurchase(Products product); 
+	void initShop();
+	bool event(QEvent *e) override;
 
 signals:
     void productPurchased(Products product);
-    void error(QString errorMessage);
+    void error(const QString& errorMessage);
 	void isTrial(bool);
 	void isActive(bool);
+	void isDurablePurchased(bool);
+	void isSubscriptionActive(bool);
     
 public slots:
     void handleErrorGracefully(QInAppProduct*);
     void handleTransaction(QInAppTransaction*);
+	void handleStringResponse(const QString&);
 };
 
 #endif // SHOPMANAGER_H
