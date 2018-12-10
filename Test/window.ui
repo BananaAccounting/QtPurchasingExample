@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>QtPurchasingExample</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -94,6 +94,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QPushButton" name="btnCheckDurable">
+     <property name="text">
+      <string>Check</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <spacer name="verticalSpacer_2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -125,6 +132,13 @@
     <widget class="QPushButton" name="btnSubscribe">
      <property name="text">
       <string>Subscribe</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="btnCheckSubscription">
+     <property name="text">
+      <string>Check</string>
      </property>
     </widget>
    </item>

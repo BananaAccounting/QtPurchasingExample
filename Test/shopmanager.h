@@ -21,11 +21,13 @@ class ShopManager : public QObject
     void setupConnections();
 
 public:
-    enum Products { banana_product, banana_once_product, banana_subscription };
+    enum Products { banana_product, banana_durable, banana_subscription, banana_consumable};
     explicit ShopManager(QWindow* mainWindow, QObject *parent = nullptr);
 
     void restorePurchases();
 	void doPurchase(Products product); 
+	void checkSubscription();
+	void checkDurable();
 	void initShop();
 	bool event(QEvent *e) override;
 
@@ -34,7 +36,7 @@ signals:
     void error(const QString& errorMessage);
 	void isTrial(bool);
 	void isActive(bool);
-	void isDurablePurchased(bool);
+	void isDurableActive(bool);
 	void isSubscriptionActive(bool);
     
 public slots:

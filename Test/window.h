@@ -34,9 +34,11 @@ public slots:
     void purchaseDurable();
     void purchaseSubscription();
     void purchaseProduct();
+	void checkSubscription();
+	void checkDurable();
 	void handleTrial(bool);
 	void handleActive(bool);
-	void handleDurablePurchased(bool);
+	void handleDurableActive(bool);
 	void handleSubscriptionActive(bool);
 
 

@@ -47,21 +47,23 @@ void AsyncStore::getAddonsAsync()
 		getStoreContext();
 	}
 
-	auto filter{ winrt::single_threaded_vector<winrt::hstring>({ L"Durable", L"Consumable", L"UnmanagedConsumable", L"Application" }) };
+	auto filter{ winrt::single_threaded_vector<winrt::hstring>({ L"Durable"}) };
 	StoreProductQueryResult  storeProductQueryRes = context.GetAssociatedStoreProductsAsync(filter).get();
 
 	if (storeProductQueryRes == nullptr) {
 		winrt::check_hresult(storeProductQueryRes.ExtendedError());
 		QString res = QString::fromStdString("Something went wrong, and the product was not returned.");
 	}
-	QString res = "Products: \n";
+	QString res = "Available addOns:";
+	emit appInfo(res);
 	for (auto const& product : storeProductQueryRes.Products()) {
 		auto p = product.Value();
-		res += QString::fromStdWString(product.Key().c_str()) + ":" + QString::fromStdWString(p.Title().c_str())
-			+ " (" + QString::fromStdWString(p.ProductKind().c_str()) + ") Price: " + QString::fromStdWString(p.Price().FormattedBasePrice().c_str()) + "\n";
+		auto data = p.ExtendedJsonData();
+		res = QString::fromStdWString(data.c_str());
+		//res += QString::fromStdWString(product.Key().c_str()) + ":" + QString::fromStdWString(p.Title().c_str())
+			//+ " (" + QString::fromStdWString(p.ProductKind().c_str()) + ") Price: " + QString::fromStdWString(p.Price().FormattedBasePrice().c_str()) + "\n";
+		emit appInfo(res+"***");
 	}
-
-	emit appAddons(res);
 }
 
 
@@ -70,7 +72,6 @@ void AsyncStore::getUserCollectionAsync()
 	if (context == nullptr) {
 		getStoreContext();
 	}
-
 	auto filter{ winrt::single_threaded_vector<winrt::hstring>({ L"Durable", L"Consumable", L"UnmanagedConsumable", L"Application" }) };
 	StoreProductQueryResult  storeProductQueryRes = context.GetUserCollectionAsync(filter).get();
 
@@ -78,19 +79,19 @@ void AsyncStore::getUserCollectionAsync()
 		winrt::check_hresult(storeProductQueryRes.ExtendedError());
 		QString res = QString::fromStdString("Something went wrong, and the product was not returned.");
 	}
-	QString res = "User products: \n";
+	//QString res = "User products: \n";
 	for (auto const& product : storeProductQueryRes.Products()) {
-		qDebug() << "Checking subscription " << product.Key().c_str();
 		StoreProduct p = product.Value();
-		res += QString::fromStdWString(product.Key().c_str()) + ":" + QString::fromStdWString(p.Title().c_str())
-			+ " (" + QString::fromStdWString(p.ProductKind().c_str()) + ") Price: " + QString::fromStdWString(p.Price().FormattedBasePrice().c_str()) + "\n";
 		if (product.Key() == durableID) {
-			emit isDurablePurchased(true);
+			emit isDurableActive(true);
+			emit appInfo("Durable is active.");
 		}
-
+		if (product.Key() == subscriptionID) {
+			emit isSubscriptionActive(true);
+			emit appInfo("Subscription is active.");
+		}
 	}
-
-	emit appInfoUserCollection(res);
+	//emit appInfoUserCollection(res);
 }
 
 void AsyncStore::checkIsTrialAsync()
@@ -118,31 +119,64 @@ void AsyncStore::checkIsTrialAsync()
 			emit isActive(true);
 		}
 	}
-	for (auto const& licenseMap : appLicense.AddOnLicenses())
-	{
-		auto license = licenseMap.Value();
-		if (license.SkuStoreId() == subscriptionID)
-		{
-			if (license.IsActive())
-			{
-
-				emit isSubscriptionActive(true);
-				auto formatter = winrt::Windows::Globalization::DateTimeFormatting::DateTimeFormatter(L"hour:minute day/month/year");
-				emit appInfo("This subscription expires on " + QString::fromStdWString(formatter.Format(license.ExpirationDate()).c_str()));
-				;
-
-			}
-		}
-	}
-
 }
 
-void AsyncStore::buySubscriptionAsync()
+void AsyncStore::checkSubscriptionAsync()
 {
 	if (context == nullptr) {
 		getStoreContext();
 	}
-	StorePurchaseResult result = context.RequestPurchaseAsync(subscriptionID).get();
+	StoreAppLicense  appLicense = context.GetAppLicenseAsync().get();
+	if (appLicense == nullptr) {
+		emit appInfo(QString::fromStdString("An error occurred while retrieving the license."));
+	}
+	for (auto license : appLicense.AddOnLicenses()) {
+		StoreLicense addOnLicense = license.Value();
+		if (addOnLicense.IsActive() && addOnLicense.InAppOfferToken()==L"banana_subscription") {
+			auto data = addOnLicense.ExtendedJsonData();
+			emit appInfo(QString::fromStdWString(data.c_str()));
+			emit isSubscriptionActive(true);
+		}
+	}
+}
+
+void AsyncStore::checkDurableAsync()
+{
+	if (context == nullptr) {
+		getStoreContext();
+	}
+	StoreAppLicense  appLicense = context.GetAppLicenseAsync().get();
+	if (appLicense == nullptr) {
+		emit appInfo(QString::fromStdString("An error occurred while retrieving the license."));
+	}
+	for (auto license : appLicense.AddOnLicenses()) {
+		StoreLicense addOnLicense = license.Value();
+		if (addOnLicense.IsActive() && addOnLicense.InAppOfferToken() == L"banana_durable") {
+			auto data = addOnLicense.ExtendedJsonData();
+			emit appInfo(QString::fromStdWString(data.c_str()));
+			emit isDurableActive(true);
+		}
+	}
+}
+
+/* Buy Addons */
+void AsyncStore::buySubscriptionAsync()
+{
+	buyAddonAsync(subscriptionID);
+}
+void AsyncStore::buyDurableAsync()
+{
+	buyAddonAsync(durableID);
+}
+void AsyncStore::buyProductAsync()
+{
+	buyAddonAsync(productID);
+}
+void AsyncStore::buyAddonAsync(winrt::hstring id) {
+	if (context == nullptr) {
+		getStoreContext();
+	}
+	StorePurchaseResult result = context.RequestPurchaseAsync(id).get();
 
 	winrt::hresult extendedError;
 	if (result == nullptr)
@@ -157,13 +191,13 @@ void AsyncStore::buySubscriptionAsync()
 	case StorePurchaseStatus::AlreadyPurchased:
 		//textBlock.Text = "The user has already purchased the product.";3
 		emit appInfo("The user has already purchased the product.");
-		emit subscriptionBought(true);
+		emit productBought(true);
 		break;
 
 	case StorePurchaseStatus::Succeeded:
 		//textBlock.Text = "The purchase was successful.";
 		emit appInfo("The purchase was successful.");
-		emit subscriptionBought(true);
+		emit productBought(true);
 		break;
 
 	case StorePurchaseStatus::NotPurchased:
@@ -186,8 +220,9 @@ void AsyncStore::buySubscriptionAsync()
 		emit appInfo("The purchase was unsuccessful due to an unknown error.  ExtendedError: " + QString::number(extendedError));
 		break;
 	}
-
 }
+
+
 
 void AsyncStore::run()
 {
@@ -218,7 +253,21 @@ void AsyncStore::run()
 		buySubscriptionAsync();
 		break;
 	}
-
+	case buyDurable:
+	{
+		buyDurableAsync();
+		break;
+	}
+	case checkSubscription:
+	{
+		checkSubscriptionAsync();
+		break;
+	}
+	case checkDurable:
+	{
+		checkDurableAsync();
+		break;
+	}
 	}
 }
 

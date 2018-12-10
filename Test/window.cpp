@@ -24,10 +24,12 @@ void Window::showEvent(QShowEvent *ev)
       connect(btnSubscribe, &QPushButton::clicked, this, &Window::purchaseSubscription);
       connect(btnBuyProduct, &QPushButton::clicked, this, &Window::purchaseProduct);
       connect(btnBuyDurable, &QPushButton::clicked, this, &Window::purchaseDurable);
+      connect(btnCheckSubscription, &QPushButton::clicked, this, &Window::checkSubscription);
+      connect(btnCheckDurable, &QPushButton::clicked, this, &Window::checkDurable);
       connect(&MyLogger::instance(), &MyLogger::writeLog, this, &Window::writeLog);
 	  connect(m_shopManager, &ShopManager::isTrial, this, &Window::handleTrial);
 	  connect(m_shopManager, &ShopManager::isActive, this, &Window::handleActive);
-	  connect(m_shopManager, &ShopManager::isDurablePurchased, this, &Window::handleDurablePurchased);
+	  connect(m_shopManager, &ShopManager::isDurableActive, this, &Window::handleDurableActive);
 	  connect(m_shopManager, &ShopManager::isSubscriptionActive, this, &Window::handleSubscriptionActive);
 
 	  m_shopManager->initShop();
@@ -51,7 +53,7 @@ void Window::handleActive(bool isActive)
 		markAsProductPurchased();
 
 }
-void Window::handleDurablePurchased(bool isPurchased)
+void Window::handleDurableActive(bool isPurchased)
 {
 	if(isPurchased)
 		markAsDurablePurchased();
@@ -63,7 +65,7 @@ void Window::handleSubscriptionActive(bool isActive)
 }
 void Window::purchaseDurable()
 {
-    m_shopManager->doPurchase(ShopManager::banana_once_product);
+    m_shopManager->doPurchase(ShopManager::banana_durable);
 }
 
 void Window::purchaseSubscription()
@@ -74,6 +76,16 @@ void Window::purchaseSubscription()
 void Window::purchaseProduct()
 {
 	m_shopManager->doPurchase(ShopManager::banana_product);
+}
+
+void Window::checkSubscription()
+{
+	m_shopManager->checkSubscription();
+}
+
+void Window::checkDurable()
+{
+	m_shopManager->checkDurable();
 }
 
 

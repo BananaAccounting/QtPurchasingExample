@@ -13,7 +13,8 @@ class AsyncStore : public QObject, public QRunnable
 public:
 	AsyncStore(QWindow* mainWindow, QObject *parent = nullptr);
 	AsyncStore();
-	enum mType { getAppInfo, getAddons, getAddonsPurchasable, getUserCollection, checkIsTrial, buySubscription };
+	enum mType { getAppInfo, getAddons, getAddonsPurchasable, getUserCollection, checkIsTrial, checkSubscription, checkDurable, 
+		buySubscription, buyDurable, buyProduct};
 	void setOperation(mType operation) { m_operation = operation; }
 	void run() override;
 	void setContext(const winrt::Windows::Services::Store::StoreContext&);
@@ -21,8 +22,10 @@ public:
 private:
 	winrt::Windows::Services::Store::StoreContext context = nullptr;
 
+	winrt::hstring productID = L"9NDW9G6P5G6X";
 	winrt::hstring subscriptionID = L"9P2QZFC6NH0M";
 	winrt::hstring durableID = L"9P27DZCTDFDR";
+	winrt::hstring consumableID = L"9NJBKP5835TX";
 
 	void getStoreContext();
 	mType m_operation = getAppInfo;
@@ -30,17 +33,20 @@ private:
 	void getAddonsAsync();
 	void getUserCollectionAsync();
 	void checkIsTrialAsync();
+	void checkSubscriptionAsync();
+	void checkDurableAsync();
+	void buyAddonAsync(winrt::hstring);
+	void buyDurableAsync();
+	void buyProductAsync();
 	void buySubscriptionAsync();
 signals:
 	void appInfo(const QString&);
-	void appAddons(const QString&);
-	void appInfoUserCollection(const QString&);
 	void isTrial(bool);
 	void isActive(bool);
-	void isDurablePurchased(bool);
+	void isDurableActive(bool);
 	void isSubscriptionActive(bool);
 	void subInfo(const QString&);
-	void subscriptionBought(bool);
+	void productBought(bool);
 public slots:
 
 };

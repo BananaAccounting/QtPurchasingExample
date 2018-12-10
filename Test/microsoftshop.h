@@ -21,7 +21,7 @@ class QInAppProduct : public QObject
 	Q_PROPERTY(QString title READ title CONSTANT)
 	Q_PROPERTY(QString description READ description CONSTANT)
 signals:
-	void isSubscriptionActive(bool);
+	void isProductBought(bool);
 	void handleStringResponse(const QString&);
 public:
 
@@ -103,12 +103,14 @@ public:
    void getAppInfo();
    void getAddonsInfo();
    void getCollectionInfo();
+   void getSubscriptionInfo();
+   void getDurableInfo();
 private:
 	
 signals:
    void isTrial(bool);
    void isActive(bool);
-   void isDurablePurchased(bool);
+   void isDurableActive(bool);
    void isSubscriptionActive(bool);
    void handleStringResponse(const QString&);
 public slots:
@@ -116,13 +118,14 @@ public slots:
 
 };
 
-/*
-interface IInitializeWithWindow : public IUnknown
+
+MIDL_INTERFACE("3E68D4BD-7135-4D10-8018-9FB6D9F33FA1")
+IInitializeWithWindow: public IUnknown
 {
 public:
-	void Initialize(void* hwnd);
-};
-struct __declspec(uuid("3E68D4BD-7135-4D10-8018-9FB6D9F33FA1")) IInitializeWithWindow;
-*/
+	virtual HRESULT STDMETHODCALLTYPE Initialize(
+		/* [in] */ __RPC__in HWND hwnd) = 0;
 
+};
+//struct __declspec(uuid("3E68D4BD-7135-4D10-8018-9FB6D9F33FA1")) IInitializeWithWindow;
 #endif // MICROSOFTSHOP_H

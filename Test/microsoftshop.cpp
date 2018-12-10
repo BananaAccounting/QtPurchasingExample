@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "microsoftshop.h"
-#include "shobjidl.h"
 
 void writeLog(QString log) {
 	qDebug() << log;
@@ -65,8 +64,17 @@ QInAppProduct::ProductType QInAppProduct::productType() const
 
 void QInAppProduct::purchase()
 {
-	
-	if (context == nullptr) {
+	AsyncStore* asyncStore = new AsyncStore();
+	asyncStore->setAutoDelete(true);
+	asyncStore->setContext(context);
+	if(title() == "banana_subscription")
+		asyncStore->setOperation(AsyncStore::mType::buySubscription);
+	else 
+		asyncStore->setOperation(AsyncStore::mType::buyDurable);
+	connect(asyncStore, &AsyncStore::appInfo, this, &QInAppProduct::handleStringResponse);
+	connect(asyncStore, &AsyncStore::productBought, this, &QInAppProduct::isProductBought);
+	QThreadPool::globalInstance()->tryStart(asyncStore);
+	/*if (context == nullptr) {
 		setContext();
 	}
 	
@@ -114,7 +122,7 @@ void QInAppProduct::purchase()
 		//textBlock.Text = "The purchase was unsuccessful due to an unknown error. " +		"ExtendedError: " + extendedError;
 		emit handleStringResponse("The purchase was unsuccessful due to an unknown error.  ExtendedError: " + QString::number(extendedError));
 		break;
-	}
+	}*/
 
 }
 
@@ -195,7 +203,6 @@ QInAppProduct * QInAppStore::registeredProduct(const QString & id)
 		product = new QInAppProduct("0", id, id, QInAppProduct::ProductType::Unlockable, "9P27DZCTDFDR");
 
 	connect(product, &QInAppProduct::handleStringResponse, this, &QInAppStore::handleStringResponse);
-	connect(product, &QInAppProduct::isSubscriptionActive, this, &QInAppStore::isSubscriptionActive);
 	return product;
 }
 
@@ -212,7 +219,7 @@ QInAppStore::QInAppStore(QWindow* mainWindow, QObject *parent)
 	ComPtr<IInitializeWithWindow> initWindow;
 	hr = storeContext->QueryInterface(IID_PPV_ARGS(&initWindow));
 	hr = initWindow->Initialize((HWND)(void*)mainWindow);
-	
+
 	IInitializeWithWindow* initWindow = (IInitializeWithWindow*)(IUnknown*) &context;
 	initWindow->Initialize(mainWindow);
 	
@@ -226,9 +233,14 @@ QInAppStore::QInAppStore(QWindow* mainWindow, QObject *parent)
 	initWindow = (winrt::com_ptr<IInitializeWithWindow>*)(winrt::com_ptr<IUnknown>*)(&context);
 	initWindow->get()->QueryInterface(__uuidof(initWindow), initWindow->put_void());
 	initWindow->get()->Initialize((HWND)(void*)mainWindow);
+	*/
+
+
+	winrt::com_ptr<IInitializeWithWindow> initWindow;
+	winrt::Windows::Foundation::IUnknown * unknown = reinterpret_cast<winrt::Windows::Foundation::IUnknown*>(&context);
+	unknown->as(initWindow);
+	initWindow->Initialize((HWND)mainWindow);
 	
-	IInitializeWithWindow initWindow = (IInitializeWithWindow) context;
-	initWindow->Initialize((HWND)(void*)mainWindow);*/
 
 }
 
@@ -241,7 +253,6 @@ void QInAppStore::checkIsTrial()
 	connect(asyncStore, &AsyncStore::isTrial, this, &QInAppStore::isTrial);
 	connect(asyncStore, &AsyncStore::isActive, this, &QInAppStore::isActive);
 	connect(asyncStore, &AsyncStore::appInfo, this, &QInAppStore::handleStringResponse);
-	connect(asyncStore, &AsyncStore::isSubscriptionActive, this, &QInAppStore::isSubscriptionActive);
 	QThreadPool::globalInstance()->tryStart(asyncStore);
 }
 
@@ -262,7 +273,7 @@ void QInAppStore::getAddonsInfo()
 	asyncStore->setAutoDelete(true);
 	asyncStore->setContext(context);
 	asyncStore->setOperation(AsyncStore::mType::getAddons);
-	connect(asyncStore, &AsyncStore::appAddons, this, &QInAppStore::handleStringResponse);
+	connect(asyncStore, &AsyncStore::appInfo, this, &QInAppStore::handleStringResponse);
 	QThreadPool::globalInstance()->tryStart(asyncStore);
 }
 
@@ -275,7 +286,36 @@ void QInAppStore::getCollectionInfo()
 	asyncStore->setAutoDelete(true);
 	asyncStore->setContext(context);
 	asyncStore->setOperation(AsyncStore::mType::getUserCollection);
-	connect(asyncStore, &AsyncStore::appInfoUserCollection, this, &QInAppStore::handleStringResponse);
-	connect(asyncStore, &AsyncStore::isDurablePurchased, this, &QInAppStore::isDurablePurchased);
+	connect(asyncStore, &AsyncStore::appInfo, this, &QInAppStore::handleStringResponse);
+	connect(asyncStore, &AsyncStore::isDurableActive, this, &QInAppStore::isDurableActive);
+	connect(asyncStore, &AsyncStore::isSubscriptionActive, this, &QInAppStore::isSubscriptionActive);
+	QThreadPool::globalInstance()->tryStart(asyncStore);
+}
+
+void QInAppStore::getSubscriptionInfo()
+{
+	if (context == nullptr) {
+		setContext();
+	}
+	AsyncStore* asyncStore = new AsyncStore();
+	asyncStore->setAutoDelete(true);
+	asyncStore->setContext(context);
+	asyncStore->setOperation(AsyncStore::mType::checkSubscription);
+	connect(asyncStore, &AsyncStore::appInfo, this, &QInAppStore::handleStringResponse);
+	connect(asyncStore, &AsyncStore::isSubscriptionActive, this, &QInAppStore::isSubscriptionActive);
+	QThreadPool::globalInstance()->tryStart(asyncStore);
+}
+
+void QInAppStore::getDurableInfo()
+{
+	if (context == nullptr) {
+		setContext();
+	}
+	AsyncStore* asyncStore = new AsyncStore();
+	asyncStore->setAutoDelete(true);
+	asyncStore->setContext(context);
+	asyncStore->setOperation(AsyncStore::mType::checkDurable);
+	connect(asyncStore, &AsyncStore::appInfo, this, &QInAppStore::handleStringResponse);
+	connect(asyncStore, &AsyncStore::isDurableActive, this, &QInAppStore::isDurableActive);
 	QThreadPool::globalInstance()->tryStart(asyncStore);
 }
