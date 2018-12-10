@@ -74,60 +74,7 @@ void QInAppProduct::purchase()
 	connect(asyncStore, &AsyncStore::appInfo, this, &QInAppProduct::handleStringResponse);
 	connect(asyncStore, &AsyncStore::productBought, this, &QInAppProduct::isProductBought);
 	QThreadPool::globalInstance()->tryStart(asyncStore);
-	/*if (context == nullptr) {
-		setContext();
-	}
-	
-
-	winrt::Windows::Services::Store::StorePurchaseResult result = context.RequestPurchaseAsync(identifier().toStdWString()).get();
-
-	winrt::hresult extendedError;
-	if (result == nullptr)
-	{
-		winrt::check_hresult(result.ExtendedError());
-		extendedError = result.ExtendedError();
-		return;
-	}
-
-	switch (result.Status())
-	{
-	case winrt::Windows::Services::Store::StorePurchaseStatus::AlreadyPurchased:
-		//textBlock.Text = "The user has already purchased the product.";3
-		emit handleStringResponse("The user has already purchased the product.");
-		emit isSubscriptionActive(true);
-		break;
-
-	case winrt::Windows::Services::Store::StorePurchaseStatus::Succeeded:
-		//textBlock.Text = "The purchase was successful.";
-		emit handleStringResponse("The purchase was successful.");
-		emit isSubscriptionActive(true);
-		break;
-
-	case winrt::Windows::Services::Store::StorePurchaseStatus::NotPurchased:
-		//textBlock.Text = "The purchase did not complete. " + "The user may have cancelled the purchase. ExtendedError: " + extendedError;
-		emit handleStringResponse("The purchase did not complete. The user may have cancelled the purchase. ExtendedError: " + QString::number(extendedError));
-		break;
-
-	case winrt::Windows::Services::Store::StorePurchaseStatus::NetworkError:
-		//textBlock.Text = "The purchase was unsuccessful due to a network error. " + "ExtendedError: " + extendedError;
-		emit handleStringResponse("The purchase was unsuccessful due to a network error. ExtendedError: " + QString::number(extendedError));
-		break;
-
-	case winrt::Windows::Services::Store::StorePurchaseStatus::ServerError:
-		//textBlock.Text = "The purchase was unsuccessful due to a server error. " +"ExtendedError: " + extendedError;
-		emit handleStringResponse("The purchase was unsuccessful due to a server error. ExtendedError: " + QString::number(extendedError));
-		break;
-
-	default:
-		//textBlock.Text = "The purchase was unsuccessful due to an unknown error. " +		"ExtendedError: " + extendedError;
-		emit handleStringResponse("The purchase was unsuccessful due to an unknown error.  ExtendedError: " + QString::number(extendedError));
-		break;
-	}*/
-
 }
-
-
-
 
 
 /* QInAppTransaction */

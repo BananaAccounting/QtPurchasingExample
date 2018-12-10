@@ -65,7 +65,7 @@ void Window::handleSubscriptionActive(bool isActive)
 }
 void Window::purchaseDurable()
 {
-    m_shopManager->doPurchase(ShopManager::banana_durable);
+    m_shopManager->doPurchase(ShopManager::banana_once_product);
 }
 
 void Window::purchaseSubscription()

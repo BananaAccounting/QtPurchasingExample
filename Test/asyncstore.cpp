@@ -151,7 +151,7 @@ void AsyncStore::checkDurableAsync()
 	}
 	for (auto license : appLicense.AddOnLicenses()) {
 		StoreLicense addOnLicense = license.Value();
-		if (addOnLicense.IsActive() && addOnLicense.InAppOfferToken() == L"banana_durable") {
+		if (addOnLicense.IsActive() && addOnLicense.InAppOfferToken() == L"banana_once_product") {
 			auto data = addOnLicense.ExtendedJsonData();
 			emit appInfo(QString::fromStdWString(data.c_str()));
 			emit isDurableActive(true);

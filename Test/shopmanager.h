@@ -21,7 +21,7 @@ class ShopManager : public QObject
     void setupConnections();
 
 public:
-    enum Products { banana_product, banana_durable, banana_subscription, banana_consumable};
+    enum Products { banana_product, banana_once_product, banana_subscription, banana_consumable};
     explicit ShopManager(QWindow* mainWindow, QObject *parent = nullptr);
 
     void restorePurchases();
