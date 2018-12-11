@@ -12,10 +12,10 @@ void setContext() {
 }
 
 /* QInAppProduct */
-class QInAppProductPrivate
+class QInAppProductPrivate1
 {
 public:
-	QInAppProductPrivate(const QString &price, const QString &title, const QString &description, QInAppProduct::ProductType type, const QString &id)
+	QInAppProductPrivate1(const QString &price, const QString &title, const QString &description, QInAppProduct1::ProductType type, const QString &id)
 		: localPrice(price)
 		, localTitle(title)
 		, localDescription(description)
@@ -27,42 +27,42 @@ public:
 	QString localPrice;
 	QString localTitle;
 	QString localDescription;
-	QInAppProduct::ProductType productType;
+	QInAppProduct1::ProductType productType;
 	QString identifier;
 };
 
-QInAppProduct::QInAppProduct(const QString &price, const QString &title, const QString &description, ProductType productType, const QString &identifier, QObject *parent)
+QInAppProduct1::QInAppProduct1(const QString &price, const QString &title, const QString &description, ProductType productType, const QString &identifier, QObject *parent)
 	: QObject(parent)
 {
-	d = QSharedPointer<QInAppProductPrivate>(new QInAppProductPrivate(price, title, description, productType, identifier));
+	d = QSharedPointer<QInAppProductPrivate1>(new QInAppProductPrivate1(price, title, description, productType, identifier));
 }
 
-QString QInAppProduct::identifier() const
+QString QInAppProduct1::identifier() const
 {
 	return d->identifier;
 }
 
-QString QInAppProduct::description() const
+QString QInAppProduct1::description() const
 {
 	return d->localDescription;
 }
 
-QString QInAppProduct::title() const
+QString QInAppProduct1::title() const
 {
 	return d->localTitle;
 }
 
-QString QInAppProduct::price() const
+QString QInAppProduct1::price() const
 {
 	return d->localPrice;
 }
 
-QInAppProduct::ProductType QInAppProduct::productType() const
+QInAppProduct1::ProductType QInAppProduct1::productType() const
 {
 	return d->productType;
 }
 
-void QInAppProduct::purchase()
+void QInAppProduct1::purchase()
 {
 	AsyncStore* asyncStore = new AsyncStore();
 	asyncStore->setAutoDelete(true);
@@ -71,90 +71,90 @@ void QInAppProduct::purchase()
 		asyncStore->setOperation(AsyncStore::mType::buySubscription);
 	else 
 		asyncStore->setOperation(AsyncStore::mType::buyDurable);
-	connect(asyncStore, &AsyncStore::appInfo, this, &QInAppProduct::handleStringResponse);
-	connect(asyncStore, &AsyncStore::productBought, this, &QInAppProduct::isProductBought);
+	connect(asyncStore, &AsyncStore::appInfo, this, &QInAppProduct1::handleStringResponse);
+	connect(asyncStore, &AsyncStore::productBought, this, &QInAppProduct1::isProductBought);
 	QThreadPool::globalInstance()->tryStart(asyncStore);
 }
 
 
 /* QInAppTransaction */
-class QInAppTransactionPrivate
+class QInAppTransactionPrivate1
 {
 public:
-	QInAppTransactionPrivate(QInAppTransaction::TransactionStatus s,
-		QInAppProduct *p)
+	QInAppTransactionPrivate1(QInAppTransaction1::TransactionStatus s,
+		QInAppProduct1 *p)
 		: status(s)
 		, product(p)
 	{
 	}
 
-	QInAppTransaction::TransactionStatus status;
-	QInAppProduct *product;
+	QInAppTransaction1::TransactionStatus status;
+	QInAppProduct1 *product;
 };
 
-QInAppTransaction::QInAppTransaction(TransactionStatus status, QInAppProduct *product, QObject *parent) : QObject(parent)
+QInAppTransaction1::QInAppTransaction1(TransactionStatus status, QInAppProduct1 *product, QObject *parent) : QObject(parent)
 {
-	d = QSharedPointer<QInAppTransactionPrivate>(new QInAppTransactionPrivate(status, product));
+	d = QSharedPointer<QInAppTransactionPrivate1>(new QInAppTransactionPrivate1(status, product));
 }
 
-QInAppTransaction::~QInAppTransaction()
+QInAppTransaction1::~QInAppTransaction1()
 {
 }
 
-QInAppProduct *QInAppTransaction::product() const
+QInAppProduct1 *QInAppTransaction1::product() const
 {
 	return d->product;
 }
 
-QInAppTransaction::TransactionStatus QInAppTransaction::status() const
+QInAppTransaction1::TransactionStatus QInAppTransaction1::status() const
 {
 	return d->status;
 }
 
-QInAppTransaction::FailureReason QInAppTransaction::failureReason() const
+QInAppTransaction1::FailureReason QInAppTransaction1::failureReason() const
 {
 	return NoFailure;
 }
 
-QString QInAppTransaction::errorString() const
+QString QInAppTransaction1::errorString() const
 {
 	return QString();
 }
 
-QDateTime QInAppTransaction::timestamp() const
+QDateTime QInAppTransaction1::timestamp() const
 {
 	return QDateTime();
 }
 
-QString QInAppTransaction::orderId() const
+QString QInAppTransaction1::orderId() const
 {
 	return QString();
 }
 
-QString QInAppTransaction::platformProperty(const QString &propertyName) const
+QString QInAppTransaction1::platformProperty(const QString &propertyName) const
 {
 	Q_UNUSED(propertyName);
 	return QString();
 }
 
 /* QInAppStore */
-QInAppProduct * QInAppStore::registeredProduct(const QString & id)
+QInAppProduct1 * QInAppStore1::registeredProduct(const QString & id)
 {
-	QInAppProduct* product;
+	QInAppProduct1* product;
 
 	if (id == "banana_product")
-		product = new QInAppProduct("0", id, id, QInAppProduct::ProductType::Unlockable, "9NDW9G6P5G6X");
+		product = new QInAppProduct1("0", id, id, QInAppProduct1::ProductType::Unlockable, "9NDW9G6P5G6X");
 	else if (id == "banana_subscription")
-		product = new QInAppProduct("0", id, id, QInAppProduct::ProductType::Subscription, "9P2QZFC6NH0M");
+		product = new QInAppProduct1("0", id, id, QInAppProduct1::ProductType::Subscription, "9P2QZFC6NH0M");
 	else
-		product = new QInAppProduct("0", id, id, QInAppProduct::ProductType::Unlockable, "9P27DZCTDFDR");
+		product = new QInAppProduct1("0", id, id, QInAppProduct1::ProductType::Unlockable, "9P27DZCTDFDR");
 
-	connect(product, &QInAppProduct::handleStringResponse, this, &QInAppStore::handleStringResponse);
+	connect(product, &QInAppProduct1::handleStringResponse, this, &QInAppStore1::handleStringResponse);
 	return product;
 }
 
 
-QInAppStore::QInAppStore(QWindow* mainWindow, QObject *parent)
+QInAppStore1::QInAppStore1(QWindow* mainWindow, QObject *parent)
 	: QObject(parent)
 {
 	setContext();
@@ -191,40 +191,40 @@ QInAppStore::QInAppStore(QWindow* mainWindow, QObject *parent)
 
 }
 
-void QInAppStore::checkIsTrial()
+void QInAppStore1::checkIsTrial()
 {
 	AsyncStore* asyncStore = new AsyncStore();
 	asyncStore->setAutoDelete(true);
 	asyncStore->setContext(context);
 	asyncStore->setOperation(AsyncStore::mType::checkIsTrial);
-	connect(asyncStore, &AsyncStore::isTrial, this, &QInAppStore::isTrial);
-	connect(asyncStore, &AsyncStore::isActive, this, &QInAppStore::isActive);
-	connect(asyncStore, &AsyncStore::appInfo, this, &QInAppStore::handleStringResponse);
+	connect(asyncStore, &AsyncStore::isTrial, this, &QInAppStore1::isTrial);
+	connect(asyncStore, &AsyncStore::isActive, this, &QInAppStore1::isActive);
+	connect(asyncStore, &AsyncStore::appInfo, this, &QInAppStore1::handleStringResponse);
 	QThreadPool::globalInstance()->tryStart(asyncStore);
 }
 
 
-void QInAppStore::getAppInfo()
+void QInAppStore1::getAppInfo()
 {
 	AsyncStore* asyncStore = new AsyncStore();
 	asyncStore->setAutoDelete(true);
 	asyncStore->setContext(context);
 	asyncStore->setOperation(AsyncStore::mType::getAppInfo);
-	connect(asyncStore, &AsyncStore::appInfo, this, &QInAppStore::handleStringResponse);
+	connect(asyncStore, &AsyncStore::appInfo, this, &QInAppStore1::handleStringResponse);
 	QThreadPool::globalInstance()->tryStart(asyncStore);
 }
 
-void QInAppStore::getAddonsInfo()
+void QInAppStore1::getAddonsInfo()
 {
 	AsyncStore* asyncStore = new AsyncStore();
 	asyncStore->setAutoDelete(true);
 	asyncStore->setContext(context);
 	asyncStore->setOperation(AsyncStore::mType::getAddons);
-	connect(asyncStore, &AsyncStore::appInfo, this, &QInAppStore::handleStringResponse);
+	connect(asyncStore, &AsyncStore::appInfo, this, &QInAppStore1::handleStringResponse);
 	QThreadPool::globalInstance()->tryStart(asyncStore);
 }
 
-void QInAppStore::getCollectionInfo()
+void QInAppStore1::getCollectionInfo()
 {
 	if (context == nullptr) {
 		setContext();
@@ -233,13 +233,13 @@ void QInAppStore::getCollectionInfo()
 	asyncStore->setAutoDelete(true);
 	asyncStore->setContext(context);
 	asyncStore->setOperation(AsyncStore::mType::getUserCollection);
-	connect(asyncStore, &AsyncStore::appInfo, this, &QInAppStore::handleStringResponse);
-	connect(asyncStore, &AsyncStore::isDurableActive, this, &QInAppStore::isDurableActive);
-	connect(asyncStore, &AsyncStore::isSubscriptionActive, this, &QInAppStore::isSubscriptionActive);
+	connect(asyncStore, &AsyncStore::appInfo, this, &QInAppStore1::handleStringResponse);
+	connect(asyncStore, &AsyncStore::isDurableActive, this, &QInAppStore1::isDurableActive);
+	connect(asyncStore, &AsyncStore::isSubscriptionActive, this, &QInAppStore1::isSubscriptionActive);
 	QThreadPool::globalInstance()->tryStart(asyncStore);
 }
 
-void QInAppStore::getSubscriptionInfo()
+void QInAppStore1::getSubscriptionInfo()
 {
 	if (context == nullptr) {
 		setContext();
@@ -248,12 +248,12 @@ void QInAppStore::getSubscriptionInfo()
 	asyncStore->setAutoDelete(true);
 	asyncStore->setContext(context);
 	asyncStore->setOperation(AsyncStore::mType::checkSubscription);
-	connect(asyncStore, &AsyncStore::appInfo, this, &QInAppStore::handleStringResponse);
-	connect(asyncStore, &AsyncStore::isSubscriptionActive, this, &QInAppStore::isSubscriptionActive);
+	connect(asyncStore, &AsyncStore::appInfo, this, &QInAppStore1::handleStringResponse);
+	connect(asyncStore, &AsyncStore::isSubscriptionActive, this, &QInAppStore1::isSubscriptionActive);
 	QThreadPool::globalInstance()->tryStart(asyncStore);
 }
 
-void QInAppStore::getDurableInfo()
+void QInAppStore1::getDurableInfo()
 {
 	if (context == nullptr) {
 		setContext();
@@ -262,7 +262,7 @@ void QInAppStore::getDurableInfo()
 	asyncStore->setAutoDelete(true);
 	asyncStore->setContext(context);
 	asyncStore->setOperation(AsyncStore::mType::checkDurable);
-	connect(asyncStore, &AsyncStore::appInfo, this, &QInAppStore::handleStringResponse);
-	connect(asyncStore, &AsyncStore::isDurableActive, this, &QInAppStore::isDurableActive);
+	connect(asyncStore, &AsyncStore::appInfo, this, &QInAppStore1::handleStringResponse);
+	connect(asyncStore, &AsyncStore::isDurableActive, this, &QInAppStore1::isDurableActive);
 	QThreadPool::globalInstance()->tryStart(asyncStore);
 }

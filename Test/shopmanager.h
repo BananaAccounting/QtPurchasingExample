@@ -9,7 +9,8 @@
 #if !defined Q_OS_WIN
 #include <QtPurchasing>
 #else
-#include "microsoftshop.h"
+//#include "microsoftshop.h"
+#include "qinappstore.h"
 #endif
 #include "mylogger.h"
 

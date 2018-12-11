@@ -137,3 +137,25 @@ In the end activate its status by clicking on **Active**
 Currently QtPurchasing doesn't support Windows Store InApp purchases
 
 ![alt text](https://i.imgur.com/H7FRLY1.png)
+
+## Our implementation
+
+Import the project using QT VS Tools.
+
+### Configuration Properties
+Windows SDK version: minimum `Windows 10, version 1607`  or later
+
+Debugging -> Environment -> add to PATH `C:\Program Files\WindowsApps\Microsoft.VCLibs.140.00.Debug_14.0.27023.1_x86__8wekyb3d8bbwe;
+C:\Program Files\WindowsApps\Microsoft.VCLibs.140.00.Debug_14.0.27023.1_x86__8wekyb3d8bbwe;`
+
+(fixes missing store dlls.)
+
+C/C++ -> Additional #using Directories -> add `C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\vcpackages;C:\Program Files (x86)\Windows Kits\10\UnionMetadata`
+
+(fixes winmd missing files)
+
+C/C++ -> Consume Windows Runtime Extension -> set `Yes (/ZW)`
+
+C/C++ -> Language -> C++ Language Standard -> set `ISO C++17 Standard (/std:c++17)`
+
+Linker -> Input -> Additional Dependencies -> add `WindowsApp.lib`

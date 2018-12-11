@@ -10,8 +10,8 @@
 #include "asyncstore.h"
 
 class QWindow;
-class QInAppProductPrivate;
-class QInAppProduct : public QObject
+class QInAppProductPrivate1;
+class QInAppProduct1 : public QObject
 {
 	Q_OBJECT
 	Q_ENUMS(ProductType)
@@ -40,16 +40,16 @@ public:
 	void purchase();
 
 protected:
-	explicit QInAppProduct(const QString &price, const QString &title, const QString &description, ProductType productType, const QString &identifier, QObject *parent = nullptr);
+	explicit QInAppProduct1(const QString &price, const QString &title, const QString &description, ProductType productType, const QString &identifier, QObject *parent = nullptr);
 
 private :
-	friend class QInAppStore;
-	Q_DISABLE_COPY(QInAppProduct)
-	QSharedPointer<QInAppProductPrivate> d;
+	friend class QInAppStore1;
+	Q_DISABLE_COPY(QInAppProduct1)
+	QSharedPointer<QInAppProductPrivate1> d;
 };
 
-class QInAppTransactionPrivate;
-class QInAppTransaction : public QObject
+class QInAppTransactionPrivate1;
+class QInAppTransaction1 : public QObject
 {
 	Q_OBJECT
 		Q_ENUMS(TransactionStatus FailureReason)
@@ -73,10 +73,10 @@ public:
 		ErrorOccurred
 	};
 
-	~QInAppTransaction();
+	~QInAppTransaction1();
 	void finalize();
 	TransactionStatus status() const;
-	QInAppProduct *product() const;
+	QInAppProduct1 *product() const;
 	QString orderId() const;
 	QString platformProperty(const QString &propertyName) const;
 	FailureReason failureReason() const;
@@ -84,20 +84,23 @@ public:
 	QDateTime timestamp() const;
 
 protected:
-	explicit QInAppTransaction(TransactionStatus status, QInAppProduct *product, QObject *parent = nullptr);
+	explicit QInAppTransaction1(TransactionStatus status, QInAppProduct1 *product, QObject *parent = nullptr);
 private:
-	Q_DISABLE_COPY(QInAppTransaction)
-	QSharedPointer<QInAppTransactionPrivate> d;
+	Q_DISABLE_COPY(QInAppTransaction1)
+	QSharedPointer<QInAppTransactionPrivate1> d;
 };
 
-class QInAppStore : public QObject
+class QInAppStore1 : public QObject
 {
    Q_OBJECT
 
 public:
-   QInAppStore(QWindow* mainWindow, QObject *parent = nullptr);
-   void registerProduct(QInAppProduct::ProductType, const QString& id) {}
-   QInAppProduct* registeredProduct(const QString& id);
+   QInAppStore1(QWindow* mainWindow, QObject *parent = nullptr);
+   explicit QInAppStore(QObject *parent = nullptr);
+   ~QInAppStore1();
+
+   void registerProduct(QInAppProduct1::ProductType, const QString& id) {}
+   QInAppProduct1* registeredProduct(const QString& id);
 
    void checkIsTrial();
    void getAppInfo();
@@ -113,6 +116,11 @@ signals:
    void isDurableActive(bool);
    void isSubscriptionActive(bool);
    void handleStringResponse(const QString&);
+
+   void productRegistered(QInAppProduct1 *product);
+   void productUnknown(QInAppProduct1::ProductType productType, const QString &identifier);
+   void transactionReady(QInAppTransaction1 *transaction);
+
 public slots:
 	
 
