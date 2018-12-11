@@ -49,7 +49,8 @@ public:
 	enum ProductType
 	{
 		Consumable,
-		Unlockable
+		Unlockable,
+		Subscription
 	};
 
 	~QInAppProduct();

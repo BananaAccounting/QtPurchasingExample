@@ -15,6 +15,9 @@
       <Extensions>moc;h;cpp</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="Source Files\qtpurchasing">
+      <UniqueIdentifier>{d177daba-737a-4c51-8aa6-e8ccbee9c68c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Test\main.cpp">
@@ -38,6 +41,21 @@
     <ClCompile Include="Test\pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Test\qinappstore.cpp">
+      <Filter>Source Files\qtpurchasing</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\qinapptransaction.cpp">
+      <Filter>Source Files\qtpurchasing</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\qinappproduct.cpp">
+      <Filter>Source Files\qtpurchasing</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\qinapppurchasebackend.cpp">
+      <Filter>Source Files\qtpurchasing</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\qinapppurchasebackendfactory.cpp">
+      <Filter>Source Files\qtpurchasing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Test\window.h">
@@ -55,6 +73,18 @@
     <QtMoc Include="Test\asyncstore.h">
       <Filter>Source Files</Filter>
     </QtMoc>
+    <QtMoc Include="Test\qinappstore.h">
+      <Filter>Source Files\qtpurchasing</Filter>
+    </QtMoc>
+    <QtMoc Include="Test\qinapptransaction.h">
+      <Filter>Source Files\qtpurchasing</Filter>
+    </QtMoc>
+    <QtMoc Include="Test\qinappproduct.h">
+      <Filter>Source Files\qtpurchasing</Filter>
+    </QtMoc>
+    <QtMoc Include="Test\qinapppurchasebackend_p.h">
+      <Filter>Source Files\qtpurchasing</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="Test\window.ui">
@@ -64,6 +94,12 @@
   <ItemGroup>
     <ClInclude Include="Test\pch.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\qinappstore_p.h">
+      <Filter>Source Files\qtpurchasing</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\qinapppurchasebackendfactory_p.h">
+      <Filter>Source Files\qtpurchasing</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -4,13 +4,15 @@
 #include <QObject>
 #include <QString>
 #include <QStringLiteral>
-
+#include <QWindow>
 
 #if !defined Q_OS_WIN
 #include <QtPurchasing>
 #else
 //#include "microsoftshop.h"
 #include "qinappstore.h"
+#include "qinapptransaction.h"
+#include "qinappproduct.h"
 #endif
 #include "mylogger.h"
 
@@ -42,8 +44,11 @@ signals:
     
 public slots:
     void handleErrorGracefully(QInAppProduct*);
-    void handleTransaction(QInAppTransaction*);
 	void handleStringResponse(const QString&);
+
+	void handleCorrectProduct(QInAppProduct*);
+	void handleUnknownProduct(QInAppProduct::ProductType, const QString &);
+	void handleTransactions(QInAppTransaction*);
 };
 
 #endif // SHOPMANAGER_H

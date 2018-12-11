@@ -24,6 +24,11 @@
     <ClCompile Include="Test\microsoftshop.cpp" />
     <ClCompile Include="Test\mylogger.cpp" />
     <ClCompile Include="Test\pch.cpp" />
+    <ClCompile Include="Test\qinappproduct.cpp" />
+    <ClCompile Include="Test\qinapppurchasebackend.cpp" />
+    <ClCompile Include="Test\qinapppurchasebackendfactory.cpp" />
+    <ClCompile Include="Test\qinappstore.cpp" />
+    <ClCompile Include="Test\qinapptransaction.cpp" />
     <ClCompile Include="Test\shopmanager.cpp" />
     <ClCompile Include="Test\window.cpp" />
   </ItemGroup>
@@ -44,6 +49,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Test\pch.h" />
+    <QtMoc Include="Test\qinapppurchasebackend_p.h" />
+    <ClInclude Include="Test\qinapppurchasebackendfactory_p.h" />
+    <ClInclude Include="Test\qinappstore_p.h" />
+    <QtMoc Include="Test\qinappproduct.h" />
+    <QtMoc Include="Test\qinappstore.h" />
+    <QtMoc Include="Test\qinapptransaction.h" />
     <QtMoc Include="Test\asyncstore.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
