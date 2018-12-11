@@ -118,14 +118,4 @@ public slots:
 
 };
 
-
-MIDL_INTERFACE("3E68D4BD-7135-4D10-8018-9FB6D9F33FA1")
-IInitializeWithWindow: public IUnknown
-{
-public:
-	virtual HRESULT STDMETHODCALLTYPE Initialize(
-		/* [in] */ __RPC__in HWND hwnd) = 0;
-
-};
-//struct __declspec(uuid("3E68D4BD-7135-4D10-8018-9FB6D9F33FA1")) IInitializeWithWindow;
 #endif // MICROSOFTSHOP_H
