@@ -31,44 +31,44 @@
 QT_BEGIN_NAMESPACE
 
 QInAppPurchaseBackend::QInAppPurchaseBackend(QObject *parent)
-	: QObject(parent)
-	, m_store(0)
+    : QObject(parent)
+    , m_store(0)
 {
 }
 
 void QInAppPurchaseBackend::initialize()
 {
-	emit ready();
+    emit ready();
 }
 
 bool QInAppPurchaseBackend::isReady() const
 {
-	return true;
+    return true;
 }
 
 void QInAppPurchaseBackend::queryProducts(const QList<Product> &products)
 {
-	for (const Product &product : products)
-		queryProduct(product.productType, product.identifier);
+    for (const Product &product : products)
+        queryProduct(product.productType, product.identifier);
 }
 
 void QInAppPurchaseBackend::queryProduct(QInAppProduct::ProductType productType,
-	const QString &identifier)
+                                                    const QString &identifier)
 {
-	qWarning("QInAppPurchaseBackend not implemented on this platform!");
-	Q_UNUSED(productType);
-	Q_UNUSED(identifier);
+    qWarning("QInAppPurchaseBackend not implemented on this platform!");
+    Q_UNUSED(productType);
+    Q_UNUSED(identifier);
 }
 
 void QInAppPurchaseBackend::restorePurchases()
 {
-	qWarning("QInAppPurchaseBackend not implemented on this platform!");
+    qWarning("QInAppPurchaseBackend not implemented on this platform!");
 }
 
 void QInAppPurchaseBackend::setPlatformProperty(const QString &propertyName, const QString &value)
 {
-	Q_UNUSED(propertyName);
-	Q_UNUSED(value);
+    Q_UNUSED(propertyName);
+    Q_UNUSED(value);
 }
 
 QT_END_NAMESPACE

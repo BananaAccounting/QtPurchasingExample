@@ -1,4 +1,3 @@
-#pragma once
 /****************************************************************************
 **
 ** Copyright (C) 2015 The Qt Company Ltd.
@@ -42,7 +41,7 @@
 //
 
 #include "qinappproduct.h"
-#include <QtCore/qobject.h>
+#include <QObject>
 
 QT_BEGIN_NAMESPACE
 
@@ -51,41 +50,41 @@ class QInAppTransaction;
 class QInAppStore;
 class QInAppPurchaseBackend : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	struct Product
-	{
-		Product(QInAppProduct::ProductType type, const QString &id)
-			: productType(type), identifier(id)
-		{
-		}
+    struct Product
+    {
+        Product(QInAppProduct::ProductType type, const QString &id)
+            : productType(type), identifier(id)
+        {
+        }
 
-		QInAppProduct::ProductType productType;
-		QString identifier;
-	};
+        QInAppProduct::ProductType productType;
+        QString identifier;
+    };
 
-	explicit QInAppPurchaseBackend(QObject *parent = 0);
+    explicit QInAppPurchaseBackend(QObject *parent = 0);
 
-	virtual void initialize();
-	virtual bool isReady() const;
+    virtual void initialize();
+    virtual bool isReady() const;
 
-	virtual void queryProducts(const QList<Product> &products);
-	virtual void queryProduct(QInAppProduct::ProductType productType, const QString &identifier);
-	virtual void restorePurchases();
+    virtual void queryProducts(const QList<Product> &products);
+    virtual void queryProduct(QInAppProduct::ProductType productType, const QString &identifier);
+    virtual void restorePurchases();
 
-	virtual void setPlatformProperty(const QString &propertyName, const QString &value);
+    virtual void setPlatformProperty(const QString &propertyName, const QString &value);
 
-	void setStore(QInAppStore *store) { m_store = store; }
-	QInAppStore *store() const { return m_store; }
+    void setStore(QInAppStore *store) { m_store = store; }
+    QInAppStore *store() const { return m_store; }
 
 Q_SIGNALS:
-	void ready();
-	void transactionReady(QInAppTransaction *transaction);
-	void productQueryFailed(QInAppProduct::ProductType productType, const QString &identifier);
-	void productQueryDone(QInAppProduct *product);
+    void ready();
+    void transactionReady(QInAppTransaction *transaction);
+    void productQueryFailed(QInAppProduct::ProductType productType, const QString &identifier);
+    void productQueryDone(QInAppProduct *product);
 
 private:
-	QInAppStore *m_store;
+    QInAppStore *m_store;
 };
 
 QT_END_NAMESPACE

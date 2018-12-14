@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2015 The Qt Company Ltd.
+** Copyright (C) 2016 The Qt Company Ltd.
 ** Contact: http://www.qt.io/licensing/
 **
 ** This file is part of the Purchasing module of the Qt Toolkit.
@@ -26,35 +26,44 @@
 **
 ****************************************************************************/
 
-#include "qinapppurchasebackendfactory_p.h"
+#include "qwininapptransaction_p.h"
+#include "qwininapppurchasebackend_p.h"
+#include "qinappproduct.h"
 
-#if defined(Q_OS_ANDROID)
-#  include "qandroidinapppurchasebackend_p.h"
-#elif defined(Q_OS_DARWIN) && !defined(Q_OS_WATCHOS)
-#  include "qmacinapppurchasebackend_p.h"
-#elif defined(Q_OS_WINRT)
-#  include "qwinrtinapppurchasebackend_p.h"
-#elif defined(Q_OS_WIN32) ||  defined(Q_OS_WIN64)
-#  include "qwininapppurchasebackend_p.h"
-#else
-#  include "qinapppurchasebackend_p.h"
-#endif
+#include <QLoggingCategory>
 
 QT_BEGIN_NAMESPACE
 
-QInAppPurchaseBackend *QInAppPurchaseBackendFactory::create()
+Q_LOGGING_CATEGORY(lcPurchasingTransaction, "qt.purchasing.transaction")
+
+QWinInAppTransaction::QWinInAppTransaction(TransactionStatus status,
+	QInAppProduct *product, FailureReason reason, const QString &expiration,QObject *parent)
+	: QInAppTransaction(status, product, parent)
+	, m_failureReason(reason), m_expiration(expiration)
 {
-#if defined(Q_OS_ANDROID)
-    return new QAndroidInAppPurchaseBackend;
-#elif defined(Q_OS_DARWIN) && !defined(Q_OS_WATCHOS)
-    return new QMacInAppPurchaseBackend;
-#elif defined (Q_OS_WINRT)
-    return new QWinRTInAppPurchaseBackend;
-#elif defined (Q_OS_WIN32) ||  defined(Q_OS_WIN64)
-	return new QWinInAppPurchaseBackend;
-#else
-    return new QInAppPurchaseBackend;
-#endif
+	qCDebug(lcPurchasingTransaction) << __FUNCTION__;
+	m_backend = qobject_cast<QWinInAppPurchaseBackend *>(parent);
+}
+
+void QWinInAppTransaction::finalize()
+{
+	/*qCDebug(lcPurchasingTransaction) << __FUNCTION__;
+	if (product()->productType() == QInAppProduct::Consumable &&
+		(status() == QInAppTransaction::PurchaseApproved ||
+			status() == QInAppTransaction::PurchaseRestored)) {
+		m_backend->fulfillConsumable(this);
+	}*/
+	deleteLater();
+}
+
+
+QString QWinInAppTransaction::platformProperty(const QString &propertyName) const
+{
+	if (propertyName == QLatin1String("expiration"))
+		return m_expiration;
+	if (propertyName == QLatin1String("extendedError"))
+		return m_extendedError;
+	return QString();
 }
 
 QT_END_NAMESPACE

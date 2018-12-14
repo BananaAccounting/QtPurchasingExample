@@ -20,7 +20,7 @@ void Window::showEvent(QShowEvent *ev)
    if (m_shopManager == nullptr)
    {
       m_shopManager = new ShopManager(this->windowHandle(), this);
-
+	  QApplication::setActiveWindow(this);
       connect(btnSubscribe, &QPushButton::clicked, this, &Window::purchaseSubscription);
       connect(btnBuyProduct, &QPushButton::clicked, this, &Window::purchaseProduct);
       connect(btnBuyDurable, &QPushButton::clicked, this, &Window::purchaseDurable);
@@ -101,7 +101,7 @@ void Window::markAsSubscribed()
 void Window::markAsDurablePurchased()
 {
     lblDurable->setText("Durable purchased");
-	btnBuyDurable->setEnabled(false);
+	//btnBuyDurable->setEnabled(false);
     this->hide();
     this->show();
 }

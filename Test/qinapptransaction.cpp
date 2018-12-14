@@ -33,33 +33,33 @@ QT_BEGIN_NAMESPACE
 class QInAppTransactionPrivate
 {
 public:
-	QInAppTransactionPrivate(QInAppTransaction::TransactionStatus s,
-		QInAppProduct *p)
-		: status(s)
-		, product(p)
-	{
-	}
+    QInAppTransactionPrivate(QInAppTransaction::TransactionStatus s,
+                             QInAppProduct *p)
+        : status(s)
+        , product(p)
+    {
+    }
 
-	QInAppTransaction::TransactionStatus status;
-	QInAppProduct *product;
+    QInAppTransaction::TransactionStatus status;
+    QInAppProduct *product;
 };
 
 /*!
-	\qmltype Transaction
-	\inqmlmodule QtPurchasing
-	\since QtPurchasing 1.0
-	\ingroup qtpurchasing
-	\brief Contains information about an in-app transaction.
+    \qmltype Transaction
+    \inqmlmodule QtPurchasing
+    \since QtPurchasing 1.0
+    \ingroup qtpurchasing
+    \brief Contains information about an in-app transaction.
 
-	Transaction contains information about a transaction in the external app store and is
-	usually provided as a result of calling \l{QtPurchasing::Product::purchase()}{purchase()}
-	on a product. When the purchase flow has ended, whether it's successful or not, either the
-	product's \l{QtPurchasing::Product::onPurchaseSucceeded}{onPurchaseSucceeded} or
-	\l{QtPurchasing::Product::onPurchaseFailed}{onPurchaseFailed} handler will be called
-	with a transaction object as argument.
+    Transaction contains information about a transaction in the external app store and is
+    usually provided as a result of calling \l{QtPurchasing::Product::purchase()}{purchase()}
+    on a product. When the purchase flow has ended, whether it's successful or not, either the
+    product's \l{QtPurchasing::Product::onPurchaseSucceeded}{onPurchaseSucceeded} or
+    \l{QtPurchasing::Product::onPurchaseFailed}{onPurchaseFailed} handler will be called
+    with a transaction object as argument.
 
-	Transaction cannot be created directly in QML, but is only provided as an argument to
-	the purchase handlers in the products.
+    Transaction cannot be created directly in QML, but is only provided as an argument to
+    the purchase handlers in the products.
 */
 
 
@@ -93,21 +93,21 @@ public:
   before. Do not expect each transaction to be unique.
  */
 
- /*!
-  * \internal
-  */\
-	QInAppTransaction::QInAppTransaction(TransactionStatus status,
-		QInAppProduct *product,
-		QObject *parent)
-	: QObject(parent)
+/*!
+ * \internal
+ */\
+QInAppTransaction::QInAppTransaction(TransactionStatus status,
+                                     QInAppProduct *product,
+                                     QObject *parent)
+    : QObject(parent)
 {
-	d = QSharedPointer<QInAppTransactionPrivate>(new QInAppTransactionPrivate(status, product));
+    d = QSharedPointer<QInAppTransactionPrivate>(new QInAppTransactionPrivate(status, product));
 }
 
 /*!
  * \internal
  */\
-	QInAppTransaction::~QInAppTransaction()
+QInAppTransaction::~QInAppTransaction()
 {
 }
 
@@ -117,14 +117,14 @@ public:
  * This property holds the product which is the object of this transaction.
  */
 
- /*!
-  * \property QInAppTransaction::product
-  *
-  * This property holds the product which is the object of this transaction.
-  */
+/*!
+ * \property QInAppTransaction::product
+ *
+ * This property holds the product which is the object of this transaction.
+ */
 QInAppProduct *QInAppTransaction::product() const
 {
-	return d->product;
+    return d->product;
 }
 
 /*!
@@ -168,19 +168,19 @@ QInAppProduct *QInAppTransaction::product() const
   \endlist
  */
 
- /*!
-  * \property QInAppTransaction::status
-  *
-  * This property holds the status of the transaction. If the purchase was successfully
-  * completed, the status will be PurchaseApproved. If the purchase failed
-  * or was unsuccessful then the status will be PurchaseFailed. If the
-  * transaction was restored as a result of calling QInAppStore::restorePurchases()
-  * then the status will be PurchaseRestored.
-  */
+/*!
+ * \property QInAppTransaction::status
+ *
+ * This property holds the status of the transaction. If the purchase was successfully
+ * completed, the status will be PurchaseApproved. If the purchase failed
+ * or was unsuccessful then the status will be PurchaseFailed. If the
+ * transaction was restored as a result of calling QInAppStore::restorePurchases()
+ * then the status will be PurchaseRestored.
+ */
 
 QInAppTransaction::TransactionStatus QInAppTransaction::status() const
 {
-	return d->status;
+    return d->status;
 }
 
 /*!
@@ -197,20 +197,20 @@ QInAppTransaction::TransactionStatus QInAppTransaction::status() const
  * \sa errorString
  */
 
- /*!
-  * \property QInAppTransaction::failureReason
-  *
-  * This property holds the reason for the failure if the transaction's status is
-  * \l{PurchaseFailed}. If the purchase was canceled by the user, the failure
-  * reason will be \l{CanceledByUser}. If the purchase failed due to an error, it
-  * will be \l{ErrorOccurred}. If the purchase did not fail, the failure reason
-  * will be \l{NoFailure}.
-  *
-  * \sa errorString, status
-  */
+/*!
+ * \property QInAppTransaction::failureReason
+ *
+ * This property holds the reason for the failure if the transaction's status is
+ * \l{PurchaseFailed}. If the purchase was canceled by the user, the failure
+ * reason will be \l{CanceledByUser}. If the purchase failed due to an error, it
+ * will be \l{ErrorOccurred}. If the purchase did not fail, the failure reason
+ * will be \l{NoFailure}.
+ *
+ * \sa errorString, status
+ */
 QInAppTransaction::FailureReason QInAppTransaction::failureReason() const
 {
-	return NoFailure;
+    return NoFailure;
 }
 
 /*!
@@ -222,17 +222,17 @@ QInAppTransaction::FailureReason QInAppTransaction::failureReason() const
  * \sa failureReason, status
  */
 
- /*!
-  * \property QInAppTransaction::errorString
-  *
-  * This property holds a string describing the error if the transaction failed
-  * due to an error. The contents of the error string is platform-specific.
-  *
-  * \sa failureReason, status
-  */
+/*!
+ * \property QInAppTransaction::errorString
+ *
+ * This property holds a string describing the error if the transaction failed
+ * due to an error. The contents of the error string is platform-specific.
+ *
+ * \sa failureReason, status
+ */
 QString QInAppTransaction::errorString() const
 {
-	return QString();
+    return QString();
 }
 
 /*!
@@ -245,18 +245,18 @@ QString QInAppTransaction::errorString() const
  * \sa orderId
  */
 
- /*!
-  * \property QInAppTransaction::timestamp
-  *
-  * This property holds the timestamp of the transaction. The timestamp
-  * can be invalid if there is no valid transaction, for example if the user
-  * canceled the purchase.
-  *
-  * \sa orderId
-  */
+/*!
+ * \property QInAppTransaction::timestamp
+ *
+ * This property holds the timestamp of the transaction. The timestamp
+ * can be invalid if there is no valid transaction, for example if the user
+ * canceled the purchase.
+ *
+ * \sa orderId
+ */
 QDateTime QInAppTransaction::timestamp() const
 {
-	return QDateTime();
+    return QDateTime();
 }
 
 /*!
@@ -266,15 +266,15 @@ QDateTime QInAppTransaction::timestamp() const
  * string if no transaction was registered (for example for canceled purchases).
  */
 
- /*!
-  * \property QInAppTransaction::orderId
-  *
-  * This property holds a unique identifier for this transaction. This value may be an empty
-  * string if no transaction was registered (for example for canceled purchases).
-  */
+/*!
+ * \property QInAppTransaction::orderId
+ *
+ * This property holds a unique identifier for this transaction. This value may be an empty
+ * string if no transaction was registered (for example for canceled purchases).
+ */
 QString QInAppTransaction::orderId() const
 {
-	return QString();
+    return QString();
 }
 
 
@@ -295,8 +295,8 @@ QString QInAppTransaction::orderId() const
  */
 QString QInAppTransaction::platformProperty(const QString &propertyName) const
 {
-	Q_UNUSED(propertyName);
-	return QString();
+    Q_UNUSED(propertyName);
+    return QString();
 }
 
 /*!
@@ -308,13 +308,13 @@ QString QInAppTransaction::platformProperty(const QString &propertyName) const
  * All transactions should be finalized.
  */
 
- /*!
-  * \qmlmethod void QtPurchasing::Transaction::finalize()
-  *
-  * Call this when the application has finished performing all necessary reactions
-  * to the purchase. If the purchase succeeded, the application should store the
-  * information about the transaction in a safe way before finalizing it.
-  * All transactions should be finalized.
-  */
+/*!
+ * \qmlmethod void QtPurchasing::Transaction::finalize()
+ *
+ * Call this when the application has finished performing all necessary reactions
+ * to the purchase. If the purchase succeeded, the application should store the
+ * information about the transaction in a safe way before finalizing it.
+ * All transactions should be finalized.
+ */
 
 QT_END_NAMESPACE

@@ -26,35 +26,51 @@
 **
 ****************************************************************************/
 
-#include "qinapppurchasebackendfactory_p.h"
+#ifndef QWININAPPPRODUCT_P_H
+#define QWININAPPPRODUCT_P_H
 
-#if defined(Q_OS_ANDROID)
-#  include "qandroidinapppurchasebackend_p.h"
-#elif defined(Q_OS_DARWIN) && !defined(Q_OS_WATCHOS)
-#  include "qmacinapppurchasebackend_p.h"
-#elif defined(Q_OS_WINRT)
-#  include "qwinrtinapppurchasebackend_p.h"
-#elif defined(Q_OS_WIN32) ||  defined(Q_OS_WIN64)
-#  include "qwininapppurchasebackend_p.h"
-#else
-#  include "qinapppurchasebackend_p.h"
-#endif
+//
+//  W A R N I N G
+//  -------------
+//
+// This file is not part of the Qt API.  It exists purely as an
+// implementation detail.  This header file may change from version to
+// version without notice, or even be removed.
+//
+// We mean it.
+//
+
+#include "qinappproduct.h"
 
 QT_BEGIN_NAMESPACE
 
-QInAppPurchaseBackend *QInAppPurchaseBackendFactory::create()
+class QWinInAppPurchaseBackend;
+
+class QWinInAppProduct : public QInAppProduct
 {
-#if defined(Q_OS_ANDROID)
-    return new QAndroidInAppPurchaseBackend;
-#elif defined(Q_OS_DARWIN) && !defined(Q_OS_WATCHOS)
-    return new QMacInAppPurchaseBackend;
-#elif defined (Q_OS_WINRT)
-    return new QWinRTInAppPurchaseBackend;
-#elif defined (Q_OS_WIN32) ||  defined(Q_OS_WIN64)
-	return new QWinInAppPurchaseBackend;
-#else
-    return new QInAppPurchaseBackend;
-#endif
-}
+	Q_OBJECT
+public:
+	explicit QWinInAppProduct(QWinInAppPurchaseBackend *backend,
+		const QString &price,
+		const QString &title,
+		const QString &description,
+		ProductType productType,
+		const QString &identifier,
+		QObject *parent = 0);
+
+	QString storeID;
+	QString productKind;
+	void purchase();
+
+private:
+	QWinInAppPurchaseBackend *m_backend;
+	
+};
+
+Q_DECLARE_METATYPE(QWinInAppProduct*)
 
 QT_END_NAMESPACE
+
+
+
+#endif // QWININAPPPRODUCT_P_H

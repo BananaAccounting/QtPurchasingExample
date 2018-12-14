@@ -34,122 +34,122 @@
 
 namespace
 {
-	class IAPRegisterMetaTypes
-	{
-	public:
-		IAPRegisterMetaTypes()
-		{
-			qRegisterMetaType<QInAppProduct::ProductType>("QInAppProduct::ProductType");
-		}
-	} _registerIAPMetaTypes;
+class IAPRegisterMetaTypes
+{
+public:
+    IAPRegisterMetaTypes()
+    {
+        qRegisterMetaType<QInAppProduct::ProductType>("QInAppProduct::ProductType");
+    }
+} _registerIAPMetaTypes;
 }
 
 QT_BEGIN_NAMESPACE
 
 /*!
-	\class QInAppStore
-	\inmodule QtPurchasing
-	\brief The main entry point for managing in-app purchases.
+    \class QInAppStore
+    \inmodule QtPurchasing
+    \brief The main entry point for managing in-app purchases.
 
-	QInAppStore is used for managing in-app purchases in your application in a
-	cross-platform way.
+    QInAppStore is used for managing in-app purchases in your application in a
+    cross-platform way.
 
-	\section1 Using the QInAppStore
-	In general there are two steps to completing an in-app purchase using the
-	API:
+    \section1 Using the QInAppStore
+    In general there are two steps to completing an in-app purchase using the
+    API:
 
-	\section2 Initialize the store
-	Upon start-up of your application, connect all signals in QInAppStore to
-	related slots in your own QObject. Then use the registerProduct() function
-	to register the ID of each product you expect to find registered in the
-	external store, as well as its type.
+    \section2 Initialize the store
+    Upon start-up of your application, connect all signals in QInAppStore to
+    related slots in your own QObject. Then use the registerProduct() function
+    to register the ID of each product you expect to find registered in the
+    external store, as well as its type.
 
-	Registering a product is asynchronous, and will at some point yield one of
-	the following two signals:
-	1. productRegistered() if the product was found in the external store with
-	   a matching type.
-	2. productUnknown() if the product was not found in the external store with
-	   the type you specified.
+    Registering a product is asynchronous, and will at some point yield one of
+    the following two signals:
+    1. productRegistered() if the product was found in the external store with
+       a matching type.
+    2. productUnknown() if the product was not found in the external store with
+       the type you specified.
 
-	In addition, a transactionReady() signal may be emitted for any existing
-	transaction which has not yet been finalized. At this point, you should
-	check if the transaction has previously been registered. If it hasn't,
-	register it right away. Finally, call QInAppTransaction::finalize() on
-	the transaction.
+    In addition, a transactionReady() signal may be emitted for any existing
+    transaction which has not yet been finalized. At this point, you should
+    check if the transaction has previously been registered. If it hasn't,
+    register it right away. Finally, call QInAppTransaction::finalize() on
+    the transaction.
 
-	\section2 Complete a purchase
-	Once the items have been successfully registered in the store, you can
-	purchase them. Get the previously registered QInAppProduct using
-	registeredProduct() and call QInAppProduct::purchase(). This call is
-	also asynchronous.
+    \section2 Complete a purchase
+    Once the items have been successfully registered in the store, you can
+    purchase them. Get the previously registered QInAppProduct using
+    registeredProduct() and call QInAppProduct::purchase(). This call is
+    also asynchronous.
 
-	At some point later on, the transactionReady() signal will be emitted for
-	the purchase. Check QInAppTransaction::status() to see if the purchase was
-	completed successfully. If it was, then you must save the information about
-	the purchase in a safe way, so that the application can restore it later.
+    At some point later on, the transactionReady() signal will be emitted for
+    the purchase. Check QInAppTransaction::status() to see if the purchase was
+    completed successfully. If it was, then you must save the information about
+    the purchase in a safe way, so that the application can restore it later.
 
-	When you are done, call QInAppTransaction::finalize(), regardless of its
-	status. Transactions which are not finalized will be emitted again the next
-	time your application calls registerProduct() for the same product.
+    When you are done, call QInAppTransaction::finalize(), regardless of its
+    status. Transactions which are not finalized will be emitted again the next
+    time your application calls registerProduct() for the same product.
 
-	\note Please mind that QInAppStore does not save the purchased
-	state of items in the store for you. The application should store this
-	information in a safe way upon receiving the transactionReady() signal,
-	before calling QInAppTransaction::finalize().
+    \note Please mind that QInAppStore does not save the purchased
+    state of items in the store for you. The application should store this
+    information in a safe way upon receiving the transactionReady() signal,
+    before calling QInAppTransaction::finalize().
 
-	\section1 Types of purchases
-	There are two types of purchases supported by QInAppStore:
-	QInAppProduct::Consumable and QInAppProduct::Unlockable. The former will be
-	consumed when the transaction is completed and QInAppTransaction::finalize()
-	is called, meaning that it can be purchased again, any number of times.
-	Unlockable items can only be purchased once.
+    \section1 Types of purchases
+    There are two types of purchases supported by QInAppStore:
+    QInAppProduct::Consumable and QInAppProduct::Unlockable. The former will be
+    consumed when the transaction is completed and QInAppTransaction::finalize()
+    is called, meaning that it can be purchased again, any number of times.
+    Unlockable items can only be purchased once.
 
-	Consumable products are temporary and can be purchased multiple times.
-	Examples could be a day-ticket on the bus or a magic sword in a computer game.
-	Note that when purchasing the same product multiple times, you should call
-	QInAppTransaction::finalize() on each transaction before you can purchase the
-	same product again.
+    Consumable products are temporary and can be purchased multiple times.
+    Examples could be a day-ticket on the bus or a magic sword in a computer game.
+    Note that when purchasing the same product multiple times, you should call
+    QInAppTransaction::finalize() on each transaction before you can purchase the
+    same product again.
 
-	Unlockable products are products that a user will buy once, and the purchase
-	of these items will be persistent. It can typically be used for things like
-	unlocking content or functionality in the application.
+    Unlockable products are products that a user will buy once, and the purchase
+    of these items will be persistent. It can typically be used for things like
+    unlocking content or functionality in the application.
 
-	\section1 Restoring purchases
-	If your application has unlockable products, and does not store the purchase
-	states of these products in a way which makes it possible to restore them
-	when the user reinstalls the application, you should provide a way for the
-	user to restore the purchases manually.
+    \section1 Restoring purchases
+    If your application has unlockable products, and does not store the purchase
+    states of these products in a way which makes it possible to restore them
+    when the user reinstalls the application, you should provide a way for the
+    user to restore the purchases manually.
 
-	Call the restorePurchases() function to begin this process. Granted that
-	the remote store supports it, you will then at some point get transactionReady()
-	for each unlockable item which has previously been purchased by the current user.
+    Call the restorePurchases() function to begin this process. Granted that
+    the remote store supports it, you will then at some point get transactionReady()
+    for each unlockable item which has previously been purchased by the current user.
 
-	Save the purchase state of each product and call QInAppTransaction::finalize() as
-	you would for a regular purchase.
+    Save the purchase state of each product and call QInAppTransaction::finalize() as
+    you would for a regular purchase.
 
-	Since restorePurchases() may, on some platforms, cause the user to be prompted for
-	their password, it should usually be called as a reaction to user input. For instance
-	applications can have a button in the UI which will trigger restorePurchases() and
-	which users can hit manually if they have reinstalled the application (or installed
-	it on a new device) and need to unlock the features that they have previously paid
-	for.
+    Since restorePurchases() may, on some platforms, cause the user to be prompted for
+    their password, it should usually be called as a reaction to user input. For instance
+    applications can have a button in the UI which will trigger restorePurchases() and
+    which users can hit manually if they have reinstalled the application (or installed
+    it on a new device) and need to unlock the features that they have previously paid
+    for.
 
-	\note This depends on support for this functionality in the remote store. If
-	the remote store does not save the purchase state of unlockable products for
-	you, the call will yield no transactionReady() signals, as if no products have
-	been purchased. Both the Android and OS X / iOS backends support restoring unlockable
-	products.
+    \note This depends on support for this functionality in the remote store. If
+    the remote store does not save the purchase state of unlockable products for
+    you, the call will yield no transactionReady() signals, as if no products have
+    been purchased. Both the Android and OS X / iOS backends support restoring unlockable
+    products.
 
 */
 
 /*!
  * Constructs a QInAppStore with the given \a parent.
  */
-	QInAppStore::QInAppStore(QObject *parent)
-	: QObject(parent)
+QInAppStore::QInAppStore(QObject *parent)
+    : QObject(parent)
 {
-	d = QSharedPointer<QInAppStorePrivate>(new QInAppStorePrivate);
-	setupBackend();
+    d = QSharedPointer<QInAppStorePrivate>(new QInAppStorePrivate);
+    setupBackend();
 }
 
 /*!
@@ -164,17 +164,17 @@ QInAppStore::~QInAppStore()
  */
 void QInAppStore::setupBackend()
 {
-	d->backend = QInAppPurchaseBackendFactory::create();
-	d->backend->setStore(this);
+    d->backend = QInAppPurchaseBackendFactory::create();
+    d->backend->setStore(this);
 
-	connect(d->backend, &QInAppPurchaseBackend::ready,
-		this, &QInAppStore::registerPendingProducts);
-	connect(d->backend, &QInAppPurchaseBackend::transactionReady,
-		this, &QInAppStore::transactionReady);
-	connect(d->backend, &QInAppPurchaseBackend::productQueryFailed,
-		this, &QInAppStore::productUnknown);
-	connect(d->backend, &QInAppPurchaseBackend::productQueryDone,
-		this, static_cast<void (QInAppStore::*)(QInAppProduct *)>(&QInAppStore::registerProduct));
+    connect(d->backend, &QInAppPurchaseBackend::ready,
+            this, &QInAppStore::registerPendingProducts);
+    connect(d->backend, &QInAppPurchaseBackend::transactionReady,
+            this, &QInAppStore::transactionReady);
+    connect(d->backend, &QInAppPurchaseBackend::productQueryFailed,
+            this, &QInAppStore::productUnknown);
+    connect(d->backend, &QInAppPurchaseBackend::productQueryDone,
+            this, static_cast<void (QInAppStore::*)(QInAppProduct *)>(&QInAppStore::registerProduct));
 }
 
 /*!
@@ -182,8 +182,8 @@ void QInAppStore::setupBackend()
  */
 void QInAppStore::registerProduct(QInAppProduct *product)
 {
-	d->registeredProducts[product->identifier()] = product;
-	emit productRegistered(product);
+    d->registeredProducts[product->identifier()] = product;
+    emit productRegistered(product);
 }
 
 /*!
@@ -194,17 +194,17 @@ void QInAppStore::registerProduct(QInAppProduct *product)
  */
 void QInAppStore::registerPendingProducts()
 {
-	QList<QInAppPurchaseBackend::Product> products;
-	products.reserve(d->pendingProducts.size());
+    QList<QInAppPurchaseBackend::Product> products;
+    products.reserve(d->pendingProducts.size());
 
-	QHash<QString, QInAppProduct::ProductType>::const_iterator it;
-	for (it = d->pendingProducts.constBegin(); it != d->pendingProducts.constEnd(); ++it)
-		products.append(QInAppPurchaseBackend::Product(it.value(), it.key()));
-	d->pendingProducts.clear();
+    QHash<QString, QInAppProduct::ProductType>::const_iterator it;
+    for (it = d->pendingProducts.constBegin(); it != d->pendingProducts.constEnd(); ++it)
+        products.append(QInAppPurchaseBackend::Product(it.value(), it.key()));
+    d->pendingProducts.clear();
 
-	d->backend->queryProducts(products);
-	if (d->pendingRestorePurchases)
-		restorePurchases();
+    d->backend->queryProducts(products);
+    if (d->pendingRestorePurchases)
+        restorePurchases();
 }
 
 /*!
@@ -219,13 +219,12 @@ void QInAppStore::registerPendingProducts()
  */
 void QInAppStore::restorePurchases()
 {
-	if (d->backend->isReady()) {
-		d->pendingRestorePurchases = false;
-		d->backend->restorePurchases();
-	}
-	else {
-		d->pendingRestorePurchases = true;
-	}
+    if (d->backend->isReady()) {
+        d->pendingRestorePurchases = false;
+        d->backend->restorePurchases();
+    } else {
+        d->pendingRestorePurchases = true;
+    }
 }
 
 /*!
@@ -243,7 +242,7 @@ void QInAppStore::restorePurchases()
  */
 void QInAppStore::setPlatformProperty(const QString &propertyName, const QString &value)
 {
-	d->backend->setPlatformProperty(propertyName, value);
+    d->backend->setPlatformProperty(propertyName, value);
 }
 
 /*!
@@ -258,16 +257,15 @@ void QInAppStore::setPlatformProperty(const QString &propertyName, const QString
  */
 void QInAppStore::registerProduct(QInAppProduct::ProductType productType, const QString &identifier)
 {
-	if (!d->backend->isReady()) {
-		d->pendingProducts[identifier] = productType;
-		if (!d->hasCalledInitialize) {
-			d->hasCalledInitialize = true;
-			d->backend->initialize();
-		}
-	}
-	else {
-		d->backend->queryProduct(productType, identifier);
-	}
+    if (!d->backend->isReady()) {
+        d->pendingProducts[identifier] = productType;
+        if (!d->hasCalledInitialize) {
+            d->hasCalledInitialize = true;
+            d->backend->initialize();
+        }
+    } else {
+        d->backend->queryProduct(productType, identifier);
+    }
 }
 
 /*!
@@ -275,7 +273,7 @@ void QInAppStore::registerProduct(QInAppProduct::ProductType productType, const 
  */
 QInAppProduct *QInAppStore::registeredProduct(const QString &identifier) const
 {
-	return d->registeredProducts.value(identifier);
+    return d->registeredProducts.value(identifier);
 }
 
 /*!
@@ -288,22 +286,22 @@ QInAppProduct *QInAppStore::registeredProduct(const QString &identifier) const
  * \sa productUnknown()
  */
 
- /*! \fn QInAppStore::productUnknown(QInAppProduct::ProductType productType, const QString &identifier)
-  *
-  * This signal is emitted when the product named \a identifier was registered using registerProduct()
-  * and matching information could not be provided by the remote store. The \a productType matches
-  * the product type which was originally passed to registerProduct().
-  *
-  * \sa productRegistered()
-  */
+/*! \fn QInAppStore::productUnknown(QInAppProduct::ProductType productType, const QString &identifier)
+ *
+ * This signal is emitted when the product named \a identifier was registered using registerProduct()
+ * and matching information could not be provided by the remote store. The \a productType matches
+ * the product type which was originally passed to registerProduct().
+ *
+ * \sa productRegistered()
+ */
 
-  /*!
-   * \fn QInAppStore::transactionReady(QInAppTransaction *transaction)
-   *
-   * This signal is emitted whenever there is a \a transaction which needs to be finalized.
-   * It is emitted either when a purchase request has been made for a product, when restorePurchases()
-   * has been called and the product was previously purchased, or when registerProduct() was called
-   * for a product and there was a pending transaction for the product which had not yet been finalized.
-   */
+/*!
+ * \fn QInAppStore::transactionReady(QInAppTransaction *transaction)
+ *
+ * This signal is emitted whenever there is a \a transaction which needs to be finalized.
+ * It is emitted either when a purchase request has been made for a product, when restorePurchases()
+ * has been called and the product was previously purchased, or when registerProduct() was called
+ * for a product and there was a pending transaction for the product which had not yet been finalized.
+ */
 
 QT_END_NAMESPACE

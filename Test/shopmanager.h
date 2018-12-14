@@ -20,9 +20,6 @@ class ShopManager : public QObject
 {
     Q_OBJECT
 
-    QInAppStore *m_myStore;
-    void setupConnections();
-
 public:
     enum Products { banana_product, banana_once_product, banana_subscription, banana_consumable};
     explicit ShopManager(QWindow* mainWindow, QObject *parent = nullptr);
@@ -33,7 +30,10 @@ public:
 	void checkDurable();
 	void initShop();
 	bool event(QEvent *e) override;
-
+private:
+	QInAppStore *m_myStore;
+	void setupConnections();
+	QString productIdentifier(Products);
 signals:
     void productPurchased(Products product);
     void error(const QString& errorMessage);

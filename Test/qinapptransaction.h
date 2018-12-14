@@ -31,58 +31,58 @@
 
 #include <QObject>
 #include <QSharedPointer>
-#include <QDateTime>
+#include <QDatetime>
 
 QT_BEGIN_NAMESPACE
 
 class QInAppProduct;
 class QInAppTransactionPrivate;
-class QInAppTransaction : public QObject
+class QInAppTransaction: public QObject
 {
-	Q_OBJECT
-		Q_ENUMS(TransactionStatus FailureReason)
-		Q_PROPERTY(TransactionStatus status READ status CONSTANT)
-		Q_PROPERTY(QInAppProduct* product READ product CONSTANT)
-		Q_PROPERTY(QString orderId READ orderId CONSTANT)
-		Q_PROPERTY(FailureReason failureReason READ failureReason CONSTANT)
-		Q_PROPERTY(QString errorString READ errorString CONSTANT)
-		Q_PROPERTY(QDateTime timestamp READ timestamp CONSTANT)
+    Q_OBJECT
+    Q_ENUMS(TransactionStatus FailureReason)
+    Q_PROPERTY(TransactionStatus status READ status CONSTANT)
+    Q_PROPERTY(QInAppProduct* product READ product CONSTANT)
+    Q_PROPERTY(QString orderId READ orderId CONSTANT)
+    Q_PROPERTY(FailureReason failureReason READ failureReason CONSTANT)
+    Q_PROPERTY(QString errorString READ errorString CONSTANT)
+    Q_PROPERTY(QDateTime timestamp READ timestamp CONSTANT)
 public:
-	enum TransactionStatus {
-		Unknown,
-		PurchaseApproved,
-		PurchaseFailed,
-		PurchaseRestored
-	};
+    enum TransactionStatus {
+        Unknown,
+        PurchaseApproved,
+        PurchaseFailed,
+        PurchaseRestored
+    };
 
-	enum FailureReason {
-		NoFailure,
-		CanceledByUser,
-		ErrorOccurred
-	};
+    enum FailureReason {
+        NoFailure,
+        CanceledByUser,
+        ErrorOccurred
+    };
 
-	~QInAppTransaction();
+    ~QInAppTransaction();
 
-	QInAppProduct *product() const;
+    QInAppProduct *product() const;
 
-	virtual QString orderId() const;
-	virtual FailureReason failureReason() const;
-	virtual QString errorString() const;
-	virtual QDateTime timestamp() const;
+    virtual QString orderId() const;
+    virtual FailureReason failureReason() const;
+    virtual QString errorString() const;
+    virtual QDateTime timestamp() const;
 
-	Q_INVOKABLE virtual void finalize() = 0;
-	Q_INVOKABLE virtual QString platformProperty(const QString &propertyName) const;
+    Q_INVOKABLE virtual void finalize() = 0;
+    Q_INVOKABLE virtual QString platformProperty(const QString &propertyName) const;
 
-	TransactionStatus status() const;
+    TransactionStatus status() const;
 
 protected:
-	explicit QInAppTransaction(TransactionStatus status,
-		QInAppProduct *product,
-		QObject *parent = nullptr);
+    explicit QInAppTransaction(TransactionStatus status,
+                               QInAppProduct *product,
+                               QObject *parent = nullptr);
 
 private:
-	Q_DISABLE_COPY(QInAppTransaction)
-		QSharedPointer<QInAppTransactionPrivate> d;
+    Q_DISABLE_COPY(QInAppTransaction)
+    QSharedPointer<QInAppTransactionPrivate> d;
 };
 
 QT_END_NAMESPACE

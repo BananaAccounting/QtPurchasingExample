@@ -19,9 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Test\asyncstore.cpp" />
     <ClCompile Include="Test\main.cpp" />
-    <ClCompile Include="Test\microsoftshop.cpp" />
     <ClCompile Include="Test\mylogger.cpp" />
     <ClCompile Include="Test\pch.cpp" />
     <ClCompile Include="Test\qinappproduct.cpp" />
@@ -29,6 +27,19 @@
     <ClCompile Include="Test\qinapppurchasebackendfactory.cpp" />
     <ClCompile Include="Test\qinappstore.cpp" />
     <ClCompile Include="Test\qinapptransaction.cpp" />
+    <ClCompile Include="Test\qwininappproduct.cpp" />
+    <ClCompile Include="Test\qwininapppurchasebackend.cpp">
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\output\GeneratedFiles\$(PlatformName)\%(Filename).moc</OutputFile>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">input</DynamicSource>
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\output\GeneratedFiles\$(PlatformName)\%(Filename).moc</OutputFile>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\output\GeneratedFiles\$(PlatformName)\%(Filename).moc</OutputFile>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">input</DynamicSource>
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\output\GeneratedFiles\$(PlatformName)\%(Filename).moc</OutputFile>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|x64'">input</DynamicSource>
+    </ClCompile>
+    <ClCompile Include="Test\qwininapptransaction.cpp" />
+    <ClCompile Include="Test\qwinstrorebridge.cpp" />
     <ClCompile Include="Test\shopmanager.cpp" />
     <ClCompile Include="Test\window.cpp" />
   </ItemGroup>
@@ -39,9 +50,6 @@
     <QtMoc Include="Test\shopmanager.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="Test\microsoftshop.h" />
-  </ItemGroup>
-  <ItemGroup>
     <QtUic Include="Test\window.ui" />
   </ItemGroup>
   <ItemGroup>
@@ -49,13 +57,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Test\pch.h" />
-    <QtMoc Include="Test\qinapppurchasebackend_p.h" />
     <ClInclude Include="Test\qinapppurchasebackendfactory_p.h" />
     <ClInclude Include="Test\qinappstore_p.h" />
-    <QtMoc Include="Test\qinappproduct.h" />
-    <QtMoc Include="Test\qinappstore.h" />
     <QtMoc Include="Test\qinapptransaction.h" />
-    <QtMoc Include="Test\asyncstore.h" />
+    <QtMoc Include="Test\qinappstore.h" />
+    <QtMoc Include="Test\qinapppurchasebackend_p.h" />
+    <QtMoc Include="Test\qinappproduct.h" />
+    <QtMoc Include="Test\qwinstorebridge.h" />
+    <QtMoc Include="Test\qwininapptransaction_p.h" />
+    <QtMoc Include="Test\qwininapppurchasebackend_p.h" />
+    <QtMoc Include="Test\qwininappproduct_p.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B12702AD-ABFB-343A-A199-8E24837244A3}</ProjectGuid>

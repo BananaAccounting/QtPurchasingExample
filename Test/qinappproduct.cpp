@@ -33,20 +33,20 @@ QT_BEGIN_NAMESPACE
 class QInAppProductPrivate
 {
 public:
-	QInAppProductPrivate(const QString &price, const QString &title, const QString &description, QInAppProduct::ProductType type, const QString &id)
-		: localPrice(price)
-		, localTitle(title)
-		, localDescription(description)
-		, productType(type)
-		, identifier(id)
-	{
-	}
+    QInAppProductPrivate(const QString &price, const QString &title, const QString &description, QInAppProduct::ProductType type, const QString &id)
+        : localPrice(price)
+        , localTitle(title)
+        , localDescription(description)
+        , productType(type)
+        , identifier(id)
+    {
+    }
 
-	QString localPrice;
-	QString localTitle;
-	QString localDescription;
-	QInAppProduct::ProductType productType;
-	QString identifier;
+    QString localPrice;
+    QString localTitle;
+    QString localDescription;
+    QInAppProduct::ProductType productType;
+    QString identifier;
 };
 
 /*!
@@ -63,19 +63,19 @@ public:
    can only be purchased once.
  */
 
- /*!
-  * \internal
-  */\
-	QInAppProduct::QInAppProduct(const QString &price, const QString &title, const QString &description, ProductType productType, const QString &identifier, QObject *parent)
-	: QObject(parent)
+/*!
+ * \internal
+ */\
+QInAppProduct::QInAppProduct(const QString &price, const QString &title, const QString &description, ProductType productType, const QString &identifier, QObject *parent)
+    : QObject(parent)
 {
-	d = QSharedPointer<QInAppProductPrivate>(new QInAppProductPrivate(price, title, description, productType, identifier));
+    d = QSharedPointer<QInAppProductPrivate>(new QInAppProductPrivate(price, title, description, productType, identifier));
 }
 
 /*!
  * \internal
  */\
-	QInAppProduct::~QInAppProduct()
+QInAppProduct::~QInAppProduct()
 {
 }
 
@@ -87,7 +87,7 @@ public:
 */
 QString QInAppProduct::price() const
 {
-	return d->localPrice;
+    return d->localPrice;
 }
 
 /*!
@@ -98,7 +98,7 @@ QString QInAppProduct::price() const
  */
 QString QInAppProduct::title() const
 {
-	return d->localTitle;
+    return d->localTitle;
 }
 
 /*!
@@ -109,7 +109,7 @@ QString QInAppProduct::title() const
  */
 QString QInAppProduct::description() const
 {
-	return d->localDescription;
+    return d->localDescription;
 }
 
 /*!
@@ -120,7 +120,7 @@ QString QInAppProduct::description() const
 */
 QString QInAppProduct::identifier() const
 {
-	return d->identifier;
+    return d->identifier;
 }
 
 /*!
@@ -144,7 +144,7 @@ QString QInAppProduct::identifier() const
  */
 QInAppProduct::ProductType QInAppProduct::productType() const
 {
-	return d->productType;
+    return d->productType;
 }
 
 /*!

@@ -52,23 +52,23 @@ class QInAppPurchaseBackend;
 class QInAppStorePrivate
 {
 public:
-	QInAppStorePrivate()
-		: backend(0)
-		, hasCalledInitialize(false)
-		, pendingRestorePurchases(false)
-	{
-	}
+    QInAppStorePrivate()
+        : backend(0)
+        , hasCalledInitialize(false)
+        , pendingRestorePurchases(false)
+    {
+    }
 
-	~QInAppStorePrivate()
-	{
-		delete backend;
-	}
+    ~QInAppStorePrivate()
+    {
+        delete backend;
+    }
 
-	QHash<QString, QInAppProduct::ProductType> pendingProducts;
-	QHash<QString, QInAppProduct *> registeredProducts;
-	QInAppPurchaseBackend *backend;
-	bool hasCalledInitialize;
-	bool pendingRestorePurchases;
+    QHash<QString, QInAppProduct::ProductType> pendingProducts;
+    QHash<QString, QInAppProduct *> registeredProducts;
+    QInAppPurchaseBackend *backend;
+    bool hasCalledInitialize;
+    bool pendingRestorePurchases;
 };
 
 QT_END_NAMESPACE

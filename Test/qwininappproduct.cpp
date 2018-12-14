@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2015 The Qt Company Ltd.
+** Copyright (C) 2016 The Qt Company Ltd.
 ** Contact: http://www.qt.io/licensing/
 **
 ** This file is part of the Purchasing module of the Qt Toolkit.
@@ -26,35 +26,34 @@
 **
 ****************************************************************************/
 
-#include "qinapppurchasebackendfactory_p.h"
+#include "qwininappproduct_p.h"
+#include "qwininapppurchasebackend_p.h"
 
-#if defined(Q_OS_ANDROID)
-#  include "qandroidinapppurchasebackend_p.h"
-#elif defined(Q_OS_DARWIN) && !defined(Q_OS_WATCHOS)
-#  include "qmacinapppurchasebackend_p.h"
-#elif defined(Q_OS_WINRT)
-#  include "qwinrtinapppurchasebackend_p.h"
-#elif defined(Q_OS_WIN32) ||  defined(Q_OS_WIN64)
-#  include "qwininapppurchasebackend_p.h"
-#else
-#  include "qinapppurchasebackend_p.h"
-#endif
+#include <QLoggingCategory>
 
 QT_BEGIN_NAMESPACE
 
-QInAppPurchaseBackend *QInAppPurchaseBackendFactory::create()
+Q_LOGGING_CATEGORY(lcPurchasingProduct, "qt.purchasing.product")
+
+QWinInAppProduct::QWinInAppProduct(QWinInAppPurchaseBackend *backend,
+	const QString &price,
+	const QString &title,
+	const QString &description,
+	ProductType productType,
+	const QString &identifier,
+	QObject *parent)
+	: QInAppProduct(price, title, description, productType, identifier, parent)
+	, m_backend(backend)
 {
-#if defined(Q_OS_ANDROID)
-    return new QAndroidInAppPurchaseBackend;
-#elif defined(Q_OS_DARWIN) && !defined(Q_OS_WATCHOS)
-    return new QMacInAppPurchaseBackend;
-#elif defined (Q_OS_WINRT)
-    return new QWinRTInAppPurchaseBackend;
-#elif defined (Q_OS_WIN32) ||  defined(Q_OS_WIN64)
-	return new QWinInAppPurchaseBackend;
-#else
-    return new QInAppPurchaseBackend;
-#endif
+	qCDebug(lcPurchasingProduct) << __FUNCTION__;
+}
+
+
+void QWinInAppProduct::purchase()
+{
+	qCDebug(lcPurchasingProduct) << __FUNCTION__;
+	m_backend->purchaseProduct(this);
 }
 
 QT_END_NAMESPACE
+

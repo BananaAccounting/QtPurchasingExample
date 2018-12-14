@@ -37,32 +37,32 @@ QT_BEGIN_NAMESPACE
 class QInAppStorePrivate;
 class QInAppProduct;
 class QInAppTransaction;
-class QInAppStore : public QObject
+class QInAppStore: public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	explicit QInAppStore(QObject *parent = nullptr);
-	~QInAppStore();
+    explicit QInAppStore(QObject *parent = nullptr);
+    ~QInAppStore();
 
-	Q_INVOKABLE void restorePurchases();
-	Q_INVOKABLE void registerProduct(QInAppProduct::ProductType productType, const QString &identifier);
-	Q_INVOKABLE QInAppProduct *registeredProduct(const QString &identifier) const;
-	Q_INVOKABLE void setPlatformProperty(const QString &propertyName, const QString &value);
+    Q_INVOKABLE void restorePurchases();
+    Q_INVOKABLE void registerProduct(QInAppProduct::ProductType productType, const QString &identifier);
+    Q_INVOKABLE QInAppProduct *registeredProduct(const QString &identifier) const;
+    Q_INVOKABLE void setPlatformProperty(const QString &propertyName, const QString &value);
 
 Q_SIGNALS:
-	void productRegistered(QInAppProduct *product);
-	void productUnknown(QInAppProduct::ProductType productType, const QString &identifier);
-	void transactionReady(QInAppTransaction *transaction);
+    void productRegistered(QInAppProduct *product);
+    void productUnknown(QInAppProduct::ProductType productType, const QString &identifier);
+    void transactionReady(QInAppTransaction *transaction);
 
 private Q_SLOTS:
-	void registerPendingProducts();
-	void registerProduct(QInAppProduct *);
+    void registerPendingProducts();
+    void registerProduct(QInAppProduct *);
 
 private:
-	void setupBackend();
+    void setupBackend();
 
-	Q_DISABLE_COPY(QInAppStore)
-		QSharedPointer<QInAppStorePrivate> d;
+    Q_DISABLE_COPY(QInAppStore)
+    QSharedPointer<QInAppStorePrivate> d;
 };
 
 QT_END_NAMESPACE

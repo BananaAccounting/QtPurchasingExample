@@ -26,8 +26,8 @@
 **
 ****************************************************************************/
 
-#ifndef QINAPPPURCHASEBACKENDFACTORY_P_H
-#define QINAPPPURCHASEBACKENDFACTORY_P_H
+#ifndef QWININAPPPURCHASEBACKEND_P_H
+#define QWININAPPPURCHASEBACKEND_P_H
 
 //
 //  W A R N I N G
@@ -39,18 +39,44 @@
 //
 // We mean it.
 //
+#include "qinapppurchasebackend_p.h"
+#include "qinappproduct.h"
 
-#include <QtCore>
+#include <QObject>
 
 QT_BEGIN_NAMESPACE
 
-class QInAppPurchaseBackend;
-class QInAppPurchaseBackendFactory
+class QWinInAppProduct;
+class QWinInAppPurchaseBackendPrivate;
+class QWinInAppTransaction;
+class QInAppStore;
+class QWinInAppPurchaseBackend : public QInAppPurchaseBackend
 {
+	Q_OBJECT
 public:
-    static QInAppPurchaseBackend *create();
-};
+	explicit QWinInAppPurchaseBackend(QObject *parent = 0);
 
+	void initialize() override;
+	bool isReady() const override;
+
+	void queryProducts(const QList<Product> &products) override;
+	void queryProduct(QInAppProduct::ProductType productType, const QString &identifier) override;
+	void restorePurchases() override;
+
+	void setPlatformProperty(const QString &propertyName, const QString &value) override;
+
+	void purchaseProduct(QWinInAppProduct *product);
+
+	void fulfillConsumable(QWinInAppTransaction *transaction);
+public slots:
+	void isAppActive(const QString&);
+	void isAddonActive(const QString&);
+	void productBought(QWinInAppTransaction*);
+private:
+	QScopedPointer<QWinInAppPurchaseBackendPrivate> d_ptr;
+	
+	Q_DECLARE_PRIVATE(QWinInAppPurchaseBackend);
+};
 QT_END_NAMESPACE
 
-#endif // QINAPPPURCHASEBACKENDFACTORY_P_H
+#endif // QWININAPPPURCHASEBACKEND_P_H

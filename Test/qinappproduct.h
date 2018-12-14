@@ -35,43 +35,42 @@
 QT_BEGIN_NAMESPACE
 
 class QInAppProductPrivate;
-class QInAppProduct : public QObject
+class QInAppProduct: public QObject
 {
-	Q_OBJECT
-		Q_ENUMS(ProductType)
-		Q_PROPERTY(QString identifier READ identifier CONSTANT)
-		Q_PROPERTY(ProductType productType READ productType CONSTANT)
-		Q_PROPERTY(QString price READ price CONSTANT)
-		Q_PROPERTY(QString title READ title CONSTANT)
-		Q_PROPERTY(QString description READ description CONSTANT)
+    Q_OBJECT
+    Q_ENUMS(ProductType)
+    Q_PROPERTY(QString identifier READ identifier CONSTANT)
+    Q_PROPERTY(ProductType productType READ productType CONSTANT)
+    Q_PROPERTY(QString price READ price CONSTANT)
+    Q_PROPERTY(QString title READ title CONSTANT)
+    Q_PROPERTY(QString description READ description CONSTANT)
 
 public:
-	enum ProductType
-	{
-		Consumable,
-		Unlockable,
-		Subscription
-	};
+    enum ProductType
+    {
+        Consumable,
+        Unlockable
+    };
 
-	~QInAppProduct();
+    ~QInAppProduct();
 
-	QString identifier() const;
-	ProductType productType() const;
+    QString identifier() const;
+    ProductType productType() const;
 
-	QString price() const;
-	QString title() const;
-	QString description() const;
+    QString price() const;
+    QString title() const;
+    QString description() const;
 
-	Q_INVOKABLE virtual void purchase() = 0;
+    Q_INVOKABLE virtual void purchase() = 0;
 
 protected:
-	explicit QInAppProduct(const QString &price, const QString &title, const QString &description, ProductType productType, const QString &identifier, QObject *parent = nullptr);
+    explicit QInAppProduct(const QString &price, const QString &title, const QString &description, ProductType productType, const QString &identifier, QObject *parent = nullptr);
 
 private:
-	friend class QInAppStore;
-	Q_DISABLE_COPY(QInAppProduct)
+    friend class QInAppStore;
+    Q_DISABLE_COPY(QInAppProduct)
 
-		QSharedPointer<QInAppProductPrivate> d;
+    QSharedPointer<QInAppProductPrivate> d;
 };
 
 QT_END_NAMESPACE
