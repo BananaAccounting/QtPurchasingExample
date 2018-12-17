@@ -300,12 +300,26 @@ void QWinInAppPurchaseBackend::purchaseSuccess(const QString &product, const QSt
 }
 void QWinInAppPurchaseBackend::purchaseCanceled(const QString &product, const QString &message)
 {
-	qDebug() << message;
+	QInAppProduct* p = store()->registeredProduct(product);
+	QWinInAppTransaction* transaction = new QWinInAppTransaction(QInAppTransaction::TransactionStatus::PurchaseFailed,
+		p,
+		QInAppTransaction::FailureReason::CanceledByUser,
+		QStringLiteral(""),
+		this);
+	transaction->m_extendedError = message;
+	emit transactionReady(transaction);
 }
 
 void QWinInAppPurchaseBackend::purchaseFailed(const QString &product, const QString &message)
 {
-	qDebug() << message;
+	QInAppProduct* p = store()->registeredProduct(product);
+	QWinInAppTransaction* transaction = new QWinInAppTransaction(QInAppTransaction::TransactionStatus::PurchaseApproved,
+		p,
+		QInAppTransaction::FailureReason::ErrorOccurred,
+		QStringLiteral(""),
+		this);
+	transaction->m_extendedError = message;
+	emit transactionReady(transaction);
 }
 QT_END_NAMESPACE
 

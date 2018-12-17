@@ -52,35 +52,35 @@ class QWinInAppTransaction;
 class QInAppStore;
 class QWinInAppPurchaseBackend : public QInAppPurchaseBackend
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	explicit QWinInAppPurchaseBackend(QObject *parent = 0);
+    explicit QWinInAppPurchaseBackend(QObject *parent = 0);
 
-	void initialize() override;
-	bool isReady() const override;
+    void initialize() override;
+    bool isReady() const override;
 
-	void queryProducts(const QList<Product> &products) override;
-	void queryProduct(QInAppProduct::ProductType productType, const QString &identifier) override;
-	void restorePurchases() override;
+    void queryProducts(const QList<Product> &products) override;
+    void queryProduct(QInAppProduct::ProductType productType, const QString &identifier) override;
+    void restorePurchases() override;
 
-	void setPlatformProperty(const QString &propertyName, const QString &value) override;
+    void setPlatformProperty(const QString &propertyName, const QString &value) override;
 
-	void purchaseProduct(QWinInAppProduct *product);
+    void purchaseProduct(QWinInAppProduct *product);
 
-	void fulfillConsumable(QWinInAppTransaction *transaction);
-	void setContext();
+    void fulfillConsumable(QWinInAppTransaction *transaction);
+    void setContext();
 public slots:
-	void isAppActive(const QString&);
-	void isAddonActive(const QString&);
-	void purchaseFailed(const QString&, const QString&);
-	void purchaseSuccess(const QString&, const QString&);
-	void purchaseCanceled(const QString&, const QString&);
+    void isAppActive(const QString&);
+    void isAddonActive(const QString&);
+    void purchaseFailed(const QString&, const QString&);
+    void purchaseSuccess(const QString&, const QString&);
+    void purchaseCanceled(const QString&, const QString&);
 signals:
 
 private:
-	QScopedPointer<QWinInAppPurchaseBackendPrivate> d_ptr;
-	
-	Q_DECLARE_PRIVATE(QWinInAppPurchaseBackend);
+    QScopedPointer<QWinInAppPurchaseBackendPrivate> d_ptr;
+
+    Q_DECLARE_PRIVATE(QWinInAppPurchaseBackend);
 };
 QT_END_NAMESPACE
 
