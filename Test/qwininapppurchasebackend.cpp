@@ -34,6 +34,7 @@
 #include <QJsonDocument>
 #include <QMap>
 #include <QDebug>
+#include <QWidget>
 
 using namespace winrt::Windows::Services::Store;
 QT_BEGIN_NAMESPACE
@@ -41,7 +42,7 @@ QT_BEGIN_NAMESPACE
 inline bool compareProductTypes(QInAppProduct::ProductType qtType, QString nativeType) {
 	if (qtType == QInAppProduct::Consumable && (nativeType == "Consumable" || nativeType == "UnmanagedConsumable"))
 		return true;
-	else if (qtType == QInAppProduct::Unlockable && ( nativeType == "Durable" || nativeType == "Application"))
+	else if (qtType == QInAppProduct::Unlockable && (nativeType == "Durable" || nativeType == "Application"))
 		return true;
 	else
 		return false;
@@ -75,11 +76,13 @@ public:
 
 	bool m_waitingForList = false;
 	StoreContext m_storeContext;
+	WId window;
+	bool initWindow = true;
 
 public slots:
 	void addToNativeProducts(const QString&);
 	void nativeListReady();
-	
+
 
 	Q_DECLARE_PUBLIC(QWinInAppPurchaseBackend)
 };
@@ -98,15 +101,15 @@ void QWinInAppPurchaseBackendPrivate::addToNativeProducts(const QString &product
 		price = p["Availabilities"]["OrderManagementData"]["Price"]["ListPrice"].toString();
 		identifier = p["Properties"]["InAppOfferToken"].toString();
 	}
-		
-	QString name = p["LocalizedProperties"]["ProductTitle"].toString();
+
+	QString name = p["LocalizedProperties"][0]["ProductTitle"].toString();
 	QInAppProduct::ProductType productType = translateProductTypes(p["ProductKind"].toString());
-	
+
 	QWinInAppProduct *appProduct = new QWinInAppProduct((QWinInAppPurchaseBackend*)this->parent(), price, name, QString(), productType, identifier, this->parent());
 	appProduct->storeID = p["ProductId"].toString();
 	appProduct->productKind = p["ProductKind"].toString();
-	
-	
+
+
 	if (!nativeProducts.contains(identifier)) {
 		nativeProducts.insert(identifier, appProduct);
 	}
@@ -126,11 +129,7 @@ QWinInAppPurchaseBackend::QWinInAppPurchaseBackend(QObject *parent)
 void QWinInAppPurchaseBackend::initialize()
 {
 	Q_D(QWinInAppPurchaseBackend);
-	if (d->m_storeContext == nullptr) {
-		auto factory = winrt::get_activation_factory<winrt::Windows::Services::Store::StoreContext, winrt::Windows::Services::Store::IStoreContextStatics>();
-		d->m_storeContext = factory.GetDefault();
-	}
-
+	setContext();
 	d->m_waitingForList = true;
 	WinStoreBridge* storeBridge = new WinStoreBridge();
 	storeBridge->setAutoDelete(true);
@@ -172,11 +171,8 @@ void QWinInAppPurchaseBackend::queryProduct(QInAppProduct::ProductType productTy
 void QWinInAppPurchaseBackend::restorePurchases()
 {
 	Q_D(QWinInAppPurchaseBackend);
-	if (d->m_storeContext == nullptr) {
-		auto factory = winrt::get_activation_factory<winrt::Windows::Services::Store::StoreContext, winrt::Windows::Services::Store::IStoreContextStatics>();
-		d->m_storeContext = factory.GetDefault();
-	}
-	
+	setContext();
+
 	WinStoreBridge* storeBridge = new WinStoreBridge();
 	storeBridge->setAutoDelete(true);
 	storeBridge->setContext(d->m_storeContext);
@@ -190,117 +186,58 @@ void QWinInAppPurchaseBackend::restorePurchases()
 
 void QWinInAppPurchaseBackend::setPlatformProperty(const QString &propertyName, const QString &value)
 {
-	Q_UNUSED(propertyName);
-	Q_UNUSED(value);
+	Q_D(QWinInAppPurchaseBackend);
+	if (propertyName == QLatin1String("window"))
+	{
+		d->window = value.toInt();
+	}
 }
 
 void QWinInAppPurchaseBackend::purchaseProduct(QWinInAppProduct * product)
+{
+	Q_D(QWinInAppPurchaseBackend);
+	setContext();
+
+	WinStoreBridge* storeBridge = new WinStoreBridge();
+	storeBridge->setAutoDelete(true);
+	storeBridge->setContext(d->m_storeContext);
+	storeBridge->setOperation(WinStoreBridge::mType::buyProduct);
+	storeBridge->setProduct(product);
+	QThreadPool::globalInstance()->tryStart(storeBridge);
+	connect(storeBridge, &WinStoreBridge::purchaseSuccess, this, &QWinInAppPurchaseBackend::purchaseSuccess);
+	connect(storeBridge, &WinStoreBridge::purchaseCanceled, this, &QWinInAppPurchaseBackend::purchaseCanceled);
+	connect(storeBridge, &WinStoreBridge::purchaseFailed, this, &QWinInAppPurchaseBackend::purchaseFailed);
+}
+
+void QWinInAppPurchaseBackend::fulfillConsumable(QWinInAppTransaction * transaction)
+{
+	Q_D(QWinInAppPurchaseBackend);
+	setContext();
+
+	WinStoreBridge* storeBridge = new WinStoreBridge();
+	storeBridge->setAutoDelete(true);
+	storeBridge->setContext(d->m_storeContext);
+	storeBridge->setOperation(WinStoreBridge::mType::fulfillConsumable);
+	storeBridge->setProduct((QWinInAppProduct*)transaction->product());
+	QThreadPool::globalInstance()->tryStart(storeBridge);
+}
+
+void QWinInAppPurchaseBackend::setContext()
 {
 	Q_D(QWinInAppPurchaseBackend);
 	if (d->m_storeContext == nullptr) {
 		auto factory = winrt::get_activation_factory<winrt::Windows::Services::Store::StoreContext, winrt::Windows::Services::Store::IStoreContextStatics>();
 		d->m_storeContext = factory.GetDefault();
 	}
-	/*WinStoreBridge* storeBridge = new WinStoreBridge();
-	storeBridge->setAutoDelete(true);
-	storeBridge->setContext(d->m_storeContext);
-	storeBridge->setOperation(WinStoreBridge::mType::buyProduct);
-	storeBridge->setProduct(product);
-	QThreadPool::globalInstance()->tryStart(storeBridge);
-	connect(storeBridge, &WinStoreBridge::isAppActive, this, &QWinInAppPurchaseBackend::isAppActive);
-	connect(storeBridge, &WinStoreBridge::isAddonActive, this, &QWinInAppPurchaseBackend::isAddonActive);*/
-
-	buyProduct(product);
-}
-
-void QWinInAppPurchaseBackend::buyProduct(QWinInAppProduct *product) {
-	Q_D(QWinInAppPurchaseBackend);
-	winrt::hstring id = (product->storeID).toStdWString().c_str();
-	
-	StorePurchaseResult result = d->m_storeContext.RequestPurchaseAsync(id).get();
-
-	winrt::hresult extendedError;
-	if (result == nullptr)
-	{
-		winrt::check_hresult(result.ExtendedError());
-		extendedError = result.ExtendedError();
-		return;
+	if (d->initWindow && d->window) {
+		winrt::com_ptr<IInitializeWithWindow> initWindow;
+		winrt::Windows::Foundation::IUnknown * unknown = reinterpret_cast<winrt::Windows::Foundation::IUnknown*>(&d->m_storeContext);
+		unknown->as(initWindow);
+		initWindow->Initialize(HWND(d->window));
+		initWindow = false;
 	}
-	QWinInAppTransaction* transaction;
-	switch (result.Status())
-	{
-	case StorePurchaseStatus::AlreadyPurchased:
-		//textBlock.Text = "The user has already purchased the product.";
-		transaction = new QWinInAppTransaction(QInAppTransaction::PurchaseRestored,
-			product,
-			QInAppTransaction::NoFailure,
-			"",
-			this);
-		transaction->m_extendedError = "The user has already purchased the product.";
-		productBought(transaction);
-		break;
 
-	case StorePurchaseStatus::Succeeded:
-		//textBlock.Text = "The purchase was successful.";
-		transaction = new QWinInAppTransaction(QInAppTransaction::PurchaseRestored,
-			product,
-			QInAppTransaction::NoFailure,
-			"",
-			this);
-		transaction->m_extendedError = "The purchase was successful.";
-		productBought(transaction);
-		break;
-
-	case StorePurchaseStatus::NotPurchased:
-		//textBlock.Text = "The purchase did not complete. " + "The user may have cancelled the purchase. ExtendedError: " + extendedError;
-		qDebug() << ("The purchase did not complete. The user may have cancelled the purchase. ExtendedError: " + QString::number(extendedError));
-		transaction = new QWinInAppTransaction(QInAppTransaction::PurchaseFailed,
-			product,
-			QInAppTransaction::CanceledByUser,
-			"",
-			this);
-		transaction->m_extendedError = "The purchase did not complete. The user may have cancelled the purchase.";
-		productBought(transaction);
-		break;
-
-	case StorePurchaseStatus::NetworkError:
-		//textBlock.Text = "The purchase was unsuccessful due to a network error. " + "ExtendedError: " + extendedError;
-		qDebug() << ("The purchase was unsuccessful due to a network error. ExtendedError: " + QString::number(extendedError));
-		transaction = new QWinInAppTransaction(QInAppTransaction::PurchaseFailed,
-			product,
-			QInAppTransaction::ErrorOccurred,
-			"",
-			this);
-		transaction->m_extendedError = "The purchase was unsuccessful due to a network error.";
-		 productBought(transaction);
-		break;
-
-	case StorePurchaseStatus::ServerError:
-		//textBlock.Text = "The purchase was unsuccessful due to a server error. " +"ExtendedError: " + extendedError;
-		qDebug() << ("The purchase was unsuccessful due to a server error. ExtendedError: " + QString::number(extendedError));
-		transaction = new QWinInAppTransaction(QInAppTransaction::PurchaseFailed,
-			product,
-			QInAppTransaction::ErrorOccurred,
-			"",
-			this);
-		transaction->m_extendedError = "The purchase was unsuccessful due to a server error.";
-		productBought(transaction);
-		break;
-
-	default:
-		//textBlock.Text = "The purchase was unsuccessful due to an unknown error. " +		"ExtendedError: " + extendedError;
-		qDebug() << ("The purchase was unsuccessful due to an unknown error.  ExtendedError: " + QString::number(extendedError));
-		transaction = new QWinInAppTransaction(QInAppTransaction::PurchaseFailed,
-			product,
-			QInAppTransaction::ErrorOccurred,
-			"",
-			this);
-		transaction->m_extendedError = "The purchase was unsuccessful due to an unknown error.";
-		productBought(transaction);
-		break;
-	}
 }
-
 
 void QWinInAppPurchaseBackend::isAppActive(const QString &jsondata)
 {
@@ -311,18 +248,18 @@ void QWinInAppPurchaseBackend::isAppActive(const QString &jsondata)
 		QInAppProduct *product = nullptr;
 		if (p["isActive"].toBool() && !p["isTrial"].toBool()) {
 			product = store()->registeredProduct(p["productId"].toString());
-		
-		if (!product) {
-			queryProduct(QInAppProduct::Unlockable, p["productId"].toString());
-			product = store()->registeredProduct(p["productId"].toString());
-		}
 
-		auto transaction = new QWinInAppTransaction(QInAppTransaction::PurchaseRestored,
-			product,
-			QInAppTransaction::NoFailure,
-			p["expiration"].toString(),
-			this);
-		emit transactionReady(transaction);
+			if (!product) {
+				queryProduct(QInAppProduct::Unlockable, p["productId"].toString());
+				product = store()->registeredProduct(p["productId"].toString());
+			}
+
+			auto transaction = new QWinInAppTransaction(QInAppTransaction::PurchaseRestored,
+				product,
+				QInAppTransaction::NoFailure,
+				p["expiration"].toString(),
+				this);
+			emit transactionReady(transaction);
 		}
 	}
 }
@@ -349,12 +286,26 @@ void QWinInAppPurchaseBackend::isAddonActive(const QString &jsondata)
 		emit transactionReady(transaction);
 	}
 }
-void QWinInAppPurchaseBackend::productBought(QWinInAppTransaction *transaction)
+
+void QWinInAppPurchaseBackend::purchaseSuccess(const QString &product, const QString &message)
 {
-	if(transaction->status()==QInAppTransaction::NoFailure)
-		emit transactionReady(transaction);
-	//if(transaction->status()== QInAppTransaction::CanceledByUser || transaction->status() == QInAppTransaction::ErrorOccurred)
-		//emit transaction
+	QInAppProduct* p = store()->registeredProduct(product);
+	QWinInAppTransaction* transaction = new QWinInAppTransaction(QInAppTransaction::TransactionStatus::PurchaseApproved,
+		p,
+		QInAppTransaction::FailureReason::NoFailure,
+		QStringLiteral(""),
+		this);
+	transaction->m_extendedError = message;
+	emit transactionReady(transaction);
+}
+void QWinInAppPurchaseBackend::purchaseCanceled(const QString &product, const QString &message)
+{
+	qDebug() << message;
+}
+
+void QWinInAppPurchaseBackend::purchaseFailed(const QString &product, const QString &message)
+{
+	qDebug() << message;
 }
 QT_END_NAMESPACE
 

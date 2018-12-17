@@ -25,6 +25,7 @@ private:
     void markAsDurablePurchased();
     void markAsProductPurchased();
 	void markAsProductTrial();
+	void markConsumbale(const QString&);
 	void writeLog(QString log);
 signals:
 protected:
@@ -34,12 +35,13 @@ public slots:
     void purchaseDurable();
     void purchaseSubscription();
     void purchaseProduct();
-	void checkSubscription();
-	void checkDurable();
+    void purchaseConsumable();
+    void useConsumable();
 	void handleTrial(bool);
 	void handleActive(bool);
 	void handleDurableActive(bool);
 	void handleSubscriptionActive(bool);
+	void handleConsumable(const QString&);
 
 
 	

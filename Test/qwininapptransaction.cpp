@@ -47,12 +47,12 @@ QWinInAppTransaction::QWinInAppTransaction(TransactionStatus status,
 
 void QWinInAppTransaction::finalize()
 {
-	/*qCDebug(lcPurchasingTransaction) << __FUNCTION__;
+	qCDebug(lcPurchasingTransaction) << __FUNCTION__;
 	if (product()->productType() == QInAppProduct::Consumable &&
 		(status() == QInAppTransaction::PurchaseApproved ||
 			status() == QInAppTransaction::PurchaseRestored)) {
 		m_backend->fulfillConsumable(this);
-	}*/
+	}
 	deleteLater();
 }
 

@@ -89,14 +89,7 @@
    <item>
     <widget class="QPushButton" name="btnBuyDurable">
      <property name="text">
-      <string>Buy durable</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="btnCheckDurable">
-     <property name="text">
-      <string>Check</string>
+      <string>Buy Durable</string>
      </property>
     </widget>
    </item>
@@ -136,13 +129,6 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="btnCheckSubscription">
-     <property name="text">
-      <string>Check</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <spacer name="verticalSpacer_3">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -151,6 +137,48 @@
       <size>
        <width>20</width>
        <height>70</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblConsumable">
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>No Consumable</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="btnBuyConsumable">
+     <property name="text">
+      <string>Buy Consumable</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="btnUseConsumable">
+     <property name="text">
+      <string>Use 1</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer_4">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
       </size>
      </property>
     </spacer>

@@ -16,10 +16,10 @@ WinStoreBridge::WinStoreBridge(QWindow* mainWindow, QObject *parent)
 {
 
 }
+
 WinStoreBridge::WinStoreBridge() {
 
 }
-
 
 void WinStoreBridge::setContext(const StoreContext & ctx)
 {
@@ -30,7 +30,6 @@ void WinStoreBridge::getStoreContext() {
 	auto factory = winrt::get_activation_factory<StoreContext, IStoreContextStatics>();
 	context = factory.GetDefault();
 }
-
 
 void WinStoreBridge::getAppInfoAsync()
 {
@@ -54,7 +53,7 @@ void WinStoreBridge::getAddonsAsync()
 		getStoreContext();
 	}
 
-	auto filter{ winrt::single_threaded_vector<winrt::hstring>({ L"Durable"}) };
+	auto filter{ winrt::single_threaded_vector<winrt::hstring>({ L"Durable", L"Consumable"}) };
 	StoreProductQueryResult  storeProductQueryRes = context.GetAssociatedStoreProductsAsync(filter).get();
 
 	if (storeProductQueryRes == nullptr) {
@@ -67,6 +66,7 @@ void WinStoreBridge::getAddonsAsync()
 	}
 	emit requestDone();
 }
+
 void WinStoreBridge::getAddonsFilteredAsync()
 {
 	if (context == nullptr) {
@@ -170,78 +170,77 @@ void WinStoreBridge::buyProductAsync() {
 	switch (result.Status())
 	{
 	case StorePurchaseStatus::AlreadyPurchased:
-		//textBlock.Text = "The user has already purchased the product.";
-		transaction = new QWinInAppTransaction(QInAppTransaction::PurchaseRestored,
-			m_product,
-			QInAppTransaction::NoFailure,
-			"",
-			this);
-		transaction->m_extendedError = "The user has already purchased the product.";
-		emit productBought(transaction);
+		emit purchaseSuccess(m_product->identifier(), "The user has already purchased the product.");
 		break;
 
 	case StorePurchaseStatus::Succeeded:
-		//textBlock.Text = "The purchase was successful.";
-		transaction = new QWinInAppTransaction(QInAppTransaction::PurchaseRestored,
-			m_product,
-			QInAppTransaction::NoFailure,
-			"",
-			this);
-		transaction->m_extendedError = "The purchase was successful.";
-		emit productBought(transaction);
+		emit purchaseSuccess(m_product->identifier(), "The purchase was successful.");
 		break;
 
 	case StorePurchaseStatus::NotPurchased:
-		//textBlock.Text = "The purchase did not complete. " + "The user may have cancelled the purchase. ExtendedError: " + extendedError;
-		emit appInfo("The purchase did not complete. The user may have cancelled the purchase. ExtendedError: " + QString::number(extendedError));
-		transaction = new QWinInAppTransaction(QInAppTransaction::PurchaseFailed,
-			m_product,
-			QInAppTransaction::CanceledByUser,
-			"",
-			this);
-		transaction->m_extendedError = "The purchase did not complete. The user may have cancelled the purchase.";
-		emit productBought(transaction);
+		emit purchaseCanceled(m_product->identifier(), "The purchase did not complete. The user may have cancelled the purchase.");
 		break;
 
 	case StorePurchaseStatus::NetworkError:
-		//textBlock.Text = "The purchase was unsuccessful due to a network error. " + "ExtendedError: " + extendedError;
-		emit appInfo("The purchase was unsuccessful due to a network error. ExtendedError: " + QString::number(extendedError));
-		transaction = new QWinInAppTransaction(QInAppTransaction::PurchaseFailed,
-			m_product,
-			QInAppTransaction::ErrorOccurred,
-			"",
-			this);
-		transaction->m_extendedError = "The purchase was unsuccessful due to a network error.";
-		emit productBought(transaction);
+		emit purchaseFailed(m_product->identifier(), "The purchase was unsuccessful due to a network error");
 		break;
 
 	case StorePurchaseStatus::ServerError:
-		//textBlock.Text = "The purchase was unsuccessful due to a server error. " +"ExtendedError: " + extendedError;
-		emit appInfo("The purchase was unsuccessful due to a server error. ExtendedError: " + QString::number(extendedError));
-		transaction = new QWinInAppTransaction(QInAppTransaction::PurchaseFailed,
-			m_product,
-			QInAppTransaction::ErrorOccurred,
-			"",
-			this);
-		transaction->m_extendedError = "The purchase was unsuccessful due to a server error.";
-		emit productBought(transaction);
+		emit purchaseFailed(m_product->identifier(), "The purchase was unsuccessful due to a server error");
 		break;
 
 	default:
-		//textBlock.Text = "The purchase was unsuccessful due to an unknown error. " +		"ExtendedError: " + extendedError;
-		emit appInfo("The purchase was unsuccessful due to an unknown error.  ExtendedError: " + QString::number(extendedError));
-		transaction = new QWinInAppTransaction(QInAppTransaction::PurchaseFailed,
-			m_product,
-			QInAppTransaction::ErrorOccurred,
-			"",
-			this);
-		transaction->m_extendedError = "The purchase was unsuccessful due to an unknown error.";
-		emit productBought(transaction);
+		emit purchaseFailed(m_product->identifier(), "The purchase was unsuccessful due to an unknown error.");
 		break;
 	}
 }
 
+void WinStoreBridge::fulfillConsumableAsync()
+{
+	winrt::hstring id = (m_product->storeID).toStdWString().c_str();
+	if (context == nullptr) {
+		getStoreContext();
+	}
+	winrt::guid trackingId = winrt::guid();
 
+	StoreConsumableResult result = context.ReportConsumableFulfillmentAsync(id, m_quantity, trackingId).get();
+
+	winrt::hresult extendedError;
+	if (result == nullptr)
+	{
+		winrt::check_hresult(result.ExtendedError());
+		extendedError = result.ExtendedError();
+		return;
+	}
+	QWinInAppTransaction* transaction;
+	switch (result.Status())
+	{
+	case StoreConsumableStatus::Succeeded:
+		emit appInfo("The fulfillment was successful.");
+		emit fulfilled(true);
+		break;
+
+	case StoreConsumableStatus::InsufficentQuantity:
+		emit appInfo("The fulfillment was unsuccessful because the remaining balance is insufficient.");
+		emit fulfilled(false);
+		break;
+
+	case StoreConsumableStatus::NetworkError:
+		emit appInfo("The fulfillment was unsuccessful due to a network error. ");
+		emit fulfilled(false);
+		break;
+
+	case StoreConsumableStatus::ServerError:
+		appInfo("The fulfillment was unsuccessful due to a server error.");
+		emit fulfilled(false);
+		break;
+
+	default:
+		appInfo("The fulfillment was unsuccessful due to an unknown error. ");
+		emit fulfilled(false);
+		break;
+	}
+}
 
 void WinStoreBridge::addFilterKind(const winrt::hstring &kind)
 {
@@ -292,5 +291,10 @@ void WinStoreBridge::run()
 		checkDurableAsync();
 		break;
 	}
+	case fulfillConsumable:
+	{
+		break;
+	}
+
 	}
 }

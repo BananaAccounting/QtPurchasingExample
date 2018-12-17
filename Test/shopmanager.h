@@ -26,11 +26,11 @@ public:
 
     void restorePurchases();
 	void doPurchase(Products product); 
-	void checkSubscription();
-	void checkDurable();
+	void useProduct(Products product, int quantity);
 	void initShop();
 	bool event(QEvent *e) override;
 private:
+	int myConsumables = 0;
 	QInAppStore *m_myStore;
 	void setupConnections();
 	QString productIdentifier(Products);
@@ -41,6 +41,7 @@ signals:
 	void isActive(bool);
 	void isDurableActive(bool);
 	void isSubscriptionActive(bool);
+	void updateConsumable(const QString&);
     
 public slots:
     void handleErrorGracefully(QInAppProduct*);

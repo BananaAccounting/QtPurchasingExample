@@ -66,13 +66,15 @@ public:
 	void setPlatformProperty(const QString &propertyName, const QString &value) override;
 
 	void purchaseProduct(QWinInAppProduct *product);
-	void buyProduct(QWinInAppProduct *product);
 
 	void fulfillConsumable(QWinInAppTransaction *transaction);
+	void setContext();
 public slots:
 	void isAppActive(const QString&);
 	void isAddonActive(const QString&);
-	void productBought(QWinInAppTransaction*);
+	void purchaseFailed(const QString&, const QString&);
+	void purchaseSuccess(const QString&, const QString&);
+	void purchaseCanceled(const QString&, const QString&);
 signals:
 
 private:

@@ -61,7 +61,7 @@ public:
 	QString storeID;
 	QString productKind;
 	void purchase();
-
+	QWinInAppPurchaseBackend* backend() { return m_backend; }
 private:
 	QWinInAppPurchaseBackend *m_backend;
 	
