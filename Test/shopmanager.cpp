@@ -24,7 +24,8 @@ QString ShopManager::productIdentifier(Products product)
 		return  QStringLiteral("banana_subscription");
 	case banana_product:
 		return  QStringLiteral("9NDW9G6P5G6X");
-
+	default:
+		return;
 	}
 }
 
