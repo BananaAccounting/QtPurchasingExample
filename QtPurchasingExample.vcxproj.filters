@@ -15,12 +15,6 @@
       <Extensions>moc;h;cpp</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
-    <Filter Include="Source Files\qtpurchasing">
-      <UniqueIdentifier>{d177daba-737a-4c51-8aa6-e8ccbee9c68c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\qtpurchasing\win">
-      <UniqueIdentifier>{cbd8139d-e623-4fd9-b44f-b71886c0cfd4}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Test\main.cpp">
@@ -38,33 +32,6 @@
     <ClCompile Include="Test\pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Test\qwininappproduct.cpp">
-      <Filter>Source Files\qtpurchasing\win</Filter>
-    </ClCompile>
-    <ClCompile Include="Test\qwininapptransaction.cpp">
-      <Filter>Source Files\qtpurchasing\win</Filter>
-    </ClCompile>
-    <ClCompile Include="Test\qwinstrorebridge.cpp">
-      <Filter>Source Files\qtpurchasing\win</Filter>
-    </ClCompile>
-    <ClCompile Include="Test\qinappproduct.cpp">
-      <Filter>Source Files\qtpurchasing</Filter>
-    </ClCompile>
-    <ClCompile Include="Test\qinapppurchasebackend.cpp">
-      <Filter>Source Files\qtpurchasing</Filter>
-    </ClCompile>
-    <ClCompile Include="Test\qinapppurchasebackendfactory.cpp">
-      <Filter>Source Files\qtpurchasing</Filter>
-    </ClCompile>
-    <ClCompile Include="Test\qinappstore.cpp">
-      <Filter>Source Files\qtpurchasing</Filter>
-    </ClCompile>
-    <ClCompile Include="Test\qinapptransaction.cpp">
-      <Filter>Source Files\qtpurchasing</Filter>
-    </ClCompile>
-    <ClCompile Include="Test\qwininapppurchasebackend.cpp">
-      <Filter>Source Files\qtpurchasing\win</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Test\window.h">
@@ -76,30 +43,6 @@
     <QtMoc Include="Test\mylogger.h">
       <Filter>Source Files</Filter>
     </QtMoc>
-    <QtMoc Include="Test\qwininappproduct_p.h">
-      <Filter>Source Files\qtpurchasing\win</Filter>
-    </QtMoc>
-    <QtMoc Include="Test\qwininapppurchasebackend_p.h">
-      <Filter>Source Files\qtpurchasing\win</Filter>
-    </QtMoc>
-    <QtMoc Include="Test\qwininapptransaction_p.h">
-      <Filter>Source Files\qtpurchasing\win</Filter>
-    </QtMoc>
-    <QtMoc Include="Test\qwinstorebridge.h">
-      <Filter>Source Files\qtpurchasing\win</Filter>
-    </QtMoc>
-    <QtMoc Include="Test\qinappproduct.h">
-      <Filter>Source Files\qtpurchasing</Filter>
-    </QtMoc>
-    <QtMoc Include="Test\qinapppurchasebackend_p.h">
-      <Filter>Source Files\qtpurchasing</Filter>
-    </QtMoc>
-    <QtMoc Include="Test\qinappstore.h">
-      <Filter>Source Files\qtpurchasing</Filter>
-    </QtMoc>
-    <QtMoc Include="Test\qinapptransaction.h">
-      <Filter>Source Files\qtpurchasing</Filter>
-    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="Test\window.ui">
@@ -109,12 +52,6 @@
   <ItemGroup>
     <ClInclude Include="Test\pch.h">
       <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Test\qinapppurchasebackendfactory_p.h">
-      <Filter>Source Files\qtpurchasing</Filter>
-    </ClInclude>
-    <ClInclude Include="Test\qinappstore_p.h">
-      <Filter>Source Files\qtpurchasing</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

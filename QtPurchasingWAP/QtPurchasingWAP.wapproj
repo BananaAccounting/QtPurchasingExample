@@ -134,6 +134,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="QtPurchasingExample\Qt5Guid.dll" />
+    <Content Include="QtPurchasingExample\Qt5Purchasing.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="QtPurchasingExample\Qt5Purchasingd.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="QtPurchasingExample\Qt5Widgets.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

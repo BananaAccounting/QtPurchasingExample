@@ -22,24 +22,6 @@
     <ClCompile Include="Test\main.cpp" />
     <ClCompile Include="Test\mylogger.cpp" />
     <ClCompile Include="Test\pch.cpp" />
-    <ClCompile Include="Test\qinappproduct.cpp" />
-    <ClCompile Include="Test\qinapppurchasebackend.cpp" />
-    <ClCompile Include="Test\qinapppurchasebackendfactory.cpp" />
-    <ClCompile Include="Test\qinappstore.cpp" />
-    <ClCompile Include="Test\qinapptransaction.cpp" />
-    <ClCompile Include="Test\qwininappproduct.cpp" />
-    <ClCompile Include="Test\qwininapppurchasebackend.cpp">
-      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\output\GeneratedFiles\$(PlatformName)\%(Filename).moc</OutputFile>
-      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">input</DynamicSource>
-      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\output\GeneratedFiles\$(PlatformName)\%(Filename).moc</OutputFile>
-      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
-      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\output\GeneratedFiles\$(PlatformName)\%(Filename).moc</OutputFile>
-      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">input</DynamicSource>
-      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\output\GeneratedFiles\$(PlatformName)\%(Filename).moc</OutputFile>
-      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|x64'">input</DynamicSource>
-    </ClCompile>
-    <ClCompile Include="Test\qwininapptransaction.cpp" />
-    <ClCompile Include="Test\qwinstrorebridge.cpp" />
     <ClCompile Include="Test\shopmanager.cpp" />
     <ClCompile Include="Test\window.cpp" />
   </ItemGroup>
@@ -57,22 +39,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Test\pch.h" />
-    <ClInclude Include="Test\qinapppurchasebackendfactory_p.h" />
-    <ClInclude Include="Test\qinappstore_p.h" />
-    <QtMoc Include="Test\qinapptransaction.h" />
-    <QtMoc Include="Test\qinappstore.h" />
-    <QtMoc Include="Test\qinapppurchasebackend_p.h" />
-    <QtMoc Include="Test\qinappproduct.h" />
-    <QtMoc Include="Test\qwinstorebridge.h" />
-    <QtMoc Include="Test\qwininapptransaction_p.h" />
-    <QtMoc Include="Test\qwininapppurchasebackend_p.h" />
-    <QtMoc Include="Test\qwininappproduct_p.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B12702AD-ABFB-343A-A199-8E24837244A3}</ProjectGuid>
     <Keyword>Qt4VSv1.0</Keyword>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
-    <CppWinRTEnabled>true</CppWinRTEnabled>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -159,8 +130,8 @@
     <QtMoc>
       <OutputFile>.\output\GeneratedFiles\$(PlatformName)\moc_%(Filename).cpp</OutputFile>
       <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
-      <IncludePath>.;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;.\output\GeneratedFiles\$(PlatformName)\.;.\output\GeneratedFiles</IncludePath>
-      <Define>UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;QT_DLL;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
+      <IncludePath>.;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;.\output\GeneratedFiles\$(PlatformName);.\output\GeneratedFiles;%(AdditionalIncludeDirectories)</IncludePath>
+      <Define>UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;QT_DLL;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB;%(PreprocessorDefinitions)</Define>
       <ForceInclude>../../../Test/pch.h;../../../Test/%(Filename)%(Extension)</ForceInclude>
     </QtMoc>
     <QtUic>
@@ -179,15 +150,16 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <PreprocessorDefinitions>UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;QT_DLL;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;.\output\GeneratedFiles\$(PlatformName);.\output\GeneratedFiles;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;QT_DLL;QT_PURCHASING_LIB;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;D:\github\qtpurchasing\include\QtPurchasing;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;.\output\GeneratedFiles\$(PlatformName);.\output\GeneratedFiles;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <CompileAsWinRT>true</CompileAsWinRT>
-      <AdditionalUsingDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\vcpackages;C:\Program Files (x86)\Windows Kits\10\UnionMetadata</AdditionalUsingDirectories>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <AdditionalUsingDirectories>
+      </AdditionalUsingDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ConformanceMode>false</ConformanceMode>
@@ -195,15 +167,15 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\github\qtpurchasing\lib;$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>WindowsApp.lib;qtmaind.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5Widgetsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>qtmaind.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5Widgetsd.lib;Qt5Purchasingd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <QtMoc>
       <OutputFile>.\output\GeneratedFiles\$(PlatformName)\moc_%(Filename).cpp</OutputFile>
       <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
-      <IncludePath>.;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;.\output\GeneratedFiles\$(PlatformName)\.;.\output\GeneratedFiles</IncludePath>
-      <Define>UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;QT_DLL;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
+      <IncludePath>.;D:\github\qtpurchasing\include\QtPurchasing;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;.\output\GeneratedFiles\$(PlatformName);.\output\GeneratedFiles;%(AdditionalIncludeDirectories)</IncludePath>
+      <Define>UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;QT_DLL;QT_PURCHASING_LIB;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB;%(PreprocessorDefinitions)</Define>
       <ForceInclude>./../../Test/pch.h;../../../Test/%(Filename)%(Extension)</ForceInclude>
     </QtMoc>
     <QtUic>
@@ -246,8 +218,8 @@
     <QtMoc>
       <OutputFile>.\output\GeneratedFiles\$(PlatformName)\moc_%(Filename).cpp</OutputFile>
       <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
-      <IncludePath>.;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;.\output\GeneratedFiles\$(PlatformName)\.;.\output\GeneratedFiles</IncludePath>
-      <Define>UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
+      <IncludePath>.;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;.\output\GeneratedFiles\$(PlatformName);.\output\GeneratedFiles;%(AdditionalIncludeDirectories)</IncludePath>
+      <Define>UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB;%(PreprocessorDefinitions)</Define>
       <ForceInclude>../../../Test/pch.h;../../../Test/%(Filename)%(Extension)</ForceInclude>
     </QtMoc>
     <QtUic>
@@ -266,15 +238,16 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <PreprocessorDefinitions>UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;.\output\GeneratedFiles\$(PlatformName);.\output\GeneratedFiles;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;QT_DLL;QT_PURCHASING_LIB;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;D:\github\qtpurchasing\include\QtPurchasing;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;.\output\GeneratedFiles\$(PlatformName);.\output\GeneratedFiles;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>
       </DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <CompileAsWinRT>true</CompileAsWinRT>
-      <AdditionalUsingDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\vcpackages;C:\Program Files (x86)\Windows Kits\10\UnionMetadata;</AdditionalUsingDirectories>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <AdditionalUsingDirectories>
+      </AdditionalUsingDirectories>
       <ConformanceMode>false</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -282,16 +255,16 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\github\qtpurchasing\lib;$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>WindowsApp.lib;qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5Purchasing.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <QtMoc>
       <OutputFile>.\output\GeneratedFiles\$(PlatformName)\moc_%(Filename).cpp</OutputFile>
       <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
-      <IncludePath>.;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;.\output\GeneratedFiles\$(PlatformName)\.;.\output\GeneratedFiles</IncludePath>
-      <Define>UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
+      <IncludePath>.;D:\github\qtpurchasing\include\QtPurchasing;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;.\output\GeneratedFiles\$(PlatformName);.\output\GeneratedFiles;%(AdditionalIncludeDirectories)</IncludePath>
+      <Define>UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;QT_DLL;QT_PURCHASING_LIB;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB;%(PreprocessorDefinitions)</Define>
       <ForceInclude>./../../Test/pch.h;../../../Test/%(Filename)%(Extension)</ForceInclude>
     </QtMoc>
     <QtUic>
