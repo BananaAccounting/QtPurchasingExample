@@ -288,6 +288,7 @@ void WinStoreBridge::run()
         break;
     }
     case fulfillConsumable: {
+        fulfillConsumableAsync();
         break;
     }
 
