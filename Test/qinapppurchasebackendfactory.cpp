@@ -50,7 +50,7 @@ QInAppPurchaseBackend *QInAppPurchaseBackendFactory::create()
     return new QMacInAppPurchaseBackend;
 #elif defined (Q_OS_WINRT)
     return new QWinRTInAppPurchaseBackend;
-#elif defined (Q_OS_WIN32) ||  defined(Q_OS_WIN64)
+#elif defined (Q_OS_WIN32)
     return new QWinInAppPurchaseBackend;
 #else
     return new QInAppPurchaseBackend;
