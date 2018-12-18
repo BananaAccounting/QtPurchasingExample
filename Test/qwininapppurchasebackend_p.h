@@ -70,11 +70,11 @@ public:
     void fulfillConsumable(QWinInAppTransaction *transaction);
     void setContext();
 public slots:
-    void isAppActive(const QString&);
-    void isAddonActive(const QString&);
-    void purchaseFailed(const QString&, const QString&);
-    void purchaseSuccess(const QString&, const QString&);
-    void purchaseCanceled(const QString&, const QString&);
+    void isAppActive(const QString &);
+    void isAddonActive(const QString &);
+    void purchaseFailed(const QString &, const QString &);
+    void purchaseSuccess(const QString &, const QString &);
+    void purchaseCanceled(const QString &, const QString &);
 signals:
 
 private:

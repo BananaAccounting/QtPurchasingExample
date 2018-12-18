@@ -54,53 +54,61 @@
 
 class WinStoreBridge : public QObject, public QRunnable
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	WinStoreBridge(QWindow* mainWindow, QObject *parent = nullptr);
-	WinStoreBridge();
-	enum mType {
-		getAppInfo, getProducts, getAddonsFiltered, getAddonsPurchasable, getUserCollection, checkIsTrial, checkSubscription, checkDurable, buyProduct, fulfillConsumable
-	};
-	void setOperation(mType operation) { m_operation = operation; }
-	void setProduct(QWinInAppProduct* product) { m_product = product; }
-	void addFilterKind(const winrt::hstring&);
-	void addFilterId(const winrt::hstring&);
-	void run() override;
-	void setContext(const winrt::Windows::Services::Store::StoreContext&);
+    WinStoreBridge(QWindow *mainWindow, QObject *parent = nullptr);
+    WinStoreBridge();
+    enum mType {
+        getAppInfo, getProducts, getAddonsFiltered, getAddonsPurchasable, getUserCollection, checkIsTrial, checkSubscription, checkDurable, buyProduct, fulfillConsumable
+    };
+    void setOperation(mType operation)
+    {
+        m_operation = operation;
+    }
+    void setProduct(QWinInAppProduct *product)
+    {
+        m_product = product;
+    }
+    void addFilterKind(const winrt::hstring &);
+    void addFilterId(const winrt::hstring &);
+    void run() override;
+    void setContext(const winrt::Windows::Services::Store::StoreContext &);
 
 private:
-	winrt::Windows::Services::Store::StoreContext context = nullptr;
-	mType m_operation = getAppInfo;
-	int m_quantity = 1;
-	QWinInAppProduct* m_product;
-	winrt::Windows::Foundation::Collections::IVector<winrt::hstring> filterKinds = winrt::single_threaded_vector<winrt::hstring>();
-	winrt::Windows::Foundation::Collections::IVector<winrt::hstring> filterIds = winrt::single_threaded_vector<winrt::hstring>();
-	void getStoreContext();
+    winrt::Windows::Services::Store::StoreContext context = nullptr;
+    mType m_operation = getAppInfo;
+    int m_quantity = 1;
+    QWinInAppProduct *m_product;
+    winrt::Windows::Foundation::Collections::IVector<winrt::hstring> filterKinds =
+        winrt::single_threaded_vector<winrt::hstring>();
+    winrt::Windows::Foundation::Collections::IVector<winrt::hstring> filterIds =
+        winrt::single_threaded_vector<winrt::hstring>();
+    void getStoreContext();
 
-	void getAppInfoAsync();
-	void getAddonsAsync();
-	void getAddonsFilteredAsync();
-	void checkIsTrialAsync();
-	void checkSubscriptionAsync();
-	void checkDurableAsync();
-	void buyProductAsync();
-	void fulfillConsumableAsync();
+    void getAppInfoAsync();
+    void getAddonsAsync();
+    void getAddonsFilteredAsync();
+    void checkIsTrialAsync();
+    void checkSubscriptionAsync();
+    void checkDurableAsync();
+    void buyProductAsync();
+    void fulfillConsumableAsync();
 signals:
-	void appInfo(const QString&);
-	void isTrial(bool);
-	void isAppActive(const QString&);
-	void isAddonActive(const QString&);
-	void isDurableActive(bool);
-	void isSubscriptionActive(bool);
-	void subInfo(const QString&);
-	void fulfilled(bool);
-	void storeProduct(const QString&);
-	void requestDone();
+    void appInfo(const QString &);
+    void isTrial(bool);
+    void isAppActive(const QString &);
+    void isAddonActive(const QString &);
+    void isDurableActive(bool);
+    void isSubscriptionActive(bool);
+    void subInfo(const QString &);
+    void fulfilled(bool);
+    void storeProduct(const QString &);
+    void requestDone();
 
-	void purchaseSuccess(const QString&, const QString&);
-	void purchaseFailed(const QString&, const QString&);
-	void purchaseCanceled(const QString&, const QString&);
+    void purchaseSuccess(const QString &, const QString &);
+    void purchaseFailed(const QString &, const QString &);
+    void purchaseCanceled(const QString &, const QString &);
 public slots:
 
 };

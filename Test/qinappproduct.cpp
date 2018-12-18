@@ -33,7 +33,8 @@ QT_BEGIN_NAMESPACE
 class QInAppProductPrivate
 {
 public:
-    QInAppProductPrivate(const QString &price, const QString &title, const QString &description, QInAppProduct::ProductType type, const QString &id)
+    QInAppProductPrivate(const QString &price, const QString &title, const QString &description,
+                         QInAppProduct::ProductType type, const QString &id)
         : localPrice(price)
         , localTitle(title)
         , localDescription(description)
@@ -66,10 +67,12 @@ public:
 /*!
  * \internal
  */\
-QInAppProduct::QInAppProduct(const QString &price, const QString &title, const QString &description, ProductType productType, const QString &identifier, QObject *parent)
+QInAppProduct::QInAppProduct(const QString &price, const QString &title, const QString &description,
+                             ProductType productType, const QString &identifier, QObject *parent)
     : QObject(parent)
 {
-    d = QSharedPointer<QInAppProductPrivate>(new QInAppProductPrivate(price, title, description, productType, identifier));
+    d = QSharedPointer<QInAppProductPrivate>(new QInAppProductPrivate(price, title, description,
+                                                                      productType, identifier));
 }
 
 /*!

@@ -46,8 +46,7 @@ class QInAppProduct: public QObject
     Q_PROPERTY(QString description READ description CONSTANT)
 
 public:
-    enum ProductType
-    {
+    enum ProductType {
         Consumable,
         Unlockable
     };
@@ -64,7 +63,8 @@ public:
     Q_INVOKABLE virtual void purchase() = 0;
 
 protected:
-    explicit QInAppProduct(const QString &price, const QString &title, const QString &description, ProductType productType, const QString &identifier, QObject *parent = nullptr);
+    explicit QInAppProduct(const QString &price, const QString &title, const QString &description,
+                           ProductType productType, const QString &identifier, QObject *parent = nullptr);
 
 private:
     friend class QInAppStore;

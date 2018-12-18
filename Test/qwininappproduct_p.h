@@ -48,26 +48,29 @@ class QWinInAppPurchaseBackend;
 
 class QWinInAppProduct : public QInAppProduct
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	explicit QWinInAppProduct(QWinInAppPurchaseBackend *backend,
-		const QString &price,
-		const QString &title,
-		const QString &description,
-		ProductType productType,
-		const QString &identifier,
-		QObject *parent = 0);
+    explicit QWinInAppProduct(QWinInAppPurchaseBackend *backend,
+                              const QString &price,
+                              const QString &title,
+                              const QString &description,
+                              ProductType productType,
+                              const QString &identifier,
+                              QObject *parent = 0);
 
-	QString storeID;
-	QString productKind;
-	void purchase();
-	QWinInAppPurchaseBackend* backend() { return m_backend; }
+    QString storeID;
+    QString productKind;
+    void purchase();
+    QWinInAppPurchaseBackend *backend()
+    {
+        return m_backend;
+    }
 private:
-	QWinInAppPurchaseBackend *m_backend;
-	
+    QWinInAppPurchaseBackend *m_backend;
+
 };
 
-Q_DECLARE_METATYPE(QWinInAppProduct*)
+Q_DECLARE_METATYPE(QWinInAppProduct *)
 
 QT_END_NAMESPACE
 

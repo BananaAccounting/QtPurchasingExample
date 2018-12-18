@@ -32,8 +32,7 @@
 #include "qinapppurchasebackendfactory_p.h"
 #include "qinapptransaction.h"
 
-namespace
-{
+namespace {
 class IAPRegisterMetaTypes
 {
 public:

@@ -52,8 +52,7 @@ class QInAppPurchaseBackend : public QObject
 {
     Q_OBJECT
 public:
-    struct Product
-    {
+    struct Product {
         Product(QInAppProduct::ProductType type, const QString &id)
             : productType(type), identifier(id)
         {
@@ -74,8 +73,14 @@ public:
 
     virtual void setPlatformProperty(const QString &propertyName, const QString &value);
 
-    void setStore(QInAppStore *store) { m_store = store; }
-    QInAppStore *store() const { return m_store; }
+    void setStore(QInAppStore *store)
+    {
+        m_store = store;
+    }
+    QInAppStore *store() const
+    {
+        return m_store;
+    }
 
 Q_SIGNALS:
     void ready();

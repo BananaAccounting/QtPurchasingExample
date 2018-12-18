@@ -10,7 +10,7 @@
     <AppIconSource>C:\Users\eilan\Desktop\banana9_1024px.png</AppIconSource>
     <SplashScreenSource>C:\Users\eilan\Desktop\banana9_1024px.png</SplashScreenSource>
     <PackageLogoSource>C:\Users\eilan\Desktop\banana9_1024px.png</PackageLogoSource>
-    <AppxPackageIsForStore>True</AppxPackageIsForStore>
+    <AppxPackageIsForStore>False</AppxPackageIsForStore>
     <AppxBuildConfigurationSelection>x86</AppxBuildConfigurationSelection>
     <PackageOptionalProjectsInIdeBuilds>False</PackageOptionalProjectsInIdeBuilds>
   </PropertyGroup>

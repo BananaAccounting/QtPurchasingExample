@@ -36,23 +36,23 @@ QT_BEGIN_NAMESPACE
 Q_LOGGING_CATEGORY(lcPurchasingProduct, "qt.purchasing.product")
 
 QWinInAppProduct::QWinInAppProduct(QWinInAppPurchaseBackend *backend,
-	const QString &price,
-	const QString &title,
-	const QString &description,
-	ProductType productType,
-	const QString &identifier,
-	QObject *parent)
-	: QInAppProduct(price, title, description, productType, identifier, parent)
-	, m_backend(backend)
+                                   const QString &price,
+                                   const QString &title,
+                                   const QString &description,
+                                   ProductType productType,
+                                   const QString &identifier,
+                                   QObject *parent)
+    : QInAppProduct(price, title, description, productType, identifier, parent)
+    , m_backend(backend)
 {
-	qCDebug(lcPurchasingProduct) << __FUNCTION__;
+    qCDebug(lcPurchasingProduct) << __FUNCTION__;
 }
 
 
 void QWinInAppProduct::purchase()
 {
-	qCDebug(lcPurchasingProduct) << __FUNCTION__;
-	m_backend->purchaseProduct(this);
+    qCDebug(lcPurchasingProduct) << __FUNCTION__;
+    m_backend->purchaseProduct(this);
 }
 
 QT_END_NAMESPACE

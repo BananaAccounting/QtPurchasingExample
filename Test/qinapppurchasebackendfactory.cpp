@@ -34,7 +34,7 @@
 #  include "qmacinapppurchasebackend_p.h"
 #elif defined(Q_OS_WINRT)
 #  include "qwinrtinapppurchasebackend_p.h"
-#elif defined(Q_OS_WIN32) ||  defined(Q_OS_WIN64)
+#elif defined(Q_OS_WIN32)
 #  include "qwininapppurchasebackend_p.h"
 #else
 #  include "qinapppurchasebackend_p.h"
@@ -51,7 +51,7 @@ QInAppPurchaseBackend *QInAppPurchaseBackendFactory::create()
 #elif defined (Q_OS_WINRT)
     return new QWinRTInAppPurchaseBackend;
 #elif defined (Q_OS_WIN32) ||  defined(Q_OS_WIN64)
-	return new QWinInAppPurchaseBackend;
+    return new QWinInAppPurchaseBackend;
 #else
     return new QInAppPurchaseBackend;
 #endif

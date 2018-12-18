@@ -49,25 +49,28 @@ class QWinInAppPurchaseBackend;
 
 class QWinInAppTransaction : public QInAppTransaction
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	explicit QWinInAppTransaction(TransactionStatus status,
-		QInAppProduct *product,
-		FailureReason reason,
-		const QString &expiration,
-		QObject *parent = nullptr);
-	FailureReason failureReason() const override { return m_failureReason; }
-	void finalize() override;
-	QString platformProperty(const QString &propertyName) const override;
-	QString m_expiration;
-	QString m_extendedError;
+    explicit QWinInAppTransaction(TransactionStatus status,
+                                  QInAppProduct *product,
+                                  FailureReason reason,
+                                  const QString &expiration,
+                                  QObject *parent = nullptr);
+    FailureReason failureReason() const override
+    {
+        return m_failureReason;
+    }
+    void finalize() override;
+    QString platformProperty(const QString &propertyName) const override;
+    QString m_expiration;
+    QString m_extendedError;
 private:
-	QWinInAppPurchaseBackend *m_backend;
-	FailureReason m_failureReason;
+    QWinInAppPurchaseBackend *m_backend;
+    FailureReason m_failureReason;
 };
 
 QT_END_NAMESPACE
 
-Q_DECLARE_METATYPE(QWinInAppTransaction*)
+Q_DECLARE_METATYPE(QWinInAppTransaction *)
 
 #endif // QWININAPPTRANSACTION_P_H

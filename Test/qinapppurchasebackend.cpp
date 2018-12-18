@@ -53,7 +53,7 @@ void QInAppPurchaseBackend::queryProducts(const QList<Product> &products)
 }
 
 void QInAppPurchaseBackend::queryProduct(QInAppProduct::ProductType productType,
-                                                    const QString &identifier)
+                                         const QString &identifier)
 {
     qWarning("QInAppPurchaseBackend not implemented on this platform!");
     Q_UNUSED(productType);

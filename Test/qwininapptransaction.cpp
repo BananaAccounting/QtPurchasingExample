@@ -37,33 +37,33 @@ QT_BEGIN_NAMESPACE
 Q_LOGGING_CATEGORY(lcPurchasingTransaction, "qt.purchasing.transaction")
 
 QWinInAppTransaction::QWinInAppTransaction(TransactionStatus status,
-	QInAppProduct *product, FailureReason reason, const QString &expiration,QObject *parent)
-	: QInAppTransaction(status, product, parent)
-	, m_failureReason(reason), m_expiration(expiration)
+                                           QInAppProduct *product, FailureReason reason, const QString &expiration, QObject *parent)
+    : QInAppTransaction(status, product, parent)
+    , m_failureReason(reason), m_expiration(expiration)
 {
-	qCDebug(lcPurchasingTransaction) << __FUNCTION__;
-	m_backend = qobject_cast<QWinInAppPurchaseBackend *>(parent);
+    qCDebug(lcPurchasingTransaction) << __FUNCTION__;
+    m_backend = qobject_cast<QWinInAppPurchaseBackend *>(parent);
 }
 
 void QWinInAppTransaction::finalize()
 {
-	qCDebug(lcPurchasingTransaction) << __FUNCTION__;
-	if (product()->productType() == QInAppProduct::Consumable &&
-		(status() == QInAppTransaction::PurchaseApproved ||
-			status() == QInAppTransaction::PurchaseRestored)) {
-		m_backend->fulfillConsumable(this);
-	}
-	deleteLater();
+    qCDebug(lcPurchasingTransaction) << __FUNCTION__;
+    if (product()->productType() == QInAppProduct::Consumable &&
+            (status() == QInAppTransaction::PurchaseApproved ||
+             status() == QInAppTransaction::PurchaseRestored)) {
+        m_backend->fulfillConsumable(this);
+    }
+    deleteLater();
 }
 
 
 QString QWinInAppTransaction::platformProperty(const QString &propertyName) const
 {
-	if (propertyName == QLatin1String("expiration"))
-		return m_expiration;
-	if (propertyName == QLatin1String("extendedError"))
-		return m_extendedError;
-	return QString();
+    if (propertyName == QLatin1String("expiration"))
+        return m_expiration;
+    if (propertyName == QLatin1String("extendedError"))
+        return m_extendedError;
+    return QString();
 }
 
 QT_END_NAMESPACE
