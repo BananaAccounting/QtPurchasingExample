@@ -145,6 +145,7 @@ Import the project using QT VS Tools.
 ### Configuration Properties
 Windows SDK version: minimum `Windows 10, version 1607`  or later
 
+*not needed if already imported in the dll*
 Debugging -> Environment -> add to PATH `C:\Program Files\WindowsApps\Microsoft.VCLibs.140.00.Debug_14.0.27023.1_x86__8wekyb3d8bbwe;
 C:\Program Files\WindowsApps\Microsoft.VCLibs.140.00.Debug_14.0.27023.1_x86__8wekyb3d8bbwe;`
 
