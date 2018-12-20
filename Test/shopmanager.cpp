@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "shopmanager.h"
 
-ShopManager::ShopManager(QWindow * mainWindow, QObject * parent) :QObject(parent)
+ShopManager::ShopManager(QWindow *mainWindow, QObject *parent) : QObject(parent)
 {
     m_myStore = new QInAppStore(this);
     m_myStore->setPlatformProperty("window", QString::number(mainWindow->winId()));
@@ -10,8 +10,7 @@ ShopManager::ShopManager(QWindow * mainWindow, QObject * parent) :QObject(parent
 
 QString ShopManager::productIdentifier(Products product)
 {
-    switch (product)
-    {
+    switch (product) {
     case banana_once_product:
         return  QStringLiteral("banana_once_product");
     case banana_subscription:
@@ -46,8 +45,7 @@ void ShopManager::useProduct(Products product, int quantity)
         if (myConsumables - quantity >= 0) {
             myConsumables -= quantity;
             emit updateConsumable(QString::number(myConsumables));
-        }
-        else {
+        } else {
             emit error("You don't have enough consumables.");
 
         }
@@ -57,15 +55,18 @@ void ShopManager::useProduct(Products product, int quantity)
 
 void ShopManager::initShop()
 {
-    m_myStore->registerProduct(QInAppProduct::Unlockable, productIdentifier(Products::banana_once_product));
-    m_myStore->registerProduct(QInAppProduct::Unlockable, productIdentifier(Products::banana_subscription));
+    m_myStore->registerProduct(QInAppProduct::Unlockable,
+                               productIdentifier(Products::banana_once_product));
+    m_myStore->registerProduct(QInAppProduct::Unlockable,
+                               productIdentifier(Products::banana_subscription));
     m_myStore->registerProduct(QInAppProduct::Unlockable, productIdentifier(Products::banana_product));
-    m_myStore->registerProduct(QInAppProduct::Consumable, productIdentifier(Products::banana_consumable));
+    m_myStore->registerProduct(QInAppProduct::Consumable,
+                               productIdentifier(Products::banana_consumable));
 
     m_myStore->restorePurchases();
 }
 
-bool ShopManager::event(QEvent* e)
+bool ShopManager::event(QEvent *e)
 {
     return QObject::event(e);
 }
@@ -76,12 +77,13 @@ void ShopManager::restorePurchases()
     MyLogger::instance().writeLog("Restoring purchases");
 }
 
-void ShopManager::handleErrorGracefully(QInAppProduct* p)
+void ShopManager::handleErrorGracefully(QInAppProduct *p)
 {
     emit error("Error regarding " + p->identifier());
 }
 
-void ShopManager::handleStringResponse(const QString& result) {
+void ShopManager::handleStringResponse(const QString &result)
+{
     MyLogger::instance().writeLog(result);
 }
 
@@ -96,11 +98,10 @@ void ShopManager::handleUnknownProduct(QInAppProduct::ProductType type, const QS
 }
 
 
-void ShopManager::handleTransactions(QInAppTransaction* transaction)
+void ShopManager::handleTransactions(QInAppTransaction *transaction)
 {
     switch (transaction->status()) {
-    case QInAppTransaction::PurchaseFailed:
-    {
+    case QInAppTransaction::PurchaseFailed: {
         emit error(transaction->platformProperty("extendedError"));
         break;
     }
@@ -110,9 +111,9 @@ void ShopManager::handleTransactions(QInAppTransaction* transaction)
             emit isDurableActive(true);
         else if (transaction->product()->identifier() == productIdentifier(Products::banana_subscription)) {
             emit isSubscriptionActive(true);
-            MyLogger::instance().writeLog("Subscription expiration date: " + transaction->platformProperty("expiration"));
-        }
-        else if (transaction->product()->identifier() == productIdentifier(Products::banana_product))
+            MyLogger::instance().writeLog("Subscription expiration date: " +
+                                          transaction->platformProperty("expiration"));
+        } else if (transaction->product()->identifier() == productIdentifier(Products::banana_product))
             emit isActive(true);
         else if (transaction->product()->identifier() == productIdentifier(Products::banana_consumable)) {
             myConsumables++;
