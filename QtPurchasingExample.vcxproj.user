@@ -2,26 +2,26 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <QTDIR>C:\Qt\5.12.0\msvc2017_64</QTDIR>
-    <LocalDebuggerEnvironment>PATH=$(QTDIR)\bin%3bC:\Program Files\WindowsApps\Microsoft.VCLibs.140.00.Debug_14.0.27023.1_x86__8wekyb3d8bbwe%3b$(PATH)
-C:\Program Files\WindowsApps\Microsoft.VCLibs.140.00.Debug_14.0.27023.1_x86__8wekyb3d8bbwe\</LocalDebuggerEnvironment>
+    <QTDIR>C:\Qt\5.12.5\msvc2017_64</QTDIR>
+    <LocalDebuggerEnvironment>PATH=$(QTDIR)\bin%3bC:\Program Files\WindowsApps\Microsoft.VCLibs.140.Debug_14.0.27023.1_x86__8wekyb3d8bbwe%3b$(PATH)
+C:\Program Files\WindowsApps\Microsoft.VCLibs.140.Debug_14.0.27023.1_x86__8wekyb3d8bbwe\</LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <QTDIR>C:\Qt\5.12.0\msvc2017</QTDIR>
+    <QTDIR>C:\Qt\5.12.5\msvc2017</QTDIR>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerEnvironment>PATH=$(QTDIR)\bin%3bC:\Program Files\WindowsApps\Microsoft.VCLibs.140.00.Debug_14.0.27023.1_x86__8wekyb3d8bbwe%3b$(PATH)
-C:\Program Files\WindowsApps\Microsoft.VCLibs.140.00.Debug_14.0.27023.1_x86__8wekyb3d8bbwe\</LocalDebuggerEnvironment>
+    <LocalDebuggerEnvironment>PATH=$(QTDIR)\bin%3bC:\Program Files\WindowsApps\Microsoft.VCLibs.140.Debug_14.0.27023.1_x86__8wekyb3d8bbwe%3b$(PATH)
+C:\Program Files\WindowsApps\Microsoft.VCLibs.140.Debug_14.0.27023.1_x86__8wekyb3d8bbwe\</LocalDebuggerEnvironment>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <QTDIR>C:\Qt\5.12.0\msvc2017_64</QTDIR>
+    <QTDIR>C:\Qt\5.12.5\msvc2017_64</QTDIR>
     <LocalDebuggerEnvironment>PATH=$(QTDIR)\bin%3b$(PATH)</LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <QTDIR>C:\Qt\5.12.0\msvc2017</QTDIR>
+    <QTDIR>C:\Qt\5.12.5\msvc2017</QTDIR>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerEnvironment>PATH=$(QTDIR)\bin%3b$(PATH)</LocalDebuggerEnvironment>
   </PropertyGroup>

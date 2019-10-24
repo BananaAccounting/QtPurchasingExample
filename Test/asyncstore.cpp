@@ -2,6 +2,8 @@
 #include "asyncstore.h"
 #include <QDebug>
 
+#include "winrt/Windows.Foundation.Collections.h"
+
 using namespace winrt::Windows::Services::Store;
 
 AsyncStore::AsyncStore(QWindow* mainWindow, QObject *parent)
@@ -46,7 +48,7 @@ void AsyncStore::getAddonsAsync()
 	if (context == nullptr) {
 		getStoreContext();
 	}
-
+	
 	auto filter{ winrt::single_threaded_vector<winrt::hstring>({ L"Durable"}) };
 	StoreProductQueryResult  storeProductQueryRes = context.GetAssociatedStoreProductsAsync(filter).get();
 

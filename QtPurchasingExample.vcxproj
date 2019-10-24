@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\Microsoft.Windows.CppWinRT.2.0.191018.6\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('packages\Microsoft.Windows.CppWinRT.2.0.191018.6\build\native\Microsoft.Windows.CppWinRT.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -46,10 +47,13 @@
     <ClInclude Include="Test\pch.h" />
     <QtMoc Include="Test\asyncstore.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B12702AD-ABFB-343A-A199-8E24837244A3}</ProjectGuid>
     <Keyword>Qt4VSv1.0</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
     <CppWinRTEnabled>true</CppWinRTEnabled>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -122,7 +126,7 @@
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <CompileAsWinRT>true</CompileAsWinRT>
-      <AdditionalUsingDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\vcpackages;C:\Program Files (x86)\Windows Kits\10\UnionMetadata;</AdditionalUsingDirectories>
+      <AdditionalUsingDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\VC\vcpackages;C:\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.18362.0;</AdditionalUsingDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ConformanceMode>false</ConformanceMode>
@@ -165,7 +169,7 @@
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <CompileAsWinRT>true</CompileAsWinRT>
-      <AdditionalUsingDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\vcpackages;C:\Program Files (x86)\Windows Kits\10\UnionMetadata</AdditionalUsingDirectories>
+      <AdditionalUsingDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\VC\vcpackages;C:\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.18362.0;</AdditionalUsingDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ConformanceMode>false</ConformanceMode>
@@ -207,7 +211,7 @@
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <CompileAsWinRT>true</CompileAsWinRT>
-      <AdditionalUsingDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\vcpackages;C:\Program Files (x86)\Windows Kits\10\UnionMetadata;</AdditionalUsingDirectories>
+      <AdditionalUsingDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\VC\vcpackages;C:\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.18362.0;</AdditionalUsingDirectories>
       <OmitFramePointers>false</OmitFramePointers>
       <ConformanceMode>false</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -252,7 +256,7 @@
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <CompileAsWinRT>true</CompileAsWinRT>
-      <AdditionalUsingDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\vcpackages;C:\Program Files (x86)\Windows Kits\10\UnionMetadata;</AdditionalUsingDirectories>
+      <AdditionalUsingDirectories>C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\VC\vcpackages;C:\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.18362.0;</AdditionalUsingDirectories>
       <ConformanceMode>false</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -290,10 +294,18 @@
     <Import Project="$(QtMsBuild)\qt.targets" />
   </ImportGroup>
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\Microsoft.Windows.CppWinRT.2.0.191018.6\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('packages\Microsoft.Windows.CppWinRT.2.0.191018.6\build\native\Microsoft.Windows.CppWinRT.targets')" />
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
       <UserProperties MocDir=".\output\GeneratedFiles\$(PlatformName)" UicDir=".\output\GeneratedFiles" RccDir=".\output\GeneratedFiles" lupdateOptions="" lupdateOnBuild="0" lreleaseOptions="" Qt5Version_x0020_x64="qt5_64" Qt5Version_x0020_Win32="qt5_32" MocOptions="" />
     </VisualStudio>
   </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\Microsoft.Windows.CppWinRT.2.0.191018.6\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.Windows.CppWinRT.2.0.191018.6\build\native\Microsoft.Windows.CppWinRT.props'))" />
+    <Error Condition="!Exists('packages\Microsoft.Windows.CppWinRT.2.0.191018.6\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.Windows.CppWinRT.2.0.191018.6\build\native\Microsoft.Windows.CppWinRT.targets'))" />
+  </Target>
 </Project>

@@ -4,4 +4,5 @@ QtPurchasingWAP/bin/*
 QtPurchasingWAP/AppPackages/*
 QtPurchasingWAP/BundleArtifacts/*
 output/*
+packages/*
 .vs/*
